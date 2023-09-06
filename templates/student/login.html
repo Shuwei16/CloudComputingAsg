@@ -6,7 +6,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>Internship Management System</title>
+  <title>Student Login</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
@@ -42,7 +42,8 @@
           <li class="dropdown"><a href="#"><span>Login</span> <i class="bi bi-chevron-down"></i></a>
             <ul>
               <li><a href="../student/login.html">Student</a></li>
-              <li><a href="../supervisor/login.html">Supervisor</a></li>
+              <li><a href="../company/login.html">Company</a></li>
+              <li><a href="../lecturer/login.html">Lecturer</a></li>
               <li><a href="../admin/login.html">Admin</a></li>
             </ul>
           </li>
@@ -58,14 +59,14 @@
       <form action="home.html">
         <h3>Student Login</h3>
 
-        <label for="email">Email</label>
-        <input type="text" placeholder="Email" id="email">
+        <label for="email">Student Email</label>
+        <input type="email" placeholder="e.g. xxx-xx99@student.tarc.edu.my" id="email">
 
-        <label for="password">Password</label>
-        <input type="password" placeholder="Password" id="password">
+        <label for="nric">NRIC</label>
+        <input type="password" placeholder="e.g. 999999-99-9999" id="nric">
 
         <button type="submit">Log In</button>
-        <a href="signup.html"><br/>Signup</a>
+        <span>Don't have an account? <a href="register.html">Register</a></span>
     </form>
     </div>
   </section><!-- End Auth -->
