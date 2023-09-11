@@ -866,7 +866,7 @@ section {
 }
 
 /*--------------------------------------------------------------
-# Home Page
+# Home Page (Student)
 --------------------------------------------------------------*/
 
 .card-header {
@@ -931,4 +931,56 @@ section {
   background-color: #dceaf5;
   border-color: #dceaf5;
   
+}
+
+/*--------------------------------------------------------------
+# Company List
+--------------------------------------------------------------*/
+
+.company-container{
+  height: 1700px;
+}
+
+/* .portfolio-info{
+  height: 100px !important;
+} */
+
+.portfolio-item{
+  height: 500px !important;
+}
+
+.techtics-img{
+  height: 350px;
+}
+
+.eCloud-img{
+  height: 350px;
+}
+
+.intego-img{
+  height: 350px;
+}
+
+.infowhiz-img{
+  height: 350px;
+}
+
+.public-img{
+  height: 350px;
+}
+
+.hatio-img{
+  height: 350px;
+}
+
+.bigpay-img{
+  height: 350px;
+}
+
+.GHL-img{
+  height: 350px;
+}
+
+.CTC-img{
+  height: 350px;
 }
