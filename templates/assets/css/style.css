@@ -477,55 +477,60 @@ h6 {
   }
 }
 
-#auth form{
+#auth form {
   width: 400px;
-  background-color: rgba(255,255,255,0.13);
+  background-color: rgba(255, 255, 255, 0.13);
   position: absolute;
-  transform: translate(-50%,-50%);
+  transform: translate(-50%, -50%);
   top: 50%;
   left: 50%;
   border-radius: 10px;
   backdrop-filter: blur(10px);
-  border: 2px solid rgba(255,255,255,0.1);
-  box-shadow: 0 0 40px rgba(8,7,16,0.6);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 0 40px rgba(8, 7, 16, 0.6);
   padding: 50px 35px;
 }
-#auth form *{
-  font-family: 'Poppins',sans-serif;
+
+#auth form * {
+  font-family: 'Poppins', sans-serif;
   color: #ffffff;
   letter-spacing: 0.5px;
   outline: none;
   border: none;
 }
-#auth form h3{
+
+#auth form h3 {
   font-size: 32px;
   font-weight: 500;
   line-height: 42px;
   text-align: center;
 }
 
-#auth label{
+#auth label {
   display: block;
   margin-top: 30px;
   font-size: 16px;
   font-weight: 500;
   text-align: left;
 }
-#auth input{
+
+#auth input {
   display: block;
   height: 50px;
   width: 100%;
-  background-color: rgba(255,255,255,0.07);
+  background-color: rgba(255, 255, 255, 0.07);
   border-radius: 3px;
   padding: 0 10px;
   margin-top: 8px;
   font-size: 14px;
   font-weight: 300;
 }
-::placeholder{
+
+::placeholder {
   color: #e5e5e5;
 }
-#auth button{
+
+#auth button {
   margin-top: 50px;
   margin-bottom: 20px;
   width: 100%;
@@ -858,4 +863,72 @@ section {
   color: #444444;
   font-size: 14px;
   background: #f7fbfe;
+}
+
+/*--------------------------------------------------------------
+# Home Page
+--------------------------------------------------------------*/
+
+.card-header {
+  border-width: 5px;
+  border-style: solid;
+  border-color: #dceaf5;
+  border-radius: 50px;
+}
+
+.btn-doc {
+  background-color: #ffffff;
+}
+
+.btn-doc:hover {
+  color: blue;
+  text-decoration: underline;
+  background-color: #ffffff;
+}
+
+.btn-doc:active {
+  color: blue;
+  text-decoration: underline;
+  background-color: #ffffff;
+}
+
+/* .btn-doc:focus {
+  color: blue;
+  text-decoration: underline;
+  background-color: #ffffff;
+}
+
+.btn-doc:visited {
+  color: blue;
+  text-decoration: underline;
+  background-color: #ffffff;
+} */
+
+.card-header {
+  background-color: #edeff0;
+  
+}
+
+.card-header-content {
+  background-color: #dceaf5;
+}
+
+#card-form{
+  height: 310px;
+}
+
+#report-form{
+  height: 310px;
+}
+
+.save-button{
+  background-color: #dceaf5;
+  border-color: #dceaf5;
+  transform: translateX(27px);
+}
+
+.save-button:hover{
+  background-color: #dceaf5;
+  border-color: #dceaf5;
+  
 }
