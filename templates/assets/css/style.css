@@ -514,7 +514,7 @@ h6 {
   text-align: left;
 }
 
-#auth input, #auth select {
+#auth input, #auth select, #auth textarea {
   display: block;
   height: 50px;
   width: 100%;

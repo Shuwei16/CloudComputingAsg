@@ -41,6 +41,7 @@
 
             <nav id="navbar" class="navbar order-last order-lg-0">
                 <ul>
+                    <li><a class="nav-link scrollto" href="home.html">Home</a></li>
                     <li><a class="nav-link scrollto" href="companyList.html">Find Company</a></li>
                     <li><a class="nav-link scrollto" href="applicationHistory.html">Job Application History</a></li>
                     <li><a class="nav-link scrollto" href="../index.html">Logout</a></li>
@@ -51,74 +52,96 @@
     </header><!-- End Header -->
 
     <!-- ======= Inner Page ======= -->
-    <section class="inner-page" style="height:100%">
+    <section class="inner-page">
         <div class="container py-5">
-            <h2>Job Application History<br />
-                <hr>
+            <h2>Application History<br />
+                <hr><br />
             </h2>
-
-            <!-- can put a boostrap table here
-        then show a list of jobs that applied before
-        need to have info like company name, contact, email, address, job title, approval status
-    -->
-
-            <table class="table">
-                <thead>
+            <table class="table align-middle mb-0 bg-white">
+                <thead class="bg-light">
                     <tr>
-                        <th scope="col">No. </th>
-                        <th scope="col">Company Name</th>
-                        <th scope="col">Contact No.</th>
-                        <th scope="col">Email</th>
-                        <th scope="col">Address</th>
-                        <th scope="col">Job Title</th>
-                        <th scope="col">Status</th>
+                        <th>Company Name</th>
+                        <th></th>
+                        <th>Applied Job</th>
+                        <th>Status</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <th scope="row">1</th>
-                        <td>...</td>
-                        <td>...</td>
-                        <td>...</td>
-                        <td>...</td>
-                        <td>...</td>
-                        <td>...</td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="ms-3">
+                                    <p class="fw-bold mb-1">Techtics Solutions Sdn Bhd</p>
+                                    <p class="text-muted mb-0">VO2-09-06, V Office 2, Lingkaran SV,, Sunway Velocity, Jalan Peel, 55100, Kuala Lumpur.</p>
+                                    <p class="text-muted mb-0">xxx@xxx.com</p>
+                                    <p class="text-muted mb-0">03-92266778</p>
+                                    <p class="text-muted mb-0"><a href = "xxx@xxx.com">xxx@xxx.com</a></p>
+                                    <p class="text-muted mb-0"><a href="03-92266778">03-92266778</a></p>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <button type="button" onclick="window.location.href='companyDetail.html';" class="btn btn-outline-primary btn-sm btn-rounded">
+                                View More Details
+                            </button>
+                        </td>
+                        <td>
+                            <p class="fw-normal mb-1">Software engineer</p>
+                        </td>
+                        <td>
+                            Approved
+                        </td>
                     </tr>
                     <tr>
-                        <th scope="row">1</th>
-                        <td>...</td>
-                        <td>...</td>
-                        <td>...</td>
-                        <td>...</td>
-                        <td>...</td>
-                        <td>...</td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="ms-3">
+                                    <p class="fw-bold mb-1">Techtics Solutions Sdn Bhd</p>
+                                    <p class="text-muted mb-0">VO2-09-06, V Office 2, Lingkaran SV,, Sunway Velocity, Jalan Peel, 55100, Kuala Lumpur.</p>
+                                    <p class="text-muted mb-0"><a href = "xxx@xxx.com">xxx@xxx.com</a></p>
+                                    <p class="text-muted mb-0"><a href="03-92266778">03-92266778</a></p>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <button type="button" onclick="window.location.href='companyDetail.html';" class="btn btn-outline-primary btn-sm btn-rounded">
+                                View More Details
+                            </button>
+                        </td>
+                        <td>
+                            <p class="fw-normal mb-1">Software engineer</p>
+                        </td>
+                        <td>
+                            Pending
+                        </td>
                     </tr>
                     <tr>
-                        <th scope="row">1</th>
-                        <td>...</td>
-                        <td>...</td>
-                        <td>...</td>
-                        <td>...</td>
-                        <td>...</td>
-                        <td>...</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">1</th>
-                        <td>...</td>
-                        <td>...</td>
-                        <td>...</td>
-                        <td>...</td>
-                        <td>...</td>
-                        <td>...</td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="ms-3">
+                                    <p class="fw-bold mb-1">Techtics Solutions Sdn Bhd</p>
+                                    <p class="text-muted mb-0">VO2-09-06, V Office 2, Lingkaran SV,, Sunway Velocity, Jalan Peel, 55100, Kuala Lumpur.</p>
+                                    <p class="text-muted mb-0"><a href = "xxx@xxx.com">xxx@xxx.com</a></p>
+                                    <p class="text-muted mb-0"><a href="03-92266778">03-92266778</a></p>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <button type="button" onclick="window.location.href='companyDetail.html';" class="btn btn-outline-primary btn-sm btn-rounded">
+                                View More Details
+                            </button>
+                        </td>
+                        <td>
+                            <p class="fw-normal mb-1">Software engineer</p>
+                        </td>
+                        <td>
+                            Rejected
+                        </td>
                     </tr>
                 </tbody>
             </table>
-
-        </div>
         </div>
     </section>
-
-
     </main><!-- End #main -->
 
     <!-- ======= Footer ======= -->
