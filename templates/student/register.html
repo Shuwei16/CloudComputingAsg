@@ -14,7 +14,9 @@
   <link href="../assets/img/favicon.png" rel="icon">
 
   <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+    rel="stylesheet">
 
   <!-- Vendor CSS Files -->
   <link href="../assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -54,16 +56,22 @@
   </header><!-- End Header -->
 
   <!-- ======= Auth Section ======= -->
-  <section id="auth" class="d-flex flex-column justify-content-center align-items-center">
+  <section id="auth" class="d-flex flex-column justify-content-center align-items-center" style="height: 200vh">
     <div class="container text-center text-md-left" data-aos="fade-up">
-      <form action="">
+      <form action="registerSuccess.html">
         <h3>Student Registration</h3>
 
         <label for="name">Full Name</label>
         <input type="text" placeholder="Name as in NRIC" id="name">
 
         <label for="nric">NRIC</label>
-        <input type="text" placeholder="e.g. 999999-99-9999" id="nric">
+        <input type="text" placeholder="e.g. 999999-99-9999" id="ic">
+
+        <label for="gender">Gender</label>
+        <select class="form-select" aria-label="gender">
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
+        </select>
 
         <label for="studentID">Student ID</label>
         <input type="text" placeholder="e.g. 99WMR99999" id="studentID">
@@ -71,24 +79,50 @@
         <label for="email">Student Email</label>
         <input type="email" placeholder="e.g. xxx-xx99@student.tarc.edu.my" id="email">
 
+        <label for="programme">Programme</label>
+        <select class="form-select" aria-label="programme">
+          <option value="Diploma in Computer Science">Diploma in Computer Science</option>
+          <option value="Diploma in Information Systems">Diploma in Information Systems</option>
+          <option value="Diploma in Information Technology">Diploma in Information Technology</option>
+          <option value="Diploma in Software Engineering">Diploma in Software Engineering</option>
+          <option value="Bachelor of Science">Bachelor of Science</option>
+          <option value="Bachelor of Computer Science">Bachelor of Computer Science</option>
+          <option value="Bachelor of Information Systems">Bachelor of Information Systems</option>
+          <option value="Bachelor of Information Technology">Bachelor of Information Technology</option>
+          <option value="Bachelor of Software Engineering">Bachelor of Software Engineering</option>
+        </select>
+
+        <label for="cohort">Cohort</label>
+        <select class="form-select" aria-label="cohort">
+          <option value="JUL2022Y2">JUL2022Y2</option>
+          <option value="NOV2022Y2">NOV2022Y2</option>
+        </select>
+
+        <label for="cgpa">CGPA</label>
+        <input type="text" placeholder="e.g. 4.0000" id="cgpa" pattern="\d+(\.\d{4})">
+
+        <label for="resume">Resume</label>
+        <input type="file" placeholder="" id="resume">
+
         <button type="submit">Register</button>
         <span>Already have an account? <a href="login.html">Login</a></span>
-    </form>
+      </form>
     </div>
   </section><!-- End Auth -->
 
-</main><!-- End #main -->
+  </main><!-- End #main -->
 
   <!-- ======= Footer ======= -->
   <footer id="footer">
     <div class="container d-md-flex py-4">
-        <div class="copyright">
-          &copy; 2023 - Internship Management System
-        </div>
+      <div class="copyright">
+        &copy; 2023 - Internship Management System
+      </div>
     </div>
   </footer><!-- End Footer -->
 
-  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
+      class="bi bi-arrow-up-short"></i></a>
 
   <!-- Vendor JS Files -->
   <script src="../assets/vendor/purecounter/purecounter_vanilla.js"></script>
