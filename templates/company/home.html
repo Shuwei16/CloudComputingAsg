@@ -1,5 +1,5 @@
 <!-- company homepage -->
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -14,7 +14,9 @@
   <link href="../assets/img/favicon.png" rel="icon">
 
   <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+    rel="stylesheet">
 
   <!-- Vendor CSS Files -->
   <link href="../assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -50,17 +52,21 @@
   <!-- ======= Inner Page ======= -->
   <section class="inner-page">
     <div class="container py-5">
-      <h2>Welcome: Microsoft Corporation!<br/><hr><br/></h2>
+      <h2>Welcome: Microsoft Corporation!<br />
+        <hr><br />
+      </h2>
       <div class="row">
         <div class="col-lg-4">
           <div class="card mb-4">
             <div class="card-body text-center">
-              <img src="../assets/img/company/company1.jpg" alt="companyLogo"
-                class="rounded-circle img-fluid" style="width: 300px;">
+              <img src="../assets/img/company/company1.jpg" alt="companyLogo" class="rounded-circle img-fluid"
+                style="width: 300px;">
               <h5 class="my-3">Microsoft Corporation</h5>
-              <p class="text-muted mb-1">We develop and market software, services, and hardware devices that deliver new opportunities, greater convenience, and enhanced value to people's lives. We do business worldwide and have offices in more than 100 countries.</p><br/><br/>
+              <p class="text-muted mb-1">We develop and market software, services, and hardware devices that deliver new
+                opportunities, greater convenience, and enhanced value to people's lives. We do business worldwide and
+                have offices in more than 100 countries.</p><br /><br />
               <div class="d-flex justify-content-center mb-2">
-                <button type="button" class="btn btn-outline-primary ms-1">Edit Info</button>
+                <button type="button" class="btn btn-outline-primary ms-1" data-bs-toggle="modal" data-bs-target="#editInfoModal">Edit Info</button>
               </div>
             </div>
           </div>
@@ -81,7 +87,8 @@
                     <p class="mb-0">Location</p>
                   </div>
                   <div class="col-sm-9">
-                    <p class="text-muted mb-0">Sunway Nexis Soho, D-5-7 No.1, Jalan PJU 5/1 Dataran Sunway, Kota Damansara, 47810 Petaling Jaya, Selangor.</p>
+                    <p class="text-muted mb-0">Sunway Nexis Soho, D-5-7 No.1, Jalan PJU 5/1 Dataran Sunway, Kota
+                      Damansara, 47810 Petaling Jaya, Selangor.</p>
                   </div>
                 </div>
                 <hr>
@@ -143,7 +150,7 @@
           </div>
         </div>
         <div class="col-lg-8">
-          <button type="button" class="btn btn-primary ms-1" style="float: right;">Add Job</button>
+          <button type="button" class="btn btn-primary ms-1" style="float: right;" data-bs-toggle="modal" data-bs-target="#addModal">Add Job</button>
           <h4 class="my-3 text-primary"><b>Job List</b></h4>
           <div class="card mb-4">
             <div class="card-body">
@@ -186,8 +193,8 @@
               <hr>
               <div class="row">
                 <div class="d-flex justify-content-center mb-2">
-                  <button type="button" class="btn btn-outline-primary ms-1" style="float: right;">Edit</button>
-                  <button type="button" class="btn btn-outline-danger ms-1" style="float: right;">Delete</button>
+                  <button type="button" class="btn btn-outline-primary ms-1" style="float: right;" data-bs-toggle="modal" data-bs-target="#editModal">Edit</button>
+                  <button type="button" class="btn btn-outline-danger ms-1" style="float: right;" data-bs-toggle="modal" data-bs-target="#deleteModal">Delete</button>
                 </div>
               </div>
             </div>
@@ -233,8 +240,8 @@
               <hr>
               <div class="row">
                 <div class="d-flex justify-content-center mb-2">
-                  <button type="button" class="btn btn-outline-primary ms-1" style="float: right;">Edit</button>
-                  <button type="button" class="btn btn-outline-danger ms-1" style="float: right;">Delete</button>
+                  <button type="button" class="btn btn-outline-primary ms-1" style="float: right;" data-bs-toggle="modal" data-bs-target="#editModal">Edit</button>
+                  <button type="button" class="btn btn-outline-danger ms-1" style="float: right;" data-bs-toggle="modal" data-bs-target="#deleteModal">Delete</button>
                 </div>
               </div>
             </div>
@@ -280,8 +287,8 @@
               <hr>
               <div class="row">
                 <div class="d-flex justify-content-center mb-2">
-                  <button type="button" class="btn btn-outline-primary ms-1" style="float: right;">Edit</button>
-                  <button type="button" class="btn btn-outline-danger ms-1" style="float: right;">Delete</button>
+                  <button type="button" class="btn btn-outline-primary ms-1" style="float: right;" data-bs-toggle="modal" data-bs-target="#editModal">Edit</button>
+                  <button type="button" class="btn btn-outline-danger ms-1" style="float: right;" data-bs-toggle="modal" data-bs-target="#deleteModal">Delete</button>
                 </div>
               </div>
             </div>
@@ -291,18 +298,19 @@
     </div>
   </section>
 
-</main><!-- End #main -->
+  </main><!-- End #main -->
 
   <!-- ======= Footer ======= -->
   <footer id="footer">
     <div class="container d-md-flex py-4">
-        <div class="copyright">
-          &copy; 2023 - Internship Management System
-        </div>
+      <div class="copyright">
+        &copy; 2023 - Internship Management System
+      </div>
     </div>
   </footer><!-- End Footer -->
 
-  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
+      class="bi bi-arrow-up-short"></i></a>
 
   <!-- Vendor JS Files -->
   <script src="../assets/vendor/purecounter/purecounter_vanilla.js"></script>
@@ -317,5 +325,267 @@
   <script src="../assets/js/main.js"></script>
 
 </body>
+
+<!-- Edit Info Modal -->
+<div class="modal fade" id="editInfoModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form action="home.html">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Edit Company Info</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="panel-body">
+            <div class="form-group">
+              <label for="companyName">Company Name</label>
+              <input type="text" class="form-control" id="companyName" placeholder="">
+            </div>
+            <br />
+            <div class="form-group">
+              <label for="companyDescription">Company Description</label>
+              <textarea class="form-control" id="companyDescription" rows="3"></textarea>
+            </div>
+            <br />
+            <div class="form-group">
+              <label for="location">Location</label>
+              <textarea class="form-control" id="location" rows="3"></textarea>
+            </div>
+            <br />
+            <div class="form-group">
+              <label for="workingDay">Working Day</label>
+              <div class="row">
+                <div class="col">
+                  <label for="startDay">Start Day</label>
+                  <select class="form-select" aria-label="startDay">
+                    <option value="Monday">Monday</option>
+                    <option value="Tuesday">Tuesday</option>
+                    <option value="Wednesday">Wednesday</option>
+                    <option value="Thursday">Thursday</option>
+                    <option value="Friday">Friday</option>
+                    <option value="Saturday">Saturday</option>
+                    <option value="Sunday">Sunday</option>
+                  </select>
+                </div>
+                <div class="col">
+                  <label for="endDay">End Day</label>
+                  <select class="form-select" aria-label="endDay">
+                    <option value="Monday">Monday</option>
+                    <option value="Tuesday">Tuesday</option>
+                    <option value="Wednesday">Wednesday</option>
+                    <option value="Thursday">Thursday</option>
+                    <option value="Friday">Friday</option>
+                    <option value="Saturday">Saturday</option>
+                    <option value="Sunday">Sunday</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <br />
+            <div class="form-group">
+              <label for="workingHour">Working Hour</label>
+              <div class="row">
+                <div class="col">
+                  <label for="startTime">Start Time</label>
+                  <input type="text" class="form-control" placeholder="">
+                </div>
+                <div class="col">
+                  <label for="endTime">End Time</label>
+                  <input type="text" class="form-control" placeholder="">
+                </div>
+              </div>
+            </div>
+            <br />
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input type="email" id="email" class="form-control" placeholder="">
+            </div>
+            <br />
+            <div class="form-group">
+              <label for="contact">Contact</label>
+              <input type="text" id="contact" class="form-control" placeholder="">
+            </div>
+            <br />
+            <div class="form-group">
+              <label for="accessory">Provided Accessory</label>
+              <input type="text" id="accessory" class="form-control" placeholder="">
+            </div>
+            <br />
+            <div class="form-group">
+              <label for="accomodation">Accomodation</label>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="hasAccomodation" id="hasAccomodation">
+                <label class="form-check-label" for="hasAccomodation">
+                  Yes
+                </label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="noAccomodation" id="noAccomodation">
+                <label class="form-check-label" for="noAccomodation">
+                  No
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Add Job Modal -->
+<div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form action="home.html">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Add New Job</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="panel-body">
+            <div class="form-group">
+              <label for="jobTitle">Job Title</label>
+              <input type="text" class="form-control" id="jobTitle" placeholder="">
+            </div>
+            <br />
+            <div class="form-group">
+              <label for="jobTitle">Allowance (RM)</label>
+              <div class="row">
+                <div class="col">
+                  <label for="minimum">Minimum</label>
+                  <input type="text" class="form-control" placeholder="minimum allowance">
+                </div>
+                <div class="col">
+                  <label for="maximum">Maximum</label>
+                  <input type="text" class="form-control" placeholder="maximum allowance">
+                </div>
+              </div>
+            </div>
+            <br />
+            <div class="form-group">
+              <label for="openFor">Open For</label><br />
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="diploma" checked>
+                <label class="form-check-label" for="diploma">
+                  Diploma
+                </label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="degree" checked>
+                <label class="form-check-label" for="degree">
+                  Degree
+                </label>
+              </div>
+            </div>
+            <br />
+            <div class="form-group">
+              <label for="jobDescription">Job Description</label>
+              <textarea class="form-control" id="jobDescription" rows="3"></textarea>
+            </div>
+            <div class="form-group">
+              <label for="jobRequirement">Job Requirement</label>
+              <textarea class="form-control" id="jobRequirement" rows="3"></textarea>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Job Modal -->
+<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form action="home.html">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Edit Job</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="panel-body">
+            <div class="form-group">
+              <label for="jobTitle">Job Title</label>
+              <input type="text" class="form-control" id="jobTitle" placeholder="">
+            </div>
+            <br />
+            <div class="form-group">
+              <label for="jobTitle">Allowance (RM)</label>
+              <div class="col">
+                <label for="minimum">Minimum</label>
+                <input type="text" class="form-control" placeholder="minimum allowance">
+              </div>
+              <div class="col">
+                <label for="maximum">Maximum</label>
+                <input type="text" class="form-control" placeholder="maximum allowance">
+              </div>
+            </div>
+            <br />
+            <div class="form-group">
+              <label for="openFor">Open For</label><br />
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="diploma" checked>
+                <label class="form-check-label" for="diploma">
+                  Diploma
+                </label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="degree" checked>
+                <label class="form-check-label" for="degree">
+                  Degree
+                </label>
+              </div>
+            </div>
+            <br />
+            <div class="form-group">
+              <label for="jobDescription">Job Description</label>
+              <textarea class="form-control" id="jobDescription" rows="3"></textarea>
+            </div>
+            <div class="form-group">
+              <label for="jobRequirement">Job Requirement</label>
+              <textarea class="form-control" id="jobRequirement" rows="3"></textarea>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Delete Job Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form action="home.html">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Delete Job</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="panel-body">
+            Are you sure to delete this job?
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-danger">Confirm</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
 
 </html>
