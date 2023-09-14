@@ -941,12 +941,16 @@ section {
   height: 1700px;
 }
 
+.application-container{
+  height: 2400px;
+}
+
 /* .portfolio-info{
   height: 100px !important;
 } */
 
 .portfolio-item{
-  height: 500px !important;
+  height: 550px !important;
 }
 
 .techtics-img{
