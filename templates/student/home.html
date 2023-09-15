@@ -152,7 +152,7 @@
                             <div class="row">
                                 <div class="d-flex justify-content-center mb-2">
                                     <button type="button" class="btn btn-outline-primary ms-1" style="float: right;"
-                                        data-bs-toggle="modal" data-bs-target="#editInfo">Edit Info</button>
+                                        data-bs-toggle="modal" data-bs-target="#editInfoModal">Edit Info</button>
                                 </div>
                             </div>
                         </div>
@@ -819,5 +819,41 @@
         </div>
     </div>
 </div>
+
+<!-- Edit Student Info Modal -->
+<div class="modal fade" id="editInfoModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <form action="home.html" method="" onsubmit="return confirm('Are you sure to this changes？')">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Edit Info</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="panel-body">
+              <div class="form-group">
+                <label for="contactNo">Contact Number</label>
+                <input type="text" class="form-control" placeholder="e.g. 019-9999999" id="contactNo" pattern="\d{2,3}-\d{7,8}" value="016-3719303">
+              </div>
+              <br />
+              <div class="form-group">
+                <label for="cgpa">CGPA</label>
+                <input type="text" class="form-control" placeholder="e.g. 4.0000" id="cgpa" pattern="\d+(\.\d{4})" value="4.0000">
+              </div>
+              <br />
+              <div class="form-group">
+                <label for="cgpa">Upload new resume (if any)</label>
+                <input type="file" class="form-control" placeholder="e.g. 4.0000" id="cgpa" pattern="\d+(\.\d{4})">
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Save</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 
 </html>

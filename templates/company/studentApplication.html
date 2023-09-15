@@ -92,12 +92,10 @@
                         </td>
 
                         <td>
-                            <button type="button" class="btn btn-success btn-sm btn-rounded" data-bs-toggle="modal"
-                                data-bs-target="#approveModal">
+                            <button type="button" class="btn btn-success btn-sm btn-rounded" onclick="confirm('Are you sure to approve this application?')">
                                 Approve
                             </button>
-                            <button type="button" class="btn btn-danger btn-sm btn-rounded" data-bs-toggle="modal"
-                                data-bs-target="#rejectModal">
+                            <button type="button" class="btn btn-danger btn-sm btn-rounded" onclick="confirm('Are you sure to reject this application?')">
                                 Reject
                             </button>
                         </td>
@@ -188,51 +186,5 @@
     <script src="../assets/js/main.js"></script>
 
 </body>
-
-<!-- Approve Modal -->
-<div class="modal fade" id="approveModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <form action="home.html">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Approve Confirmation</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="panel-body">
-                        Are you sure to approve this student's applciation?
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Confirm</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-<!-- Reject Modal -->
-<div class="modal fade" id="rejectModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <form action="home.html">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Reject Confirmation</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="panel-body">
-                        Are you sure to reject this student's applciation?
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-danger">Confirm</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
 
 </html>
