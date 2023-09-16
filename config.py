@@ -1,9 +1,9 @@
 # rmb to change after
 
-customhost = "employee.cyu5o1soey0x.us-east-1.rds.amazonaws.com"
-customuser = "aws_user"
-custompass = "Bait3273"
-customdb = "employee"
-custombucket = "wangshuwei-employee"
+customhost = "internshipdbinstance.c7qv5pz2qhty.us-east-1.rds.amazonaws.com"
+customuser = "Teohxinzhi123"
+custompass = "Teohxinzhi123"
+customdb = "internship"
+custombucket = "teohxinzhi-internship-bucket"
 customregion = "us-east-1"
 
