@@ -38,15 +38,15 @@
         <div class="container d-flex align-items-center">
 
             <div class="logo me-auto">
-                <h1><a href="home.html">Lanternship</a></h1>
+                <h1><a href="{{ url_for('studentHome') }}">Lanternship</a></h1>
             </div>
 
             <nav id="navbar" class="navbar order-last order-lg-0">
                 <ul>
-                    <li><a class="nav-link scrollto" href="home.html">Home</a></li>
-                    <li><a class="nav-link scrollto" href="companyList.html">Find Company</a></li>
-                    <li><a class="nav-link scrollto" href="applicationHistory.html">Job Application History</a></li>
-                    <li><a class="nav-link scrollto" href="../index.html">Logout</a></li>
+                    <li><a class="nav-link scrollto" href="{{ url_for('studentHome') }}">Home</a></li>
+                    <li><a class="nav-link scrollto" href="{{ url_for('studentCompanyList') }}companyList.html">Find Company</a></li>
+                    <li><a class="nav-link scrollto" href="{{ url_for('studentApplicationHistory') }}">Job Application History</a></li>
+                    <li><a class="nav-link scrollto" href="{{ url_for('index') }}">Logout</a></li>
                 </ul>
                 <i class="bi bi-list mobile-nav-toggle"></i>
             </nav><!-- .navbar -->
@@ -205,7 +205,7 @@
                     <h4 class="my-3 text-primary"><b>Report Submission</b></h4>
                     <div class="card mb-4">
                         <div class="card-body">
-                            <form action="home.html" method=""
+                            <form action="{{ url_for('studentHome') }}" method=""
                                 onsubmit="return confirm('Are you sure to submit these reports? Once submitted, cannot be changed anymore.')">
                                 <div class="form-group">
                                     <label for="monthlyReport" class="col-form-label">Monthly Reports (Upload all your
@@ -235,7 +235,7 @@
                     <div class="card mb-4 mb-lg-0">
                         <div class="card-body p-0">
                             <div class="card-body">
-                                <form action="home.html" method=""
+                                <form action="{{ url_for('studentHome') }}" method=""
                                     onsubmit="return confirm('Are you sure to submit this company? Once submitted, cannot be changed anymore.')">
                                     <div class="form-group">
                                         <label for="companyName" class="col-form-label">Company Name</label>
@@ -388,7 +388,7 @@
 <div class="modal fade" id="editInfoModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form action="home.html" method="" onsubmit="return confirm('Are you sure to this changes？')">
+            <form action="{{ url_for('studentHome') }}" method="" onsubmit="return confirm('Are you sure to this changes？')">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Edit Info</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>

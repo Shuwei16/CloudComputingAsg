@@ -36,14 +36,14 @@
     <div class="container d-flex align-items-center">
 
       <div class="logo me-auto">
-        <h1><a href="home.html">Lanternship</a></h1>
+        <h1><a href="{{ url_for('companyHome') }}">Lanternship</a></h1>
       </div>
 
       <nav id="navbar" class="navbar order-last order-lg-0">
         <ul>
-          <li><a class="nav-link scrollto" href="home.html">Home</a></li>
-          <li><a class="nav-link scrollto" href="studentApplication.html">Student Applications</a></li>
-          <li><a class="nav-link scrollto" href="../index.html">Logout</a></li>
+          <li><a class="nav-link scrollto" href="{{ url_for('companyHome') }}">Home</a></li>
+          <li><a class="nav-link scrollto" href="{{ url_for('companyStudentApplication') }}">Student Applications</a></li>
+          <li><a class="nav-link scrollto" href="{{ url_for('index') }}">Logout</a></li>
         </ul>
         <i class="bi bi-list mobile-nav-toggle"></i>
       </nav><!-- .navbar -->
@@ -341,7 +341,7 @@
 <div class="modal fade" id="editInfoModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
-      <form action="home.html" method="" onsubmit="return confirm('Are you sure to this changes？')">
+      <form action="{{ url_for('comapanyHome') }}" method="" onsubmit="return confirm('Are you sure to this changes？')">
         <div class="modal-header">
           <h5 class="modal-title" id="exampleModalLabel">Edit Company Info</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -456,7 +456,7 @@
 <div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
-      <form action="home.html" method="" onsubmit="return confirm('Are you sure to add this job？')">
+      <form action="{{ url_for('companyHome') }}" method="" onsubmit="return confirm('Are you sure to add this job？')">
         <div class="modal-header">
           <h5 class="modal-title" id="exampleModalLabel">Add New Job</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -521,7 +521,7 @@
 <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
-      <form action="home.html" method="" onsubmit="return confirm('Are you sure to this changes？')">
+      <form action="{{ url_for('companyHome') }}" method="" onsubmit="return confirm('Are you sure to this changes？')">
         <div class="modal-header">
           <h5 class="modal-title" id="exampleModalLabel">Edit Job</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>

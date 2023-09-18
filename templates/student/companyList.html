@@ -36,15 +36,15 @@
     <div class="container d-flex align-items-center">
 
       <div class="logo me-auto">
-        <h1><a href="home.html">Lanternship</a></h1>
+        <h1><a href="{{ url_for('studentHome') }}">Lanternship</a></h1>
       </div>
 
       <nav id="navbar" class="navbar order-last order-lg-0">
         <ul>
-          <li><a class="nav-link scrollto" href="home.html">Home</a></li>
-          <li><a class="nav-link scrollto" href="companyList.html">Find Company</a></li>
-          <li><a class="nav-link scrollto" href="applicationHistory.html">Job Application History</a></li>
-          <li><a class="nav-link scrollto" href="../index.html">Logout</a></li>
+          <li><a class="nav-link scrollto" href="{{ url_for('studentHome') }}">Home</a></li>
+          <li><a class="nav-link scrollto" href="{{ url_for('studentCompanyList') }}">Find Company</a></li>
+          <li><a class="nav-link scrollto" href="{{ url_for('studentApplicationHistory') }}">Job Application History</a></li>
+          <li><a class="nav-link scrollto" href="{{ url_for('index') }}">Logout</a></li>
         </ul>
         <i class="bi bi-list mobile-nav-toggle"></i>
       </nav><!-- .navbar -->
@@ -83,12 +83,12 @@
                 <div class="portfolio-wrap">
                   <figure class="h-50">
                     <img src="../assets/img/company/techtics.jpg" class="techtics-img img-fluid w-100" alt="">
-                    <a href="companyDetail.html" class="link-details" title="More Details" target="_blank"><i
+                    <a href="{{ url_for('studentCompanyDetail') }}" class="link-details" title="More Details" target="_blank"><i
                         class="bx bx-link"></i></a>
                   </figure>
 
                   <div class="portfolio-info ">
-                    <h4><a href="companyDetail.html">Techtics Solutions Sdn Bhd</a></h4>
+                    <h4><a href="{{ url_for('studentCompanyDetail') }}">Techtics Solutions Sdn Bhd</a></h4>
                     <p>Software</p>
                     <p>RM 800.00 - RM 1000.00</p>
                   </div>
@@ -99,12 +99,12 @@
                 <div class="portfolio-wrap">
                   <figure class="h-50">
                     <img src="../assets/img/company/ecloud_sdn_bhd_logo.jpg" class="eCloud-img img-fluid w-100" alt="">
-                    <a href="companyDetail.html" class="link-details" title="More Details" target="_blank"><i
+                    <a href="{{ url_for('studentCompanyDetail') }}" class="link-details" title="More Details" target="_blank"><i
                         class="bx bx-link"></i></a>
                   </figure>
 
                   <div class="portfolio-info">
-                    <h4><a href="companyDetail.html">eCloud Sdn Bhd</a></h4>
+                    <h4><a href="{{ url_for('studentCompanyDetail') }}">eCloud Sdn Bhd</a></h4>
                     <p>Security</p>
                     <p>RM 800.00 - RM 1000.00</p>
                   </div>
@@ -115,12 +115,12 @@
                 <div class="portfolio-wrap">
                   <figure class="h-50">
                     <img src="../assets/img/company/Intego.png" class="intego-img img-fluid w-100" alt="">
-                    <a href="companyDetail.html" class="link-details" title="More Details" target="_blank"><i
+                    <a href="{{ url_for('studentCompanyDetail') }}" class="link-details" title="More Details" target="_blank"><i
                         class="bx bx-link"></i></a>
                   </figure>
 
                   <div class="portfolio-info">
-                    <h4><a href="companyDetail.html">INTEGO TECHNOLOGIES SDN BHD</a></h4>
+                    <h4><a href="{{ url_for('studentCompanyDetail') }}">INTEGO TECHNOLOGIES SDN BHD</a></h4>
                     <p>Hardware</p>
                     <p>RM 800.00 - RM 1000.00</p>
                   </div>
@@ -131,12 +131,12 @@
                 <div class="portfolio-wrap">
                   <figure class="h-50">
                     <img src="../assets/img/company/infowhiz.png" class="infowhiz-img img-fluid w-100" alt="">
-                    <a href="companyDetail.html" class="link-details" title="More Details" target="_blank"><i
+                    <a href="{{ url_for('studentCompanyDetail') }}" class="link-details" title="More Details" target="_blank"><i
                         class="bx bx-link"></i></a>
                   </figure>
 
                   <div class="portfolio-info">
-                    <h4><a href="companyDetail.html">Infowhiz Solutions (M) Sdn Bhd</a></h4>
+                    <h4><a href="{{ url_for('studentCompanyDetail') }}">Infowhiz Solutions (M) Sdn Bhd</a></h4>
                     <p>Security</p>
                     <p>RM 800.00 - RM 1000.00</p>
                   </div>
@@ -147,12 +147,12 @@
                 <div class="portfolio-wrap">
                   <figure class="h-50">
                     <img src="../assets/img/company/public.jpg" class="public-img img-fluid w-100" alt="">
-                    <a href="companyDetail.html" class="link-details" title="More Details" target="_blank"><i
+                    <a href="{{ url_for('studentCompanyDetail') }}" class="link-details" title="More Details" target="_blank"><i
                         class="bx bx-link"></i></a>
                   </figure>
 
                   <div class="portfolio-info">
-                    <h4><a href="companyDetail.html">Public Mutual Berhad</a></h4>
+                    <h4><a href="{{ url_for('studentCompanyDetail') }}">Public Mutual Berhad</a></h4>
                     <p>Security</p>
                     <p>RM 800.00 - RM 1000.00</p>
                   </div>
@@ -163,12 +163,12 @@
                 <div class="portfolio-wrap">
                   <figure class="h-50">
                     <img src="../assets/img/company/hatio.png" class="hatio-img img-fluid w-100" alt="">
-                    <a href="companyDetail.html" class="link-details" title="More Details" target="_blank"><i
+                    <a href="{{ url_for('studentCompanyDetail') }}" class="link-details" title="More Details" target="_blank"><i
                         class="bx bx-link"></i></a>
                   </figure>
 
                   <div class="portfolio-info">
-                    <h4><a href="companyDetail.html">Hatio Sea Sdn Bhd</a></h4>
+                    <h4><a href="{{ url_for('studentCompanyDetail') }}">Hatio Sea Sdn Bhd</a></h4>
                     <p>Software</p>
                     <p>RM 800.00 - RM 1000.00</p>
                   </div>
@@ -179,12 +179,12 @@
                 <div class="portfolio-wrap">
                   <figure class="h-50">
                     <img src="../assets/img/company/bigpay-logo-512.png" class="bigpay-img img-fluid w-100" alt="">
-                    <a href="companyDetail.html" class="link-details" title="More Details" target="_blank"><i
+                    <a href="{{ url_for('studentCompanyDetail') }}" class="link-details" title="More Details" target="_blank"><i
                         class="bx bx-link"></i></a>
                   </figure>
 
                   <div class="portfolio-info">
-                    <h4><a href="companyDetail.html">Bigpay Malaysia Sdn Bhd</a></h4>
+                    <h4><a href="{{ url_for('studentCompanyDetail') }}">Bigpay Malaysia Sdn Bhd</a></h4>
                     <p>Software</p>
                     <p>RM 800.00 - RM 1000.00</p>
                   </div>
@@ -195,12 +195,12 @@
                 <div class="portfolio-wrap">
                   <figure class="h-50">
                     <img src="../assets/img/company/GHL.png" class="GHL-img img-fluid w-100" alt="">
-                    <a href="companyDetail.html" class="link-details" title="More Details" target="_blank"><i
+                    <a href="{{ url_for('studentCompanyDetail') }}" class="link-details" title="More Details" target="_blank"><i
                         class="bx bx-link"></i></a>
                   </figure>
 
                   <div class="portfolio-info">
-                    <h4><a href="companyDetail.html">GHL SYSTEMS BERHAD</a></h4>
+                    <h4><a href="{{ url_for('studentCompanyDetail') }}">GHL SYSTEMS BERHAD</a></h4>
                     <p>Hardware</p>
                     <p>RM 800.00 - RM 1000.00</p>
                   </div>
@@ -211,11 +211,11 @@
                 <div class="portfolio-wrap">
                   <figure class="h-50">
                     <img src="../assets/img/company/CTC.jpg" class="CTC-img img-fluid w-100" alt="">
-                    <a href="companyDetail.html" class="link-details" title="More Details" target="_blank"><i
+                    <a href="{{ url_for('studentCompanyDetail') }}" class="link-details" title="More Details" target="_blank"><i
                         class="bx bx-link"></i></a>
                   </figure>
                   <div class="portfolio-info">
-                    <h4><a href="companyDetail.html">CTC Global Sdn Bhd</a></h4>
+                    <h4><a href="{{ url_for('studentCompanyDetail') }}">CTC Global Sdn Bhd</a></h4>
                     <p>Hardware</p>
                     <p>RM 800.00 - RM 1000.00</p>
                   </div>

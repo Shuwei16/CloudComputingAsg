@@ -34,17 +34,17 @@
     <div class="container d-flex align-items-center">
 
       <div class="logo me-auto">
-        <h1><a href="../index.html">Lanternship</a></h1>
+        <h1><a href="{{ url_for('index') }}">Lanternship</a></h1>
       </div>
 
       <nav id="navbar" class="navbar order-last order-lg-0">
         <ul>
           <li class="dropdown"><a href="#"><span>Login</span> <i class="bi bi-chevron-down"></i></a>
             <ul>
-              <li><a href="../student/login.html">Student</a></li>
-              <li><a href="../company/login.html">Company</a></li>
-              <li><a href="../lecturer/login.html">Lecturer</a></li>
-              <li><a href="../admin/login.html">Admin</a></li>
+              <li><a href="{{ url_for('studentLogin') }}">Student</a></li>
+              <li><a href="{{ url_for('companyLogin') }}">Company</a></li>
+              <li><a href="{{ url_for('lecturerLogin') }}">Lecturer</a></li>
+              <li><a href="{{ url_for('adminLogin') }}">Admin</a></li>
             </ul>
           </li>
         </ul>
@@ -56,7 +56,7 @@
    <!-- ======= Auth Section ======= -->
   <section id="auth" class="d-flex flex-column justify-content-center align-items-center">
     <div class="container text-center text-md-left" data-aos="fade-up">
-      <form action="home.html">
+      <form action="{{ url_for('lecturerHome') }}">
         <h3>Lecturer Login</h3>
 
         <label for="email">Email</label>
