@@ -11,22 +11,20 @@
   <meta content="" name="keywords">
 
   <!-- Favicons -->
-  <link href="../assets/img/favicon.png" rel="icon">
+  <link href="{{ url_for('static', filename='img/favicon.png') }}" rel="icon">
 
   <!-- Google Fonts -->
-  <link
-    href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
-    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
 
   <!-- Vendor CSS Files -->
-  <link href="../assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-  <link href="../assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-  <link href="../assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
-  <link href="../assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
-  <link href="../assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+  <link href="{{ url_for('static', filename='vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+  <link href="{{ url_for('static', filename='vendor/bootstrap-icons/bootstrap-icons.css') }}" rel="stylesheet">
+  <link href="{{ url_for('static', filename='vendor/boxicons/css/boxicons.min.css') }}" rel="stylesheet">
+  <link href="{{ url_for('static', filename='vendor/glightbox/css/glightbox.min.css') }}" rel="stylesheet">
+  <link href="{{ url_for('static', filename='vendor/swiper/swiper-bundle.min.css') }}" rel="stylesheet">
 
   <!-- Template Main CSS File -->
-  <link href="../assets/css/style.css" rel="stylesheet">
+  <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
 </head>
 
 <body>
@@ -51,25 +49,33 @@
     </div>
   </header><!-- End Header -->
 
+   
+   <!-- ======= Breadcrumbs ======= -->
+   <!-- <section class="breadcrumbs">
+    <div class="container">
+
+      <div class="d-flex justify-content-between align-items-center">
+        <h2><br/><br/>Company Detail</h2>
+      </div>
+
+    </div>
+  </section>End Breadcrumbs -->
+
   <!-- ======= Inner Page ======= -->
   <section class="inner-page">
     <div class="container py-5">
-      <h2>Company: Techtics Solutions Sdn Bhd<br />
-        <hr>
-      </h2>
-      <br />
+      <h2>Welcome: Techtics Solutions Sdn Bhd!<br/><hr></h2>
+      <div class="d-flex justify-content-between align-items-center">
+        <h2><br/>Company Detail</h2>
+      </div>
       <div class="row">
         <div class="col-lg-4">
           <div class="card mb-4">
             <div class="card-body text-center">
-              <img src="../assets/img/company/techtics.jpg" alt="companyLogo" class="rounded-circle img-fluid"
-                style="width: 300px;">
+              <img src="{{ url_for('static', filename='img/company/techtics.jpg') }}" alt="companyLogo"
+                class="rounded-circle img-fluid" style="width: 300px;">
               <h5 class="my-3">Techtics Solutions Sdn Bhd</h5>
-              <p class="text-muted mb-1">At Techtics Solutions we’ll transition you smoothly into the crypto universe,
-                starting with design thinking-driven solutions that focus on your specific needs and goals. You’ll
-                benefit from a decentralised world that is changing how investments, business and entertainment are
-                being shaped and delivered. With decentralisation and without intermediaries, the whole virtual world
-                becomes your market and target.</p><br /><br />
+              <p class="text-muted mb-1">At Techtics Solutions we’ll transition you smoothly into the crypto universe, starting with design thinking-driven solutions that focus on your specific needs and goals. You’ll benefit from a decentralised world that is changing how investments, business and entertainment are being shaped and delivered. With decentralisation and without intermediaries, the whole virtual world becomes your market and target.</p><br/><br/>
               <!-- <div class="d-flex justify-content-center mb-2">
                 <button type="button" class="btn btn-outline-primary ms-1">Edit Info</button>
               </div> -->
@@ -92,8 +98,7 @@
                     <p class="mb-0">Location</p>
                   </div>
                   <div class="col-sm-9">
-                    <p class="text-muted mb-0">VO2-09-06, V Office 2, Lingkaran SV,, Sunway Velocity, Jalan Peel, 55100,
-                      Kuala Lumpur.</p>
+                    <p class="text-muted mb-0">VO2-09-06, V Office 2, Lingkaran SV,, Sunway Velocity, Jalan Peel, 55100, Kuala Lumpur.</p>
                   </div>
                 </div>
                 <hr>
@@ -120,16 +125,18 @@
                     <p class="mb-0">Email</p>
                   </div>
                   <div class="col-sm-9">
-                    <p class="text-muted mb-0"><a href="mailto:info@techtics.io">info@techtics.io</a></p>
+                    <p class="text-muted mb-0">info@techtics.io</p>
                   </div>
                 </div>
                 <hr>
                 <div class="row">
                   <div class="col-sm-3">
-                    <p class="mb-0">Contact No.</p>
+                    <p class="mb-0">Contact</p>
                   </div>
                   <div class="col-sm-9">
-                    <p class="text-muted mb-0"><a href="tel:+60399266778">03-99266778</a></p>
+                    <p class="text-muted mb-0">(+60)3-9226 6778
+
+                    </p>
                   </div>
                 </div>
                 <hr>
@@ -188,15 +195,14 @@
               <hr>
               <div class="row">
                 <p class="mb-4 text-primary">Job Description</p>
-                <p class="text-muted mb-0">• Blockchain related game development (GameFi, NFT Game, Metaverse,
-                  etc...)<br>
+                <p class="text-muted mb-0">• Blockchain related game development (GameFi, NFT Game, Metaverse, etc...)<br>
 
                   • Knowledge of Unity, including experience with scripting, textures, animation, and GUI<br>
-
+                  
                   • Assess, develop, debug, maintain, and set code standards<br>
-
+                  
                   • Work closely with the designer and back-end programmer<br>
-
+                  
                   • Knowledge of Cocos Creator and TypeScript is a plus</p>
               </div>
               <hr>
@@ -207,8 +213,9 @@
               <hr>
               <div class="row">
                 <div class="d-flex justify-content-center mb-2">
-                  <button type="button" class="btn btn-outline-primary ms-1"
-                    onclick="confirm('Are you sure to apply this job?')">Apply</button>
+                  <button type="button" class="btn btn-outline-primary ms-1" data-bs-toggle="modal"
+                  data-bs-target="#exampleModal" style="float: right;">Apply</button>
+                  <!-- <button type="button" class="btn btn-outline-danger ms-1" style="float: right;">Delete</button> -->
                 </div>
               </div>
             </div>
@@ -254,13 +261,14 @@
               <hr>
               <div class="row">
                 <div class="d-flex justify-content-center mb-2">
-                  <button type="button" class="btn btn-outline-primary ms-1"
-                    onclick="confirm('Are you sure to apply this job?')">Apply</button>
+                  <button type="button" class="btn btn-outline-primary ms-1" data-bs-toggle="modal"
+                  data-bs-target="#exampleModal" style="float: right;">Apply</button>
+                  <!-- <button type="button" class="btn btn-outline-danger ms-1" style="float: right;">Delete</button> -->
                 </div>
               </div>
             </div>
           </div>
-          <div class="card mb-4">
+          <!-- <div class="card mb-4">
             <div class="card-body">
               <div class="row">
                 <div class="col-sm-3">
@@ -301,44 +309,73 @@
               <hr>
               <div class="row">
                 <div class="d-flex justify-content-center mb-2">
-                  <button type="button" class="btn btn-outline-primary ms-1"
-                    onclick="confirm('Are you sure to apply this job?')">Apply</button>
+                  <button type="button" class="btn btn-outline-primary ms-1" style="float: right;">Edit</button>
+                  <button type="button" class="btn btn-outline-danger ms-1" style="float: right;">Delete</button>
                 </div>
               </div>
             </div>
-          </div>
+          </div> -->
         </div>
       </div>
     </div>
   </section>
-  <!-- End Inner Page -->
 
-  </main><!-- End #main -->
+
+</main><!-- End #main -->
 
   <!-- ======= Footer ======= -->
   <footer id="footer">
     <div class="container d-md-flex py-4">
-      <div class="copyright">
-        &copy; 2023 - Internship Management System
-      </div>
+        <div class="copyright">
+          &copy; 2023 - Internship Management System
+        </div>
     </div>
   </footer><!-- End Footer -->
 
-  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
-      class="bi bi-arrow-up-short"></i></a>
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
   <!-- Vendor JS Files -->
-  <script src="../assets/vendor/purecounter/purecounter_vanilla.js"></script>
-  <script src="../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <script src="../assets/vendor/glightbox/js/glightbox.min.js"></script>
-  <script src="../assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
-  <script src="../assets/vendor/swiper/swiper-bundle.min.js"></script>
-  <script src="../assets/vendor/waypoints/noframework.waypoints.js"></script>
-  <script src="../assets/vendor/php-email-form/validate.js"></script>
+  <script src="{{ url_for('static', filename='vendor/purecounter/purecounter_vanilla.js') }}"></script>
+  <script src="{{ url_for('static', filename='vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='vendor/glightbox/js/glightbox.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='vendor/isotope-layout/isotope.pkgd.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='vendor/swiper/swiper-bundle.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='vendor/waypoints/noframework.waypoints.js') }}"></script>
+  <script src="{{ url_for('static', filename='vendor/php-email-form/validate.js') }}"></script>
 
   <!-- Template Main JS File -->
-  <script src="../assets/js/main.js"></script>
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 
 </body>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1"
+aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Confirmation</h5>
+            <button type="button" class="btn-close"
+                data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <div class="panel-body">
+                
+              <p>Are you sure you want to apply to this job?</p>
+                <!-- <div class="btn btn-default">
+                    <a
+                        href="/Student/ProgressReport?template=FOCS_StudF03&amp;level=Bachelor">My
+                        Progress report</a>
+                </div> -->
+            </div>
+        </div>
+        <div class="modal-footer d-flex justify-content-center">
+            <button type="button" class="btn btn-success"
+                data-bs-dismiss="modal" style="float: right;">Confirm</button>
+            <button type="button" class="btn btn-danger" style="float: right;" data-bs-dismiss="modal" aria-label="Close">No</button>
+        </div>
+    </div>
+</div>
+</div>
 
 </html>
