@@ -1,6 +1,6 @@
 # rmb to change after
 
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for, flash, session
 from pymysql import connections
 import os
 import boto3
@@ -11,14 +11,14 @@ app = Flask(__name__)
 bucket = custombucket
 region = customregion
 
-# db_conn = connections.Connection(
-#     host=customhost,
-#     port=3306,
-#     user=customuser,
-#     password=custompass,
-#     db=customdb
+db_conn = connections.Connection(
+    host=customhost,
+    port=3306,
+    user=customuser,
+    password=custompass,
+    db=customdb
 
-# )
+)
 # output = {}
 # table = 'employee'
 
@@ -29,20 +29,65 @@ def index():
     return render_template('index.html')
 
 # Student
-@app.route("/student/login")
+@app.route("/student/login", method=['GET', 'POST'])
 def studentLogin():
-    return render_template('student/login.html')
+    if request.method == 'POST':
+        email = request.form['email']
+        nric = request.form['nric']
+        
+        cursor = db_conn.cursor()
+        cursor.execute("SELECT * FROM students WHERE studEmail = %s AND studIC = %s", (email, nric))
+        user = cursor.fetchone()
+        cursor.close()
+        
+        if user:
+            session['studID'] = user['studID']
+            return render_template('student/home.html')
+        else:
+            error_message = 'Login failed. Please check your email and nric.'
+    
+    return render_template('student/login.html', error_message=error_message)
 
-@app.route("/student/register")
+@app.route("/student/register", methods=['GET', 'POST'])
 def studentRegister():
+    if request.method == 'POST':
+        # Retrieve registration data from the form
+        name = request.form['name']
+        nric = request.form['nric']
+        gender = request.form['gender']
+        studentID = request.form['studentID']
+        email = request.form['email']
+        contactNo = request.form['contactNo']
+        programme = request.form['programme']
+        cohort = request.form['cohort']
+        lecturerName = request.form['lecturerName']
+        cgpa = request.form['cgpa']
+        resume = request.form['resume']
+        
+        # Search for lecturer email
+        cursor = db_conn.cursor()
+        cursor.execute("SELECT email FROM lecturers WHERE name = %s", (lecturerName))
+        lecturerEmail = cursor.fetchone()
+        cursor.close()
+
+        # Insert the new user into the database (Assuming you have a 'students' table)
+        cursor = db_conn.cursor()
+        cursor.execute("INSERT INTO students (studID, studEmail, studIC, gender, studName, course, studPhone, cgpa, lectEmail) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)", 
+                       (studentID, email, nric, name, programme, contactNo, cgpa, lecturerEmail))
+        db_conn.commit()
+        cursor.close()
+        
+        return redirect(url_for('studentRegisterSuccess'))
+    
     return render_template('student/register.html')
 
 @app.route("/student/registerSuccess")
 def studentRegisterSuccess():
     return render_template('student/registerSuccess.html')
 
-@app.route("/student/home")
+@app.route("/student/home", method=['POST'])
 def studentHome():
+    
     return render_template('student/home.html')
 
 @app.route("/student/companyList")
@@ -58,9 +103,24 @@ def studentApplicationHistory():
     return render_template('student/applicationHistory.html')
 
 # Lecturer
-@app.route("/lecturer/login")
+@app.route("/lecturer/login", method=['GET', 'POST'])
 def lecturerLogin():
-    return render_template('lecturer/login.html')
+    if request.method == 'POST':
+        email = request.form['email']
+        password = request.form['password']
+        
+        cursor = db_conn.cursor()
+        cursor.execute("SELECT * FROM lecturers WHERE email = %s AND password = %s", (email, password))
+        user = cursor.fetchone()
+        cursor.close()
+        
+        if user:
+            session['email'] = user['email']
+            return render_template('lecturer/home.html')
+        else:
+            error_message = 'Login failed. Please check your email and password.'
+    
+    return render_template('lecturer/login.html', error_message=error_message)
 
 @app.route("/lecturer/home")
 def lecturerHome():
@@ -71,12 +131,47 @@ def lecturerDetail():
     return render_template('lecturer/studentDetail.html')
 
 # Company
-@app.route("/company/login")
+@app.route("/company/login", method=['GET', 'POST'])
 def companyLogin():
-    return render_template('company/login.html')
+    if request.method == 'POST':
+        email = request.form['email']
+        password = request.form['password']
+        
+        cursor = db_conn.cursor()
+        cursor.execute("SELECT * FROM companies WHERE email = %s AND password = %s", (email, password))
+        user = cursor.fetchone()
+        cursor.close()
+        
+        if user:
+            session['email'] = user['email']
+            return render_template('company/home.html')
+        else:
+            error_message = 'Login failed. Please check your email and password.'
+    
+    return render_template('company/login.html', error_message=error_message)
 
-@app.route("/company/register")
+@app.route("/company/register", methods=['GET', 'POST'])
 def companyRegister():
+    if request.method == 'POST':
+        # Retrieve registration data from the form
+        companyName = request.form['companyName']
+        companyDescription = request.form['companyDescription']
+        category = request.form['category']
+        contactNo = request.form['contactNo']
+        email = request.form['email']
+        address = request.form['line1'] + ', ' + request.form['line2'] + ', ' + request.form['city'] + ', ' + request.form['postcode'] + ', ' + request.form['state'] + '.'
+        companyLogo = request.form['companyLogo']
+        password = request.form['password']
+
+        # Insert the new user into the database (Assuming you have a 'students' table)
+        cursor = db_conn.cursor()
+        cursor.execute("INSERT INTO companies (compEmail, compPassword, compName, compDesc, category, compLocation, compPhone) VALUES (%s, %s, %s, %s, %s, %s, %s)", 
+                       (email, password, companyName, companyDescription, category, address, contactNo))
+        db_conn.commit()
+        cursor.close()
+        
+        return redirect(url_for('studentRegisterSuccess'))
+    
     return render_template('company/register.html')
 
 @app.route("/company/registerSuccess")
@@ -92,9 +187,24 @@ def companyStudentApplication():
     return render_template('company/studentApplication.html')
 
 # Admin
-@app.route("/admin/login")
+@app.route("/admin/login", method=['GET', 'POST'])
 def adminLogin():
-    return render_template('admin/login.html')
+    if request.method == 'POST':
+        email = request.form['email']
+        password = request.form['password']
+        
+        cursor = db_conn.cursor()
+        cursor.execute("SELECT * FROM admins WHERE email = %s AND password = %s", (email, password))
+        user = cursor.fetchone()
+        cursor.close()
+        
+        if user:
+            session['email'] = user['email']
+            return render_template('admin/home.html')
+        else:
+            error_message = 'Login failed. Please check your email and password.'
+    
+    return render_template('admin/login.html', error_message=error_message)
 
 @app.route("/admin/home")
 def adminHome():
@@ -112,7 +222,13 @@ def adminCompanyDetail():
 def adminLecturerList():
     return render_template('admin/lecturerList.html')
 
-
+# logout
+@app.route("/logout")
+def logout():
+    # Clear the session to log out the user
+    session.clear()
+    flash('You have been logged out.', 'success')
+    return redirect(url_for('index'))
 
 # @app.route("/about", methods=['POST'])
 # def about():
