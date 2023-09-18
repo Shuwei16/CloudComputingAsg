@@ -89,7 +89,7 @@
                 </div>
                 <h1 style="color: #88B04B;">Success</h1>
                 <p>You have successfully registered! <br /> Now you can login to the system.</p>
-                <button onclick="window.location.href='login.html';" class="btn btn-outline-primary ms-1">Login</button>
+                <button onclick='window.location.href="{{ url_for('studentLogin') }}";' class="btn btn-outline-primary ms-1">Login</button>
             </div>
         </div>
     </section><!-- End Auth -->
