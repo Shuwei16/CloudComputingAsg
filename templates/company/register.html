@@ -43,7 +43,7 @@
             <ul>
               <li><a href="../student/login.html">Student</a></li>
               <li><a href="../company/login.html">Company</a></li>
-              <li><a href="../supervisor/login.html">Supervisor</a></li>
+              <li><a href="../lecturer/login.html">Lecturer</a></li>
               <li><a href="../admin/login.html">Admin</a></li>
             </ul>
           </li>
@@ -54,19 +54,45 @@
   </header><!-- End Header -->
 
   <!-- ======= Auth Section ======= -->
-  <section id="auth" class="d-flex flex-column justify-content-center align-items-center">
+  <section id="auth" class="d-flex flex-column justify-content-center align-items-center" style="height: 200vh">
     <div class="container text-center text-md-left" data-aos="fade-up">
-      <form action="">
+      <form action="registerSuccess.html">
         <h3>Company Registration</h3>
 
+        <label for="companyName">Company Name</label>
+        <input type="text" placeholder="" id="companyName">
+
+        <label for="companyDescription">Company Description</label>
+        <textarea class="form-control" id="companyDescription" rows="3"></textarea>
+
+        <label for="category">Category</label>
+        <select class="form-select" aria-label="category">
+          <option value="Software">Software</option>
+          <option value="Hardware">Hardware</option>
+          <option value="Security">Security</option>
+        </select>
+
+        <label for="contactNo">Contact Number</label>
+        <input type="text" placeholder="e.g. 019-9999999" id="contactNo" pattern="\d{2,3}-\d{7,8}">
+
         <label for="email">Email</label>
-        <input type="text" placeholder="Email" id="email">
+        <input type="email" placeholder="e.g. xxx@xxx.com" id="email">
+
+        <label for="address">Address</label>
+        <input type="text" placeholder="address line 1" id="text">
+        <input type="text" placeholder="address line 2" id="text">
+        <input type="text" placeholder="city" id="text">
+        <input type="text" placeholder="postcode" id="text">
+        <input type="text" placeholder="state" id="text">
+
+        <label for="companyLogo">Company Logo</label>
+        <input type="file" placeholder="" id="text">
 
         <label for="password">Password</label>
-        <input type="password" placeholder="Password" id="password">
+        <input type="password" placeholder="" id="text">
 
-        <label for="password">Blabla</label>
-        <input type="password" placeholder="Password" id="password">
+        <label for="password">Confirm Password</label>
+        <input type="password" placeholder="" id="text">
 
         <button type="submit">Register</button>
         <span>Already have an account? <a href="login.html">Login</a></span>

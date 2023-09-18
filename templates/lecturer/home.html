@@ -14,7 +14,9 @@
   <link href="../assets/img/favicon.png" rel="icon">
 
   <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+    rel="stylesheet">
 
   <!-- Vendor CSS Files -->
   <link href="../assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -39,8 +41,7 @@
 
       <nav id="navbar" class="navbar order-last order-lg-0">
         <ul>
-          <li><a class="nav-link scrollto" href="">Function 1</a></li>
-          <li><a class="nav-link scrollto" href="">Function 2</a></li>
+          <li><a class="nav-link scrollto" href="home.html">Home</a></li>
           <li><a class="nav-link scrollto" href="../index.html">Logout</a></li>
         </ul>
         <i class="bi bi-list mobile-nav-toggle"></i>
@@ -48,37 +49,163 @@
     </div>
   </header><!-- End Header -->
 
-   <!-- ======= Breadcrumbs ======= -->
-   <section class="breadcrumbs">
-    <div class="container">
-
-      <div class="d-flex justify-content-between align-items-center">
-        <h2><br/><br/>Lecturer Home Page</h2>
-      </div>
-
-    </div>
-  </section><!-- End Breadcrumbs -->
-
+  <!-- ======= Inner Page ======= -->
   <section class="inner-page">
     <div class="container">
-      <p>
-        Example inner page template<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
-      </p>
-    </div>
-  </section>
+      <div class="container py-5">
+        <h2>Welcome: Lim Ji Ji!<br />
+          <hr><br />
+        </h2>
+        <section id="portfolio" class="portfolio">
+          <div class="application-container container" style="height: auto;">
+            <div class="section-title">
+              <h2>List of Students</h2>
+              <p>Click the button below to filter the students with different cohort</p>
+            </div>
 
-</main><!-- End #main -->
+            <div class="row">
+              <div class="col-lg-12">
+                <ul id="portfolio-flters">
+                  <li data-filter="*" class="filter-active">All</li>
+                  <li data-filter="filter-JUL2022Y2">JUL2022Y2</li>
+                  <li data-filter="filter-NOV2022Y2">NOV2022Y2</li>
+                </ul>
+              </div>
+            </div>
+
+            <table class="table align-middle mb-0 bg-white" id="table-student">
+              <thead class="bg-light">
+                <tr>
+                  <th>Cohort</th>
+                  <th>Student</th>
+                  <th>Company Supervisor</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="filter-JUL2022Y2">
+                  <td>
+                    JUL2022Y2
+                  </td>
+                  <td>
+                    <div class="d-flex align-items-center">
+                      <div class="ms-3">
+                        <p class="fw-bold mb-1">John Doe</p>
+                        <p class="text-muted mb-0">Bachelor degree in software engineering</p>
+                        <p class="text-muted mb-0">22WMR00001</p>
+                        <p class="text-muted mb-0"><a href="mailto:xxx@student.tarc.edu.my">xxx@student.tarc.edu.my</a>
+                        </p>
+                        <p class="text-muted mb-0"><a href="tel:+60123456789">012-3456789</a></p>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="d-flex align-items-center">
+                      <div class="ms-3">
+                        <p class="fw-bold mb-1">John Doe</p>
+                        <p class="text-muted mb-0">Techtics Solutions Sdn Bhd</p>
+                        <p class="text-muted mb-0"><a href="mailto:xxx@xxx.com">xxx@xxx.com</a></p>
+                        <p class="text-muted mb-0"><a href="tel:+60123456789">012-3456789</a></p>
+                      </div>
+                    </div>
+                  </td>
+
+                  <td>
+                    <button type="button" class="btn btn-outline-primary btn-sm btn-rounded"
+                      onclick="window.location.href='studentDetail.html';">
+                      View Details
+                    </button>
+                  </td>
+                </tr>
+                <tr class="filter-JUL2022Y2">
+                  <td>
+                    JUL2022Y2
+                  </td>
+                  <td>
+                    <div class="d-flex align-items-center">
+                      <div class="ms-3">
+                        <p class="fw-bold mb-1">John Doe</p>
+                        <p class="text-muted mb-0">Bachelor degree in software engineering</p>
+                        <p class="text-muted mb-0">22WMR00001</p>
+                        <p class="text-muted mb-0"><a href="mailto:xxx@student.tarc.edu.my">xxx@student.tarc.edu.my</a>
+                        </p>
+                        <p class="text-muted mb-0"><a href="tel:+60123456789">012-3456789</a></p>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="d-flex align-items-center">
+                      <div class="ms-3">
+                        <p class="fw-bold mb-1">John Doe</p>
+                        <p class="text-muted mb-0">Techtics Solutions Sdn Bhd</p>
+                        <p class="text-muted mb-0"><a href="mailto:xxx@xxx.com">xxx@xxx.com</a></p>
+                        <p class="text-muted mb-0"><a href="tel:+60123456789">012-3456789</a></p>
+                      </div>
+                    </div>
+                  </td>
+
+                  <td>
+                    <button type="button" class="btn btn-outline-primary btn-sm btn-rounded"
+                      onclick="window.location.href='studentDetail.html';">
+                      View Details
+                    </button>
+                  </td>
+                </tr>
+                <tr class="filter-NOV2022Y2">
+                  <td>
+                    NOV2022Y2
+                  </td>
+                  <td>
+                    <div class="d-flex align-items-center">
+                      <div class="ms-3">
+                        <p class="fw-bold mb-1">John Doe</p>
+                        <p class="text-muted mb-0">Bachelor degree in software engineering</p>
+                        <p class="text-muted mb-0">22WMR00001</p>
+                        <p class="text-muted mb-0"><a href="mailto:xxx@student.tarc.edu.my">xxx@student.tarc.edu.my</a>
+                        </p>
+                        <p class="text-muted mb-0"><a href="tel:+60123456789">012-3456789</a></p>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="d-flex align-items-center">
+                      <div class="ms-3">
+                        <p class="fw-bold mb-1">John Doe</p>
+                        <p class="text-muted mb-0">Techtics Solutions Sdn Bhd</p>
+                        <p class="text-muted mb-0"><a href="mailto:xxx@xxx.com">xxx@xxx.com</a></p>
+                        <p class="text-muted mb-0"><a href="tel:+60123456789">012-3456789</a></p>
+                      </div>
+                    </div>
+                  </td>
+
+                  <td>
+                    <button type="button" class="btn btn-outline-primary btn-sm btn-rounded"
+                      onclick="window.location.href='studentDetail.html';">
+                      View Details
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+  </section>
+  <!-- End Inner Page -->
+
+  </main><!-- End #main -->
 
   <!-- ======= Footer ======= -->
   <footer id="footer">
     <div class="container d-md-flex py-4">
-        <div class="copyright">
-          &copy; 2023 - Internship Management System
-        </div>
+      <div class="copyright">
+        &copy; 2023 - Internship Management System
+      </div>
     </div>
   </footer><!-- End Footer -->
 
-  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
+      class="bi bi-arrow-up-short"></i></a>
 
   <!-- Vendor JS Files -->
   <script src="../assets/vendor/purecounter/purecounter_vanilla.js"></script>
@@ -91,6 +218,59 @@
 
   <!-- Template Main JS File -->
   <script src="../assets/js/main.js"></script>
+
+  <!-- JavaScript to filter the table based on filter buttons -->
+  <script>
+    // Get references to filter buttons, input field, and table
+    var filterButtons = document.querySelectorAll("#portfolio-flters li");
+    var input = document.getElementById('filterInput');
+    var table = document.getElementById('table-student');
+
+    // Add click event listeners to filter buttons
+    filterButtons.forEach(function (button) {
+      button.addEventListener('click', function () {
+        // Remove active class from all filter buttons
+        filterButtons.forEach(function (btn) {
+          btn.classList.remove("filter-active");
+        });
+
+        // Add active class to the clicked button
+        button.classList.add("filter-active");
+
+        // Get the filter value from the data-filter attribute
+        var filterValue = button.getAttribute('data-filter');
+
+        // Loop through all table rows and show/hide based on the filter
+        var rows = table.getElementsByTagName('tr');
+        for (var i = 1; i < rows.length; i++) {
+          var row = rows[i];
+          if (filterValue === "*" || row.classList.contains(filterValue)) {
+            row.style.display = '';
+          } else {
+            row.style.display = 'none';
+          }
+        }
+      });
+    });
+
+    // Add an event listener to the input field for text-based filtering
+    input.addEventListener('keyup', function () {
+      var filter = input.value.toLowerCase();
+      var rows = table.getElementsByTagName('tr');
+
+      // Loop through all table rows and hide those that don't match the filter
+      for (var i = 1; i < rows.length; i++) {
+        var row = rows[i];
+        var text = row.textContent.toLowerCase();
+
+        if (text.includes(filter)) {
+          row.style.display = '';
+        } else {
+          row.style.display = 'none';
+        }
+      }
+    });
+  </script>
 
 </body>
 

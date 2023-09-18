@@ -1,0 +1,426 @@
+<!-- lecturer list -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>Lecturer List</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+
+    <!-- Favicons -->
+    <link href="../assets/img/favicon.png" rel="icon">
+
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+        rel="stylesheet">
+
+    <!-- Vendor CSS Files -->
+    <link href="../assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+    <link href="../assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+    <link href="../assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+    <link href="../assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+
+    <!-- Template Main CSS File -->
+    <link href="../assets/css/style.css" rel="stylesheet">
+</head>
+
+<body>
+
+    <!-- ======= Header ======= -->
+    <header id="header" class="fixed-top d-flex align-items-center">
+        <div class="container d-flex align-items-center">
+
+            <div class="logo me-auto">
+                <h1><a href="home.html">Lanternship</a></h1>
+            </div>
+
+            <nav id="navbar" class="navbar order-last order-lg-0">
+                <ul>
+                    <li><a class="nav-link scrollto" href="home.html">Home</a></li>
+                    <li><a class="nav-link scrollto" href="companyList.html">Companies</a></li>
+                    <li><a class="nav-link scrollto" href="lecturerList.html">Lecturers</a></li>
+                    <li><a class="nav-link scrollto" href="../index.html">Logout</a></li>
+                </ul>
+                <i class="bi bi-list mobile-nav-toggle"></i>
+            </nav><!-- .navbar -->
+        </div>
+    </header><!-- End Header -->
+
+    <!-- ======= Inner Page ======= -->
+    <section class="inner-page">
+        <div class="container py-5">
+            <button type="button" class="btn btn-primary ms-1" style="float: right;" data-bs-toggle="modal"
+                data-bs-target="#addModal">Add Lecturer</button>
+            <div class="input-group-append">
+            </div>
+            <h2>Internship Supervisor List<br />
+                <hr>
+            </h2>
+            <div class="input-group mb-3">
+                <input type="text" id="search" class="form-control" placeholder="Search lecturer..."
+                    aria-label="Search lecturer" aria-describedby="basic-addon2">
+            </div>
+            <br />
+            <table class="table align-middle mb-0 bg-white" id="lecturerTable">
+                <thead class="bg-light">
+                    <tr>
+                        <th>Lecturer Name</th>
+                        <th>Email</th>
+                        <th>Contact No.</th>
+                        <th>Total Number of Students Handled</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="ms-3">
+                                    <p class="text-muted mb-0">Lim Ji Ji</p>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="ms-3">
+                                    <p class="text-muted mb-0"><a href="mailto:xxx@xxx.com">xxx@xxx.com</a></p>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="ms-3">
+                                    <p class="text-muted mb-0"><a href="tel:+6011-1111111">011-11111111</a></p>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="ms-3">
+                                    <p class="text-muted mb-0">100</p>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-outline-primary btn-sm btn-rounded"
+                                data-bs-toggle="modal" data-bs-target="#editModal">
+                                Edit
+                            </button>
+                            <button type="button" class="btn btn-outline-danger btn-sm btn-rounded"
+                                onclick="confirm('Are you sure to delete this lecturer?')">
+                                Delete
+                            </button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="ms-3">
+                                    <p class="text-muted mb-0">Lim Ji Ji</p>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="ms-3">
+                                    <p class="text-muted mb-0"><a href="mailto:xxx@xxx.com">xxx@xxx.com</a></p>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="ms-3">
+                                    <p class="text-muted mb-0"><a href="tel:+6011-1111111">011-11111111</a></p>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="ms-3">
+                                    <p class="text-muted mb-0">100</p>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-outline-primary btn-sm btn-rounded"
+                                data-bs-toggle="modal" data-bs-target="#editModal">
+                                Edit
+                            </button>
+                            <button type="button" class="btn btn-outline-danger btn-sm btn-rounded"
+                                onclick="confirm('Are you sure to delete this lecturer?')">
+                                Delete
+                            </button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="ms-3">
+                                    <p class="text-muted mb-0">Lim Ji Ji</p>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="ms-3">
+                                    <p class="text-muted mb-0"><a href="mailto:xxx@xxx.com">xxx@xxx.com</a></p>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="ms-3">
+                                    <p class="text-muted mb-0"><a href="tel:+6011-1111111">011-11111111</a></p>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="ms-3">
+                                    <p class="text-muted mb-0">100</p>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-outline-primary btn-sm btn-rounded"
+                                data-bs-toggle="modal" data-bs-target="#editModal">
+                                Edit
+                            </button>
+                            <button type="button" class="btn btn-outline-danger btn-sm btn-rounded"
+                                onclick="confirm('Are you sure to delete this lecturer?')">
+                                Delete
+                            </button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="ms-3">
+                                    <p class="text-muted mb-0">Lim Ji Ji</p>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="ms-3">
+                                    <p class="text-muted mb-0"><a href="mailto:xxx@xxx.com">xxx@xxx.com</a></p>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="ms-3">
+                                    <p class="text-muted mb-0"><a href="tel:+6011-1111111">011-11111111</a></p>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="ms-3">
+                                    <p class="text-muted mb-0">100</p>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-outline-primary btn-sm btn-rounded"
+                                data-bs-toggle="modal" data-bs-target="#editModal">
+                                Edit
+                            </button>
+                            <button type="button" class="btn btn-outline-danger btn-sm btn-rounded"
+                                onclick="confirm('Are you sure to delete this lecturer?')">
+                                Delete
+                            </button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="ms-3">
+                                    <p class="text-muted mb-0">Lim Ji Ji</p>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="ms-3">
+                                    <p class="text-muted mb-0"><a href="mailto:xxx@xxx.com">xxx@xxx.com</a></p>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="ms-3">
+                                    <p class="text-muted mb-0"><a href="tel:+6011-1111111">011-11111111</a></p>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="ms-3">
+                                    <p class="text-muted mb-0">100</p>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-outline-primary btn-sm btn-rounded"
+                                data-bs-toggle="modal" data-bs-target="#editModal">
+                                Edit
+                            </button>
+                            <button type="button" class="btn btn-outline-danger btn-sm btn-rounded"
+                                onclick="confirm('Are you sure to delete this lecturer?')">
+                                Delete
+                            </button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="ms-3">
+                                    <p class="text-muted mb-0">Lim Ji Ji</p>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="ms-3">
+                                    <p class="text-muted mb-0"><a href="mailto:xxx@xxx.com">xxx@xxx.com</a></p>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="ms-3">
+                                    <p class="text-muted mb-0"><a href="tel:+6011-1111111">011-11111111</a></p>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="ms-3">
+                                    <p class="text-muted mb-0">100</p>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-outline-primary btn-sm btn-rounded"
+                                data-bs-toggle="modal" data-bs-target="#editModal">
+                                Edit
+                            </button>
+                            <button type="button" class="btn btn-outline-danger btn-sm btn-rounded"
+                                onclick="confirm('Are you sure to delete this lecturer?')">
+                                Delete
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+    <!-- End Inner Page -->
+
+    </main><!-- End #main -->
+
+    <!-- ======= Footer ======= -->
+    <footer id="footer">
+        <div class="container d-md-flex py-4">
+            <div class="copyright">
+                &copy; 2023 - Internship Management System
+            </div>
+        </div>
+    </footer><!-- End Footer -->
+
+    <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
+            class="bi bi-arrow-up-short"></i></a>
+
+    <!-- Vendor JS Files -->
+    <script src="../assets/vendor/purecounter/purecounter_vanilla.js"></script>
+    <script src="../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="../assets/vendor/glightbox/js/glightbox.min.js"></script>
+    <script src="../assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+    <script src="../assets/vendor/swiper/swiper-bundle.min.js"></script>
+    <script src="../assets/vendor/waypoints/noframework.waypoints.js"></script>
+    <script src="../assets/vendor/php-email-form/validate.js"></script>
+
+    <!-- Template Main JS File -->
+    <script src="../assets/js/main.js"></script>
+</body>
+
+<!-- Add Lecturer Modal -->
+<div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form action="home.html" method="" onsubmit="return confirm('Are you sure to add this lecturer？')">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Edit Job</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <label for="lecturerName">Lecturer Name</label>
+                            <input type="text" class="form-control" id="lecturerName" placeholder="">
+                        </div>
+                        <br />
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" class="form-control" id="email" placeholder="e.g. xxx@tarc.edu.my">
+                        </div>
+                        <br />
+                        <div class="form-group">
+                            <label for="contactNo">ContactNo</label>
+                            <input type="text" class="form-control" id="contactNo" placeholder="e.g. 019-9999999"
+                                id="contactNo" pattern="\d{2,3}-\d{7,8}" />
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Lecturer Modal -->
+<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form action="home.html" method="" onsubmit="return confirm('Are you sure to this changes？')">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Edit Job</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <label for="lecturerName">Lecturer Name</label>
+                            <input type="text" class="form-control" id="lecturerName" placeholder="" value="Lim Ji Ji">
+                        </div>
+                        <br />
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" class="form-control" id="email" placeholder="" value="xxx@xxx.com">
+                        </div>
+                        <br />
+                        <div class="form-group">
+                            <label for="contactNo">ContactNo</label>
+                            <input type="text" class="form-control" id="contactNo" placeholder="" value="011-11111111">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+</html>
