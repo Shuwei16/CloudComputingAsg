@@ -56,34 +56,34 @@
   </header><!-- End Header -->
 
   <!-- ======= Auth Section ======= -->
-  <section id="auth" class="d-flex flex-column justify-content-center align-items-center" style="height: 220vh">
+  <section id="auth" class="d-flex flex-column justify-content-center align-items-center" style="height: 200vh">
     <div class="container text-center text-md-left" data-aos="fade-up">
-      <form action="{{ url_for('studentRegisterSuccess') }}" method="POST">
+      <form action="{{ url_for('studentRegister') }}" method="POST">
         <h3>Student Registration</h3>
 
         <label for="name">Full Name</label>
-        <input type="text" placeholder="Name as in NRIC" id="name" required>
+        <input type="text" placeholder="Name as in NRIC" id="name" name="name" required>
 
         <label for="nric">NRIC</label>
-        <input type="text" placeholder="e.g. 999999-99-9999" id="ic" pattern="\d{6}-\d{2}-\d{4}" required>
+        <input type="text" placeholder="e.g. 999999-99-9999" id="ic" pattern="\d{6}-\d{2}-\d{4}" name="nric" required>
 
         <label for="gender">Gender</label>
-        <select class="form-select" aria-label="gender" id="gender" required>
+        <select class="form-select" aria-label="gender" id="gender" name="gender" required>
           <option value="Male">Male</option>
           <option value="Female">Female</option>
         </select>
 
         <label for="studentID">Student ID</label>
-        <input type="text" placeholder="e.g. 99WMR99999" id="studentID" required>
+        <input type="text" placeholder="e.g. 99WMR99999" id="studentID"  name="studentID" required>
 
         <label for="email">Student Email</label>
-        <input type="email" placeholder="e.g. xxx-xx99@student.tarc.edu.my" id="email" required>
+        <input type="email" placeholder="e.g. xxx-xx99@student.tarc.edu.my" id="email" name="email" required>
 
         <label for="contactNo">Contact Number</label>
-        <input type="text" placeholder="e.g. 019-9999999" id="contactNo" pattern="\d{2,3}-\d{7,8}" required>
+        <input type="text" placeholder="e.g. 019-9999999" id="contactNo" pattern="\d{2,3}-\d{7,8}" name="contactNo" required>
 
         <label for="programme">Programme</label>
-        <select class="form-select" aria-label="programme" id="programme" required>
+        <select class="form-select" aria-label="programme" id="programme" required name="programme">
           <option value="Diploma in Computer Science">Diploma in Computer Science</option>
           <option value="Diploma in Information Systems">Diploma in Information Systems</option>
           <option value="Diploma in Information Technology">Diploma in Information Technology</option>
@@ -96,22 +96,22 @@
         </select>
 
         <label for="cohort">Cohort</label>
-        <select class="form-select" aria-label="cohort" id="cohort" required>
+        <select class="form-select" aria-label="cohort" id="cohort" name="cohort" required>
           <option value="JUL2022Y2">JUL2022Y2</option>
           <option value="NOV2022Y2">NOV2022Y2</option>
         </select>
 
         <label for="lecturerName">UC Supervisor</label>
-        <select class="form-select" aria-label="lecturerName" id="lecturerName" required>
+        <select class="form-select" aria-label="lecturerName" id="lecturerName" name="lecturerName" required>
           <option value="Lim Ji Ji">Lim Ji Ji</option>
           <option value="Tew Qi Qi">Tew Qi Qi</option>
         </select>
 
         <label for="cgpa">CGPA</label>
-        <input type="text" placeholder="e.g. 4.0000" id="cgpa" pattern="\d+(\.\d{4})" required>
+        <input type="text" placeholder="e.g. 4.0000" id="cgpa" pattern="\d+(\.\d{4})" name="cgpa" required>
 
         <label for="resume">Resume</label>
-        <input type="file" placeholder="" id="resume" required>
+        <input type="file" placeholder="" id="resume" name="resume" required>
 
         <button type="submit">Register</button>
         <span>Already have an account? <a href="{{ url_for('studentLogin') }}">Login</a></span>

@@ -38,22 +38,23 @@ def index():
 @app.route("/student/login", methods=['GET', 'POST'])
 def studentLogin():
     error_message = None  # Define error_message with a default value
-    
+
     if request.method == 'POST':
         email = request.form['email']
         nric = request.form['nric']
-        
+
         cursor = db_conn.cursor()
-        cursor.execute("SELECT * FROM student WHERE studEmail = %s AND studIC = %s;", (email, nric))
+        cursor.execute("SELECT * FROM student WHERE studEmail = %s AND studIC = %s", (email, nric))
         user = cursor.fetchone()
         cursor.close()
-        
+
         if user:
-            session['studID'] = user[0]
-            return render_template('student/home.html', session=user[0])
+            session['studID'] = user['studID']
+            return redirect(url_for('studentHome'))
         else:
             error_message = 'Login failed. Please check your email and nric.'
-    
+            return render_template('student/login.html', error_message=error_message)
+
     return render_template('student/login.html', error_message=error_message)
 
 @app.route("/student/register", methods=['GET', 'POST'])
@@ -74,14 +75,14 @@ def studentRegister():
         
         # Search for lecturer email
         cursor = db_conn.cursor()
-        cursor.execute("SELECT email FROM lecturers WHERE name = %s", (lecturerName))
+        cursor.execute("SELECT lecEmail FROM lecturer WHERE lecName = %s", (lecturerName))
         lecturerEmail = cursor.fetchone()
         cursor.close()
 
         # Insert the new user into the database (Assuming you have a 'students' table)
         cursor = db_conn.cursor()
-        cursor.execute("INSERT INTO students (studID, studEmail, studIC, gender, studName, course, studPhone, cgpa, lectEmail) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)", 
-                       (studentID, email, nric, name, programme, contactNo, cgpa, lecturerEmail))
+        cursor.execute("INSERT INTO student (studID, studEmail, studIC, gender, studName, course, studPhone, cgpa, lectEmail) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)", 
+                       (studentID, email, nric, gender, name, programme, contactNo, cgpa, lecturerEmail))
         db_conn.commit()
         cursor.close()
         
@@ -167,13 +168,13 @@ def lecturerDetail():
 @app.route("/company/login", methods=['GET', 'POST'])
 def companyLogin():
     error_message = None  # Define error_message with a default value
-    
+
     if request.method == 'POST':
         email = request.form['email']
         password = request.form['password']
         
         cursor = db_conn.cursor()
-        cursor.execute("SELECT * FROM companies WHERE email = %s AND password = %s", (email, password))
+        cursor.execute("SELECT * FROM company WHERE compEmail = %s AND compPassword = %s", (email, password))
         user = cursor.fetchone()
         cursor.close()
         
@@ -182,6 +183,7 @@ def companyLogin():
             return render_template('company/home.html')
         else:
             error_message = 'Login failed. Please check your email and password.'
+            return render_template('company/login.html', error_message=error_message)
     
     return render_template('company/login.html', error_message=error_message)
 
@@ -200,7 +202,7 @@ def companyRegister():
 
         # Insert the new user into the database (Assuming you have a 'students' table)
         cursor = db_conn.cursor()
-        cursor.execute("INSERT INTO companies (compEmail, compPassword, compName, compDesc, category, compLocation, compPhone) VALUES (%s, %s, %s, %s, %s, %s, %s)", 
+        cursor.execute("INSERT INTO company (compEmail, compPassword, compName, compDesc, category, compLocation, compPhone) VALUES (%s, %s, %s, %s, %s, %s, %s)", 
                        (email, password, companyName, companyDescription, category, address, contactNo))
         db_conn.commit()
         cursor.close()
@@ -215,6 +217,70 @@ def companyRegisterSuccess():
 
 @app.route("/company/home")
 def companyHome():
+    if request.method == 'GET':
+        cursor = db_conn.cursor()
+        cursor.execute('SELECT * FROM jobs')
+        jobs = cursor.fetchall()
+        cursor.close()
+    
+        return render_template('company/home.html', jobs=jobs)
+
+    elif request.method == 'POST':
+        jobTitle = request.form['jobTitle']
+        minimum = request.form['minimum']
+        maximum = request.form['maximum']
+        open_for = request.form.getlist('open_for[]')
+        jobDescription = request.form['jobDescription']
+        jobRequirement = request.form['jobRequirement']
+
+        allowance = f"{minimum} - {maximum}"
+
+        # Automatically generate a new job ID by incrementing the maximum job ID
+        cursor = db_conn.cursor()
+        cursor.execute("SELECT MAX(id) FROM jobs")
+        max_id = cursor.fetchone()[0]  # Get the maximum job ID
+        new_job_id = max_id + 1 if max_id is not None else 1  # Increment the maximum job ID by 1 or start at 1 if no jobs exist
+
+        cursor = db_conn.cursor()
+        cursor.execute("INSERT INTO jobs (jobID, jobTitle, allowance, open_for, jobDescription, jobRequirement) VALUES (%s, %s, %s, %s, %s, %s)", (new_job_id, jobTitle, allowance, ','.join(open_for), jobDescription, jobRequirement))
+        db_conn.commit()
+        cursor.close()
+        return render_template('company/home.html')
+    
+    elif request.method == 'PUT':
+        job_id = request.form['job_id']  # Get the job ID from the form
+        jobTitle = request.form['jobTitle']
+        minimum = request.form['minimum']
+        maximum = request.form['maximum']
+        open_for = request.form.getlist('open_for[]')
+        jobDescription = request.form['jobDescription']
+        jobRequirement = request.form['jobRequirement']
+
+        allowance = f"{minimum} - {maximum}"
+
+        cursor = db_conn.cursor()
+        cursor.execute('SELECT * FROM jobs WHERE id = %s', (job_id,))
+        job = cursor.fetchone()
+        cursor.close()
+
+        allowance = job['allowance']
+        minimum, maximum = map(float, allowance.split(' - '))
+
+        cursor = db_conn.cursor()
+        cursor.execute("UPDATE jobs SET jobTitle = %s, allowance = %s, open_for = %s, jobDescription = %s, jobRequirement = %s WHERE id = %s", (jobTitle, allowance, ','.join(open_for), jobDescription, jobRequirement, job_id))
+        db_conn.commit()
+        cursor.close()
+        return render_template('company/home.html', job=job, minimum=minimum, maximum=maximum)
+    
+    elif request.method == 'DELETE':
+        # Handle the DELETE request (e.g., delete a job)
+        # Extract the job ID from the request data
+        job_id = request.form['job_id']
+        cursor = db_conn.cursor()
+        cursor.execute("DELETE FROM jobs WHERE id = %s", (job_id,))
+        db_conn.commit()
+        cursor.close()
+        return redirect(url_for('companyHome', message="Job deleted successfully"))
     return render_template('company/home.html')
 
 @app.route("/company/studentApplication")

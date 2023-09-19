@@ -69,10 +69,10 @@
         <h3>Student Login</h3>
 
         <label for="email">Student Email</label>
-        <input type="email" placeholder="e.g. xxx-xx99@student.tarc.edu.my" id="email" name="email" required>
+        <input name="email" type="email" placeholder="e.g. xxx-xx99@student.tarc.edu.my" id="email" required>
 
         <label for="nric">NRIC</label>
-        <input type="password" placeholder="e.g. 999999-99-9999" id="nric" name="nric" pattern="\d{6}-\d{2}-\d{4}" required>
+        <input name="nric" type="nric" placeholder="e.g. 999999-99-9999" id="nric" pattern="\d{6}-\d{2}-\d{4}" required>
 
         <button type="submit">Log In</button>
         <span>Don't have an account? <a href="{{ url_for('studentRegister') }}">Register</a></span>
