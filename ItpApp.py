@@ -6,7 +6,13 @@ import os
 import boto3
 from config import *
 
+import secrets
+
+
+
+
 app = Flask(__name__)
+app.secret_key = secrets.token_hex(16)
 
 bucket = custombucket
 region = customregion
@@ -29,20 +35,22 @@ def index():
     return render_template('index.html')
 
 # Student
-@app.route("/student/login", method=['GET', 'POST'])
+@app.route("/student/login", methods=['GET', 'POST'])
 def studentLogin():
+    error_message = None  # Define error_message with a default value
+    
     if request.method == 'POST':
         email = request.form['email']
         nric = request.form['nric']
         
         cursor = db_conn.cursor()
-        cursor.execute("SELECT * FROM students WHERE studEmail = %s AND studIC = %s", (email, nric))
+        cursor.execute("SELECT * FROM student WHERE studEmail = %s AND studIC = %s;", (email, nric))
         user = cursor.fetchone()
         cursor.close()
         
         if user:
-            session['studID'] = user['studID']
-            return render_template('student/home.html')
+            session['studID'] = user[0]
+            return render_template('student/home.html', session=user[0])
         else:
             error_message = 'Login failed. Please check your email and nric.'
     
@@ -85,10 +93,33 @@ def studentRegister():
 def studentRegisterSuccess():
     return render_template('student/registerSuccess.html')
 
-@app.route("/student/home", method=['POST'])
+@app.route("/student/home", methods=['GET', 'POST'])
 def studentHome():
+    print(session['studID'])
+    if 'studID' in session:
+        studID = session['studID']
+        
+        # Fetch the user's information from the database based on studID
+        cursor = db_conn.cursor()
+        cursor.execute("""
+                       SELECT students.*, cohorts.startDate AS startDate, cohorts.endDate AS endDate, lecturers.name AS lectName
+                       FROM students
+                       JOIN cohorts ON students.cohortID = cohorts.cohortID
+                       JOIN lecturers ON students.lectEmail = lecturers.email
+                       WHERE studID = %s
+                       """, (studID))
+        user = cursor.fetchone()
+        cursor.close()
+        
+        if user:
+            # Pass the user's information to the template
+            return render_template('student/home.html', user=session,)
     
     return render_template('student/home.html')
+def editStudentInfo():
+    if request.method == 'POST':
+        contactNo = request.form['contactNo']
+        cgpa = request.form['cgpa']
 
 @app.route("/student/companyList")
 def studentCompanyList():
@@ -103,8 +134,10 @@ def studentApplicationHistory():
     return render_template('student/applicationHistory.html')
 
 # Lecturer
-@app.route("/lecturer/login", method=['GET', 'POST'])
+@app.route("/lecturer/login", methods=['GET', 'POST'])
 def lecturerLogin():
+    error_message = None  # Define error_message with a default value
+
     if request.method == 'POST':
         email = request.form['email']
         password = request.form['password']
@@ -115,7 +148,7 @@ def lecturerLogin():
         cursor.close()
         
         if user:
-            session['email'] = user['email']
+            session['user'] = user
             return render_template('lecturer/home.html')
         else:
             error_message = 'Login failed. Please check your email and password.'
@@ -131,8 +164,10 @@ def lecturerDetail():
     return render_template('lecturer/studentDetail.html')
 
 # Company
-@app.route("/company/login", method=['GET', 'POST'])
+@app.route("/company/login", methods=['GET', 'POST'])
 def companyLogin():
+    error_message = None  # Define error_message with a default value
+    
     if request.method == 'POST':
         email = request.form['email']
         password = request.form['password']
@@ -187,8 +222,10 @@ def companyStudentApplication():
     return render_template('company/studentApplication.html')
 
 # Admin
-@app.route("/admin/login", method=['GET', 'POST'])
+@app.route("/admin/login", methods=['GET', 'POST'])
 def adminLogin():
+    error_message = None  # Define error_message with a default value
+    
     if request.method == 'POST':
         email = request.form['email']
         password = request.form['password']
