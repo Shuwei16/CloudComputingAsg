@@ -498,73 +498,66 @@ def companyHome():
             cursor.close()
             return redirect(url_for('companyHome', message="Job deleted successfully"))
         
-        cursor = db_conn.cursor()
-        # cursor.execute('SELECT * FROM jobs')
-        # jobs = cursor.fetchall()
-        # cursor.execute('SELECT * FROM company')
-        # companies = cursor.fetchall()
-        cursor.execute("""
-                    SELECT company.*
-                    FROM company 
-                    JOIN jobs ON company.compEmail = jobs.compEmail
-                    WHERE company.compEmail = %s
-                    """, (session['compEmail']),)
-        company_data = cursor.fetchone()
+    cursor = db_conn.cursor()
+    # cursor.execute('SELECT * FROM jobs')
+    # jobs = cursor.fetchall()
+    # cursor.execute('SELECT * FROM company')
+    # companies = cursor.fetchall()
+    cursor.execute("""
+                SELECT company.*
+                FROM company 
+                JOIN jobs ON company.compEmail = jobs.compEmail
+                WHERE company.compEmail = %s
+                """, (session['compEmail']),)
+    company_data = cursor.fetchone()
         
 
-        if company_data:
-            # Convert the user record to a dictionary
-            company = {
-                'compEmail': company_data[0],
-                'compPassword': company_data[1],
-                'compName': company_data[2],
-                'compDesc': company_data[3],
-                'category': company_data[4],
-                'compLocation': company_data[5],
-                'workingStartDay': company_data[6],
-                'workingEndDay': company_data[7],
-                'workingStartTime': company_data[8],
-                'workingEndTime': company_data[9],
-                'compPhone': company_data[10],
-                'accessories': company_data[11],
-                'accomodation': company_data[12],
-                # Add other fields as needed
-            }
-        
-            cursor.execute("""
-                    SELECT jobs.*
-                    FROM jobs 
-                    JOIN company ON jobs.compEmail = company.compEmail
-                    WHERE company.compEmail = %s
-                    """, (session['compEmail']),)
-            job_data = cursor.fetchall()
-            
-        
-        if job_data:
-        # Initialize an empty list to store job dictionaries
-            jobs = []
-
-            for row in job_data:
-            # Convert each row to a dictionary
-                job = {
-                    'jobID': row[0],
-                    'jobTitle': row[1],
-                    'allowance': row[2],  # Access the 'allowance' column
-                    'level': row[3],
-                    'jobDesc': row[4],
-                    'jobReq': row[5],
-                    'compEmail': row[6],
-                    # Add other fields as needed
-            }
-
-            # Append the job dictionary to the list of jobs
-            jobs.append(job)
-
-        cursor.close()
-        print(jobs)
-        return render_template('company/home.html', company=company, jobs=jobs)
+    if company_data:
+        # Convert the user record to a dictionary
+        company = {
+            'compEmail': company_data[0],
+            'compPassword': company_data[1],
+            'compName': company_data[2],
+            'compDesc': company_data[3],
+            'category': company_data[4],
+            'compLocation': company_data[5],
+            'workingStartDay': company_data[6],
+            'workingEndDay': company_data[7],
+            'workingStartTime': company_data[8],
+            'workingEndTime': company_data[9],
+            'compPhone': company_data[10],
+            'accessories': company_data[11],
+            'accomodation': company_data[12],
+            # Add other fields as needed
+        }
     
-    return render_template('company/home.html')
+    cursor.execute("""
+            SELECT *
+            FROM jobs 
+            WHERE compEmail = %s
+            """, (session['compEmail']),)
+    job_data = cursor.fetchall()
+    cursor.close()
+    
+    # Initialize an empty list to store job dictionaries
+    jobs = []
+    for row in job_data:
+    # Convert each row to a dictionary
+        job = {
+            'jobID': row[0],
+            'jobTitle': row[1],
+            'allowance': row[2],  # Access the 'allowance' column
+            'level': row[3],
+            'jobDesc': row[4],
+            'jobReq': row[5],
+            'compEmail': row[6],
+            # Add other fields as needed
+        }    
+        # Append the job dictionary to the list of jobs
+        jobs.append(job)
+        
+    print(jobs)
+    return render_template('company/home.html', company=company, jobs=jobs)
 
 @app.route("/company/studentApplication")
 def companyStudentApplication():
