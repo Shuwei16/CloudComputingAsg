@@ -26,8 +26,6 @@ db_conn = connections.Connection(
 
 )
 
-os.environ['AWS_ACCESS_KEY_ID'] = 'ASIAV5XJKC2GTNHLESSW'
-os.environ['AWS_SECRET_ACCESS_KEY'] = 'Dg50MsN600ATTA85sayjQtwx5eIauj0yYQcyXMVu'
 # output = {}
 # table = 'employee'
 
