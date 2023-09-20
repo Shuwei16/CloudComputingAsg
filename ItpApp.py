@@ -146,15 +146,16 @@ def studentHome():
                 parrentAckForm = request.files['parrentAckForm']
                 letterOfIndemnity = request.files['letterOfIndemnity']
                 hiredEvidence = request.files['hiredEvidence']
-
+                
                 # Update data in student table
                 cursor = db_conn.cursor()
                 
                 # Uplaod image file in S3
-                compAcceptanceForm_in_s3 = "studID-" + str(session['studID']) + "_compAcceptanceForm"
-                parrentAckForm_in_s3 = "studID-" + str(session['studID']) + "_parrentAckForm"
-                letterOfIndemnity_in_s3 = "studID-" + str(session['studID']) + "_letterOfIndemnity"
-                hiredEvidence_in_s3 = "studID-" + str(session['studID']) + "_hiredEvidence"
+                compAcceptanceForm_in_s3 = "studID-" + str(session['studID']) + "_compAcceptanceForm.pdf"
+                parrentAckForm_in_s3 = "studID-" + str(session['studID']) + "_parrentAckForm.pdf"
+                letterOfIndemnity_in_s3 = "studID-" + str(session['studID']) + "_letterOfIndemnity.pdf"
+                if request.files['hiredEvidence'] is not None:
+                    hiredEvidence_in_s3 = "studID-" + str(session['studID']) + "_hiredEvidence.pdf"
                 s3 = boto3.resource('s3')
                 
                 cursor.execute("""
@@ -169,7 +170,8 @@ def studentHome():
                     s3.Bucket(custombucket).put_object(Key=compAcceptanceForm_in_s3, Body=compAcceptanceForm)
                     s3.Bucket(custombucket).put_object(Key=parrentAckForm_in_s3, Body=parrentAckForm)
                     s3.Bucket(custombucket).put_object(Key=letterOfIndemnity_in_s3, Body=letterOfIndemnity)
-                    s3.Bucket(custombucket).put_object(Key=hiredEvidence_in_s3, Body=hiredEvidence)
+                    if request.files['hiredEvidence'] is not None:
+                        s3.Bucket(custombucket).put_object(Key=hiredEvidence_in_s3, Body=hiredEvidence)
                     bucket_location = boto3.client('s3').get_bucket_location(Bucket=custombucket)
                     s3_location = (bucket_location['LocationConstraint'])
 
@@ -221,39 +223,41 @@ def studentHome():
                 # Add other fields as needed
             }
             
-            # # Get the s3 bucket location
-            # bucket_location = boto3.client('s3').get_bucket_location(Bucket=custombucket)
-            # s3_location = (bucket_location['LocationConstraint'])
+            # Get the s3 bucket location
+            s3 = boto3.resource('s3')
+            bucket_location = boto3.client('s3').get_bucket_location(Bucket=custombucket)
+            s3_location = (bucket_location['LocationConstraint'])
             
-            # # Initialize files url
-            # compAcceptanceForm_url = None
-            # parrentAckForm_url = None
-            # letterOfIndemnity_url = None
-            # hiredEvidence_url = None
+            if s3_location is None:
+                s3_location = 'us-east-1'
             
-            # # Retrieve files from s3 bucket
-            # compAcceptanceForm_url = "https://s3{0}.amazonaws.com/{1}/{2}".format(
-            #     s3_location,
-            #     custombucket,
-            #     compAcceptanceForm_in_s3)
+            compAcceptanceForm_url = "https://{0}.s3.{1}.amazonaws.com/studID-{2}_compAcceptanceForm.pdf".format(
+                custombucket,
+                s3_location,
+                session['studID'])
+
+            parrentAckForm_url = "https://{0}.s3.{1}.amazonaws.com/studID-{2}_parrentAckForm.pdf".format(
+                s3_location,
+                custombucket,
+                session['studID'])
+
+            letterOfIndemnity_url = "https://{0}.s3.{1}.amazonaws.com/studID-{2}_letterOfIndemnity.pdf".format(
+                s3_location,
+                custombucket,
+                session['studID'])
+
+            hiredEvidence_url = "https://{0}.s3.{1}.amazonaws.com/studID-{2}_hiredEvidence.pdf".format(
+                s3_location,
+                custombucket,
+                session['studID'])
             
-            # parrentAckForm_url = "https://s3{0}.amazonaws.com/{1}/{2}".format(
-            #     s3_location,
-            #     custombucket,
-            #     parrentAckForm_in_s3)
-            
-            # letterOfIndemnity_url = "https://s3{0}.amazonaws.com/{1}/{2}".format(
-            #     s3_location,
-            #     custombucket,
-            #     letterOfIndemnity_in_s3)
-            
-            # hiredEvidence_url = "https://s3{0}.amazonaws.com/{1}/{2}".format(
-            #     s3_location,
-            #     custombucket,
-            #     hiredEvidence_in_s3)
             
             # Pass the user's information to the template
-            return render_template('student/home.html', user=user)
+            return render_template('student/home.html', user=user, 
+                                   compAcceptanceForm_url=compAcceptanceForm_url, 
+                                   parrentAckForm_url=parrentAckForm_url,
+                                   letterOfIndemnity_url=letterOfIndemnity_url,
+                                   hiredEvidence_url=hiredEvidence_url)
     
     return render_template('student/home.html')
 
@@ -280,12 +284,45 @@ def studentCompanyList():
     
     return render_template('student/companyList.html', companies=companies)
 
-@app.route("/student/companyDetail")
+@app.route("/student/companyDetail", methods=['GET', 'POST'])
 def studentCompanyDetail():
+    
+    if request.method == 'POST':
+        jobID = request.form['jobID']
+        
+        # Automatically generate a new application ID by incrementing the maximum application ID
+        cursor = db_conn.cursor()
+        cursor.execute("SELECT MAX(applicationID) FROM application")
+        max_id = cursor.fetchone()[0]  # Get the maximum application ID
+        
+        if max_id is not None:
+            # Extract the numeric part and increment it
+            numeric_part = int(max_id[1:])  # Convert 'A00001' to 1
+            new_numeric_part = numeric_part + 1
+    
+            # Format the new applicationID with the same pattern ('A' + 5-digit numeric part)
+            new_app_id = 'A{:05d}'.format(new_numeric_part)
+        else:
+            # If there are no application, start with 'A00001'
+            new_app_id = 'A00001'
+        
+        print(new_app_id)
+        print(jobID)
+        print(session['studID'])
+        
+        # Insert the new application into the database
+        cursor = db_conn.cursor()
+        cursor.execute("INSERT INTO application (applicationID, jobID, studID, applicationStatus) VALUES (%s, %s, %s, %s)", 
+                       (new_app_id, jobID, session['studID'], 'Pending'))
+        db_conn.commit()
+        cursor.close()
+        
+        return redirect(url_for('studentApplicationHistory'))
+    
     # Retrieve the company query parameter from the URL
     companyName = request.args.get('company')
     
-    # Fetch the user's information from the database based on studID
+    # Fetch the company's information from the database based on studID
     cursor = db_conn.cursor()
         
     cursor.execute("""
@@ -297,7 +334,7 @@ def studentCompanyDetail():
     cursor.close()
     
     if company_data:
-        # Convert the user record to a dictionary
+        # Convert the company record to a dictionary
         company = {
             'compEmail': company_data[0],
             'compName': company_data[2],
@@ -314,12 +351,68 @@ def studentCompanyDetail():
             # Add other fields as needed
         }
     
+        # Fetch the job's information from the database based on studID
+        cursor = db_conn.cursor()
+        cursor.execute("""
+                SELECT *
+                FROM jobs 
+                WHERE compEmail = %s
+                """, (company['compEmail']),)
+        job_data = cursor.fetchall()
+        cursor.close()
+        
+        # Initialize an empty list to store job dictionaries
+        jobs = []
+        for row in job_data:
+        # Convert each row to a dictionary
+            job = {
+                'jobID': row[0],
+                'jobTitle': row[1],
+                'allowance': row[2],  # Access the 'allowance' column
+                'level': row[3],
+                'jobDesc': row[4],
+                'jobReq': row[5],
+                'compEmail': row[6],
+                # Add other fields as needed
+            }    
+            # Append the job dictionary to the list of jobs
+            jobs.append(job)
+    
     # Pass the company's information to the template
-    return render_template('student/companyDetail.html', company=company)
+    return render_template('student/companyDetail.html', company=company, jobs=jobs)
 
 @app.route("/student/applicationHistory")
 def studentApplicationHistory():
-    return render_template('student/applicationHistory.html')
+    
+    cursor = db_conn.cursor()
+    # Execute a SQL query to fetch data from the database
+    cursor.execute("""
+                   SELECT company.compName, company.compLocation, company.compEmail, company.compPhone, jobs.jobTitle, application.applicationStatus
+                   FROM application
+                   JOIN jobs ON application.jobID = jobs.jobID
+                   JOIN company ON jobs.compEmail = company.compEmail
+                   WHERE application.studID = %s
+                   """, session['studID'])
+    apps_data = cursor.fetchall()  # Fetch all rows
+    cursor.close()
+    
+    # Initialize an empty list to store dictionaries
+    apps = []
+
+    # Iterate through the fetched data and create dictionaries
+    for row in apps_data:
+        app_dict = {
+            'compName': row[0],
+            'compAddr': row[1],
+            'compEmail': row[2],
+            'compPhone': row[3],
+            'job': row[4],
+            'status': row[5],
+            # Add other fields as needed
+        }
+        apps.append(app_dict)
+        
+    return render_template('student/applicationHistory.html', apps=apps)
 
 # Lecturer
 @app.route("/lecturer/login", methods=['GET', 'POST'])
@@ -446,11 +539,10 @@ def companyHome():
             cursor.execute("INSERT INTO jobs (jobID, jobTitle, allowance, level, jobDesc, jobReq, compEmail) VALUES (%s, %s, %s, %s, %s, %s, %s)", (new_job_id, jobTitle, allowance, ','.join(open_for), jobDescription, jobRequirement, compEmail))
             db_conn.commit()
             cursor.close()
-            return render_template('company/home.html')
         
         elif action == 'editJob':
     
-            # job_id = request.form['job_id']  # Get the job ID from the form
+            job_id = request.form['job_id']  # Get the job ID from the form
             jobTitle = request.form['jobTitle']
             minimum = request.form['minimum']
             maximum = request.form['maximum']
@@ -461,28 +553,10 @@ def companyHome():
             allowance = f"{minimum} - {maximum}"
 
             cursor = db_conn.cursor()
-            cursor.execute("""
-                    SELECT jobs.jobID
-                    FROM jobs 
-                    JOIN company ON jobs.compEmail = company.compEmail
-                    WHERE company.compEmail = %s
-                    """, (session['compEmail']),)
-            job_id = cursor.fetchone()
-            
-
-            cursor = db_conn.cursor()
-            cursor.execute('SELECT * FROM jobs WHERE jobs.jobID = %s', (job_id,))
-            job = cursor.fetchone()
-            
-
-            allowance = job['allowance']
-            minimum, maximum = map(float, allowance.split(' - '))
-
-            cursor = db_conn.cursor()
             cursor.execute("UPDATE jobs SET jobTitle = %s, allowance = %s, open_for = %s, jobDescription = %s, jobRequirement = %s WHERE id = %s", (jobTitle, allowance, ','.join(open_for), jobDescription, jobRequirement, job_id))
             db_conn.commit()
             cursor.close()
-            return render_template('company/home.html', job=job, minimum=minimum, maximum=maximum)
+            # return render_template('company/home.html', job=job, minimum=minimum, maximum=maximum)
     
         elif action == 'delete':
             # Handle the DELETE request (e.g., delete a job)
@@ -492,7 +566,6 @@ def companyHome():
             cursor.execute("DELETE FROM jobs WHERE id = %s", (job_id,))
             db_conn.commit()
             cursor.close()
-            return redirect(url_for('companyHome', message="Job deleted successfully"))
         
     cursor = db_conn.cursor()
     # cursor.execute('SELECT * FROM jobs')
@@ -537,6 +610,8 @@ def companyHome():
     
     # Initialize an empty list to store job dictionaries
     jobs = []
+    minimums = []  # Initialize an empty list for minimums
+    maximums = []  # Initialize an empty list for maximums
     for row in job_data:
     # Convert each row to a dictionary
         job = {
@@ -551,9 +626,15 @@ def companyHome():
         }    
         # Append the job dictionary to the list of jobs
         jobs.append(job)
+
+        allowance = job['allowance']
+        min_allowance, max_allowance = map(float, allowance.split(' - '))
+
+    # Append a dictionary containing jobID and minimum allowance to the minimums list
+        minimums.append({'jobID': job['jobID'], 'min_allowance': min_allowance})
+        maximums.append({'jobID': job['jobID'], 'max_allowance': max_allowance})
         
-    print(jobs)
-    return render_template('company/home.html', company=company, jobs=jobs)
+    return render_template('company/home.html', company=company, jobs=jobs, minimums=minimums, maximums=maximums)
 
 @app.route("/company/studentApplication")
 def companyStudentApplication():

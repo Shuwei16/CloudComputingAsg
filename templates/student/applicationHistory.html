@@ -68,81 +68,32 @@
                     </tr>
                 </thead>
                 <tbody>
+                    {% for row in apps %}
                     <tr>
                         <td>
                             <div class="d-flex align-items-center">
                                 <div class="ms-3">
-                                    <p class="fw-bold mb-1">Techtics Solutions Sdn Bhd</p>
-                                    <p class="text-muted mb-0">VO2-09-06, V Office 2, Lingkaran SV,, Sunway Velocity,
-                                        Jalan Peel, 55100, Kuala Lumpur.</p>
-                                    <p class="text-muted mb-0"><a href="mailto:xxx@xxx.com">xxx@xxx.com</a></p>
-                                    <p class="text-muted mb-0"><a href="tel:+603-92266778">03-92266778</a></p>
+                                    <p class="fw-bold mb-1">{{ row['compName'] }}</p>
+                                    <p class="text-muted mb-0">{{ row['compAddr'] }}</p>
+                                    <p class="text-muted mb-0"><a href="mailto:{{ row['compEmail'] }}">{{ row['compEmail'] }}</a></p>
+                                    <p class="text-muted mb-0"><a href="tel:+6{{ row['compPhone'] }}">{{ row['compPhone'] }}</a></p>
                                 </div>
                             </div>
                         </td>
                         <td>
-                            <button type="button" onclick="window.location.href='companyDetail.html';"
+                            <button type="button" onclick='window.location.href="{{ url_for('studentCompanyDetail', company=row['compName']) }}";'
                                 class="btn btn-outline-primary btn-sm btn-rounded">
                                 View More Details
                             </button>
                         </td>
                         <td>
-                            <p class="fw-normal mb-1">Software engineer</p>
+                            <p class="fw-normal mb-1">{{ row['job'] }}</p>
                         </td>
                         <td>
-                            Approved
+                            {{ row['status'] }}
                         </td>
                     </tr>
-                    <tr>
-                        <td>
-                            <div class="d-flex align-items-center">
-                                <div class="ms-3">
-                                    <p class="fw-bold mb-1">Techtics Solutions Sdn Bhd</p>
-                                    <p class="text-muted mb-0">VO2-09-06, V Office 2, Lingkaran SV,, Sunway Velocity,
-                                        Jalan Peel, 55100, Kuala Lumpur.</p>
-                                    <p class="text-muted mb-0"><a href="mailto:xxx@xxx.com">xxx@xxx.com</a></p>
-                                    <p class="text-muted mb-0"><a href="tel:+603-92266778">03-92266778</a></p>
-                                </div>
-                            </div>
-                        </td>
-                        <td>
-                            <button type="button" onclick="window.location.href='companyDetail.html';"
-                                class="btn btn-outline-primary btn-sm btn-rounded">
-                                View More Details
-                            </button>
-                        </td>
-                        <td>
-                            <p class="fw-normal mb-1">Software engineer</p>
-                        </td>
-                        <td>
-                            Pending
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="d-flex align-items-center">
-                                <div class="ms-3">
-                                    <p class="fw-bold mb-1">Techtics Solutions Sdn Bhd</p>
-                                    <p class="text-muted mb-0">VO2-09-06, V Office 2, Lingkaran SV,, Sunway Velocity,
-                                        Jalan Peel, 55100, Kuala Lumpur.</p>
-                                    <p class="text-muted mb-0"><a href="mailto:xxx@xxx.com">xxx@xxx.com</a></p>
-                                    <p class="text-muted mb-0"><a href="tel:+603-92266778">03-92266778</a></p>
-                                </div>
-                            </div>
-                        </td>
-                        <td>
-                            <button type="button" onclick="window.location.href='companyDetail.html';"
-                                class="btn btn-outline-primary btn-sm btn-rounded">
-                                View More Details
-                            </button>
-                        </td>
-                        <td>
-                            <p class="fw-normal mb-1">Software engineer</p>
-                        </td>
-                        <td>
-                            Rejected
-                        </td>
-                    </tr>
+                    {% endfor %}
                 </tbody>
             </table>
         </div>
@@ -176,34 +127,5 @@
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 
 </body>
-
-<!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Confirmation</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="panel-body">
-
-                    <p>Are you sure you want to apply to this job?</p>
-                    <!-- <div class="btn btn-default">
-                    <a
-                        href="/Student/ProgressReport?template=FOCS_StudF03&amp;level=Bachelor">My
-                        Progress report</a>
-                </div> -->
-                </div>
-            </div>
-            <div class="modal-footer d-flex justify-content-center">
-                <button type="button" class="btn btn-success" data-bs-dismiss="modal"
-                    style="float: right;">Confirm</button>
-                <button type="button" class="btn btn-danger" style="float: right;" data-bs-dismiss="modal"
-                    aria-label="Close">No</button>
-            </div>
-        </div>
-    </div>
-</div>
 
 </html>

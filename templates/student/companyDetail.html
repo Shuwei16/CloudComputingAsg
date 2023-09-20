@@ -143,7 +143,7 @@
                     <p class="mb-0">Provided Accessory</p>
                   </div>
                   <div class="col-sm-9">
-                    <p class="text-muted mb-0">{{ company.accessory }}</p>
+                    <p class="text-muted mb-0">{{ company.accessories }}</p>
                   </div>
                 </div>
                 <hr>
@@ -160,8 +160,8 @@
           </div>
         </div>
         <div class="col-lg-8">
-          <!-- <button type="button" class="btn btn-primary ms-1" style="float: right;">Add Job</button> -->
           <h4 class="my-3 text-primary"><b>Job List</b></h4>
+          {% for job in jobs %}
           <div class="card mb-4">
             <div class="card-body">
               <div class="row">
@@ -169,7 +169,7 @@
                   <p class="mb-0">Job Title</p>
                 </div>
                 <div class="col-sm-9">
-                  <p class="text-muted mb-0">Intern - Unity Developer</p>
+                  <p class="text-muted mb-0">{{ job['jobTitle'] }}</p>
                 </div>
               </div>
               <hr>
@@ -178,7 +178,7 @@
                   <p class="mb-0">Allowance</p>
                 </div>
                 <div class="col-sm-9">
-                  <p class="text-muted mb-0">RM 300.00 - RM 900.00</p>
+                  <p class="text-muted mb-0">{{ job['allowance'] }}</p>
                 </div>
               </div>
               <hr>
@@ -187,132 +187,32 @@
                   <p class="mb-0">Open For</p>
                 </div>
                 <div class="col-sm-9">
-                  <p class="text-muted mb-0">Diploma & Degree</p>
+                  <p class="text-muted mb-0">{{ job['level'] }}</p>
                 </div>
               </div>
               <hr>
               <div class="row">
                 <p class="mb-4 text-primary">Job Description</p>
-                <p class="text-muted mb-0">• Blockchain related game development (GameFi, NFT Game, Metaverse, etc...)<br>
-
-                  • Knowledge of Unity, including experience with scripting, textures, animation, and GUI<br>
-                  
-                  • Assess, develop, debug, maintain, and set code standards<br>
-                  
-                  • Work closely with the designer and back-end programmer<br>
-                  
-                  • Knowledge of Cocos Creator and TypeScript is a plus</p>
+                <p class="text-muted mb-0">{{ job['jobDesc'] }}</p>
               </div>
               <hr>
               <div class="row">
                 <p class="mb-4 text-primary">Job Requirement</p>
-                <p class="text-muted mb-0">...</p>
+                <p class="text-muted mb-0">{{ job['jobReq'] }}</p>
               </div>
               <hr>
               <div class="row">
                 <div class="d-flex justify-content-center mb-2">
-                  <button type="button" class="btn btn-outline-primary ms-1" data-bs-toggle="modal"
-                  data-bs-target="#exampleModal" style="float: right;">Apply</button>
-                  <!-- <button type="button" class="btn btn-outline-danger ms-1" style="float: right;">Delete</button> -->
+                  <form action="{{ url_for('studentCompanyDetail') }}" method="POST"
+                  onsubmit="return confirm('Are you sure to apply this job?')">
+                    <input type="hidden" id="jobID" name="jobID" value="{{ job['jobID'] }}">
+                    <button type="submit" class="btn btn-outline-primary ms-1" style="float: right;">Apply</button>
+                  </form>
                 </div>
               </div>
             </div>
           </div>
-          <div class="card mb-4">
-            <div class="card-body">
-              <div class="row">
-                <div class="col-sm-3">
-                  <p class="mb-0">Job Title</p>
-                </div>
-                <div class="col-sm-9">
-                  <p class="text-muted mb-0">Software Developer (Intern)</p>
-                </div>
-              </div>
-              <hr>
-              <div class="row">
-                <div class="col-sm-3">
-                  <p class="mb-0">Allowance</p>
-                </div>
-                <div class="col-sm-9">
-                  <p class="text-muted mb-0">RM 600.00 - RM 800.00</p>
-                </div>
-              </div>
-              <hr>
-              <div class="row">
-                <div class="col-sm-3">
-                  <p class="mb-0">Open For</p>
-                </div>
-                <div class="col-sm-9">
-                  <p class="text-muted mb-0">Diploma & Degree</p>
-                </div>
-              </div>
-              <hr>
-              <div class="row">
-                <p class="mb-4 text-primary">Job Description</p>
-                <p class="text-muted mb-0">...</p>
-              </div>
-              <hr>
-              <div class="row">
-                <p class="mb-4 text-primary">Job Requirement</p>
-                <p class="text-muted mb-0">...</p>
-              </div>
-              <hr>
-              <div class="row">
-                <div class="d-flex justify-content-center mb-2">
-                  <button type="button" class="btn btn-outline-primary ms-1" data-bs-toggle="modal"
-                  data-bs-target="#exampleModal" style="float: right;">Apply</button>
-                  <!-- <button type="button" class="btn btn-outline-danger ms-1" style="float: right;">Delete</button> -->
-                </div>
-              </div>
-            </div>
-          </div>
-          <!-- <div class="card mb-4">
-            <div class="card-body">
-              <div class="row">
-                <div class="col-sm-3">
-                  <p class="mb-0">Job Title</p>
-                </div>
-                <div class="col-sm-9">
-                  <p class="text-muted mb-0">Software Developer (Intern)</p>
-                </div>
-              </div>
-              <hr>
-              <div class="row">
-                <div class="col-sm-3">
-                  <p class="mb-0">Allowance</p>
-                </div>
-                <div class="col-sm-9">
-                  <p class="text-muted mb-0">RM 600.00 - RM 800.00</p>
-                </div>
-              </div>
-              <hr>
-              <div class="row">
-                <div class="col-sm-3">
-                  <p class="mb-0">Open For</p>
-                </div>
-                <div class="col-sm-9">
-                  <p class="text-muted mb-0">Diploma & Degree</p>
-                </div>
-              </div>
-              <hr>
-              <div class="row">
-                <p class="mb-4 text-primary">Job Description</p>
-                <p class="text-muted mb-0">...</p>
-              </div>
-              <hr>
-              <div class="row">
-                <p class="mb-4 text-primary">Job Requirement</p>
-                <p class="text-muted mb-0">...</p>
-              </div>
-              <hr>
-              <div class="row">
-                <div class="d-flex justify-content-center mb-2">
-                  <button type="button" class="btn btn-outline-primary ms-1" style="float: right;">Edit</button>
-                  <button type="button" class="btn btn-outline-danger ms-1" style="float: right;">Delete</button>
-                </div>
-              </div>
-            </div>
-          </div> -->
+          {% endfor %}
         </div>
       </div>
     </div>
@@ -345,35 +245,5 @@
   <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 
 </body>
-
-<!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1"
-aria-labelledby="exampleModalLabel" aria-hidden="true">
-<div class="modal-dialog">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Confirmation</h5>
-            <button type="button" class="btn-close"
-                data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-            <div class="panel-body">
-                
-              <p>Are you sure you want to apply to this job?</p>
-                <!-- <div class="btn btn-default">
-                    <a
-                        href="/Student/ProgressReport?template=FOCS_StudF03&amp;level=Bachelor">My
-                        Progress report</a>
-                </div> -->
-            </div>
-        </div>
-        <div class="modal-footer d-flex justify-content-center">
-            <button type="button" class="btn btn-success"
-                data-bs-dismiss="modal" style="float: right;">Confirm</button>
-            <button type="button" class="btn btn-danger" style="float: right;" data-bs-dismiss="modal" aria-label="Close">No</button>
-        </div>
-    </div>
-</div>
-</div>
 
 </html>
