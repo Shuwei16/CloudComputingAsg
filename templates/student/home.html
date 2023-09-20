@@ -203,31 +203,57 @@
                     </div>
                     <br />
                     <h4 class="my-3 text-primary"><b>Report Submission</b></h4>
-                    <p style="font-size:12px">(All forms must be in pdf format)</p>
+                    <p style="font-size:12px">(All report must be in pdf format)</p>
                     <div class="card mb-4">
                         <div class="card-body">
-                            <form action="{{ url_for('studentHome') }}" method=""
+                            <form action="{{ url_for('studentHome') }}" method="POST" enctype="multipart/form-data"
                                 onsubmit="return confirm('Are you sure to submit these reports? Once submitted, cannot be changed anymore.')">
+                                {% if rptStatus == 0 %}<input type="hidden" name="action" value="submitReport">{% endif %}
                                 <div class="form-group">
-                                    <label for="monthlyReport1" class="col-form-label">Monthly Report 1</label>
-                                    <input type="file" class="form-control" id="monthlyReport1" name="monthlyReport1" placeholder="" required>
+                                    {% if rptStatus == 0 %}
+                                    <label for="progressReport1" class="col-form-label">Progress Report 1</label>
+                                    <input type="file" class="form-control" id="progressReport1" name="progressReport1" placeholder="" required accept=".pdf">
+                                    <br />
+                                    {% else %}
+                                    <a href="{{ progressReport1_url }}" class="btn btn-secondary ms-1"
+                                        style="margin: 5px; width: 100%; text-align: center;"
+                                        target="_blank">View Progress Report 1</a>
+                                    {% endif %}
                                 </div>
-                                <br />
                                 <div class="form-group">
-                                    <label for="monthlyReport2" class="col-form-label">Monthly Report 2</label>
-                                    <input type="file" class="form-control" id="monthlyReport2" name="monthlyReport2" placeholder="" required>
+                                    {% if rptStatus == 0 %}
+                                    <label for="progressReport2" class="col-form-label">Progress Report 2</label>
+                                    <input type="file" class="form-control" id="progressReport2" name="progressReport2" placeholder="" required accept=".pdf">
+                                    <br />
+                                    {% else %}
+                                    <a href="{{ progressReport2_url }}" class="btn btn-secondary ms-1"
+                                        style="margin: 5px; width: 100%; text-align: center;"
+                                        target="_blank">View Progress Report 2</a>
+                                    {% endif %}
                                 </div>
-                                <br />
                                 <div class="form-group">
-                                    <label for="monthlyReport2" class="col-form-label">Monthly Report 3</label>
-                                    <input type="file" class="form-control" id="monthlyReport2" name="monthlyReport2" placeholder="" required>
+                                    {% if rptStatus == 0 %}
+                                    <label for="progressReport3" class="col-form-label">Progress Report 3</label>
+                                    <input type="file" class="form-control" id="progressReport3" name="progressReport3" placeholder="" required accept=".pdf">
+                                    <br />
+                                    {% else %}
+                                    <a href="{{ progressReport3_url }}" class="btn btn-secondary ms-1"
+                                        style="margin: 5px; width: 100%; text-align: center;"
+                                        target="_blank">View Progress Report 3</a>
+                                    {% endif %}
                                 </div>
-                                <br />
                                 <div class="form-group">
+                                    {% if rptStatus == 0 %}
                                     <label for="finalReport" class="col-form-label">Final Report</label>
-                                    <input type="file" class="form-control" id="finalReport" name="finalReport" placeholder="" required>
+                                    <input type="file" class="form-control" id="finalReport" name="finalReport" placeholder="" required accept=".pdf">
+                                    {% else %}
+                                    <a href="{{ finalReport_url }}" class="btn btn-secondary ms-1"
+                                        style="margin: 5px; width: 100%; text-align: center;"
+                                        target="_blank">View Final Report</a>
+                                    {% endif %}
                                 </div>
                                 <br />
+                                {% if rptStatus == 0 %}
                                 <hr>
                                 <div class="row">
                                     <div class="d-flex justify-content-center mb-2">
@@ -235,6 +261,7 @@
                                             style="float: right;">Submit</button>
                                     </div>
                                 </div>
+                                {% endif %}
                             </form>
                         </div>
                     </div>

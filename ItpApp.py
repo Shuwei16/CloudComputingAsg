@@ -1,9 +1,10 @@
 # rmb to change after
 
-from flask import Flask, render_template, request, redirect, url_for, flash, session
+from flask import Flask, render_template, request,  redirect, url_for, flash, session
 from pymysql import connections
 import os
 import boto3
+import requests
 from config import *
 
 import secrets
@@ -145,7 +146,6 @@ def studentHome():
                 compAcceptanceForm = request.files['compAcceptanceForm']
                 parrentAckForm = request.files['parrentAckForm']
                 letterOfIndemnity = request.files['letterOfIndemnity']
-                hiredEvidence = request.files['hiredEvidence']
                 
                 # Update data in student table
                 cursor = db_conn.cursor()
@@ -154,8 +154,6 @@ def studentHome():
                 compAcceptanceForm_in_s3 = "studID-" + str(session['studID']) + "_compAcceptanceForm.pdf"
                 parrentAckForm_in_s3 = "studID-" + str(session['studID']) + "_parrentAckForm.pdf"
                 letterOfIndemnity_in_s3 = "studID-" + str(session['studID']) + "_letterOfIndemnity.pdf"
-                if request.files['hiredEvidence'] is not None:
-                    hiredEvidence_in_s3 = "studID-" + str(session['studID']) + "_hiredEvidence.pdf"
                 s3 = boto3.resource('s3')
                 
                 cursor.execute("""
@@ -170,8 +168,6 @@ def studentHome():
                     s3.Bucket(custombucket).put_object(Key=compAcceptanceForm_in_s3, Body=compAcceptanceForm)
                     s3.Bucket(custombucket).put_object(Key=parrentAckForm_in_s3, Body=parrentAckForm)
                     s3.Bucket(custombucket).put_object(Key=letterOfIndemnity_in_s3, Body=letterOfIndemnity)
-                    if request.files['hiredEvidence'] is not None:
-                        s3.Bucket(custombucket).put_object(Key=hiredEvidence_in_s3, Body=hiredEvidence)
                     bucket_location = boto3.client('s3').get_bucket_location(Bucket=custombucket)
                     s3_location = (bucket_location['LocationConstraint'])
 
@@ -184,6 +180,37 @@ def studentHome():
                     return str(e)
 
                 cursor.close()
+            
+            # Submit report
+            if action == 'submitReport':
+                progressReport1 = request.files['progressReport1']
+                progressReport2 = request.files['progressReport2']
+                progressReport3 = request.files['progressReport3']
+                finalReport = request.files['finalReport']
+                s3 = boto3.resource('s3')
+                
+                # Uplaod image file in S3
+                progressReport1_in_s3 = "studID-" + str(session['studID']) + "_progressReport1.pdf"
+                progressReport2_in_s3 = "studID-" + str(session['studID']) + "_progressReport2.pdf"
+                progressReport3_in_s3 = "studID-" + str(session['studID']) + "_progressReport3.pdf"
+                finalReport_in_s3 = "studID-" + str(session['studID']) + "_finalReport.pdf"
+                s3 = boto3.resource('s3')
+                
+                try:
+                    s3.Bucket(custombucket).put_object(Key=progressReport1_in_s3, Body=progressReport1)
+                    s3.Bucket(custombucket).put_object(Key=progressReport2_in_s3, Body=progressReport2)
+                    s3.Bucket(custombucket).put_object(Key=progressReport3_in_s3, Body=progressReport3)
+                    s3.Bucket(custombucket).put_object(Key=finalReport_in_s3, Body=finalReport)
+                    bucket_location = boto3.client('s3').get_bucket_location(Bucket=custombucket)
+                    s3_location = (bucket_location['LocationConstraint'])
+
+                    if s3_location is None:
+                        s3_location = ''
+                    else:
+                        s3_location = '-' + s3_location
+                    
+                except Exception as e:
+                    return str(e)
         
         # Fetch the user's information from the database based on studID
         cursor = db_conn.cursor()
@@ -228,11 +255,10 @@ def studentHome():
             bucket_location = boto3.client('s3').get_bucket_location(Bucket=custombucket)
             s3_location = (bucket_location['LocationConstraint'])
             
-            # # Initialize files url
-            # compAcceptanceForm_url = None
-            # parrentAckForm_url = None
-            # letterOfIndemnity_url = None
-            # hiredEvidence_url = None
+            if s3_location is None:
+                s3_location = 'us-east-1'
+            
+            # Initial declaration
             
             compAcceptanceForm_url = "https://{0}.s3.{1}.amazonaws.com/studID-{2}_compAcceptanceForm.pdf".format(
                 custombucket,
@@ -240,27 +266,51 @@ def studentHome():
                 session['studID'])
 
             parrentAckForm_url = "https://{0}.s3.{1}.amazonaws.com/studID-{2}_parrentAckForm.pdf".format(
-                s3_location,
                 custombucket,
+                s3_location,
                 session['studID'])
 
             letterOfIndemnity_url = "https://{0}.s3.{1}.amazonaws.com/studID-{2}_letterOfIndemnity.pdf".format(
-                s3_location,
                 custombucket,
-                session['studID'])
-
-            hiredEvidence_url = "https://{0}.s3.{1}.amazonaws.com/studID-{2}_hiredEvidence.pdf".format(
                 s3_location,
-                custombucket,
                 session['studID'])
             
+            progressReport1_url = "https://{0}.s3.{1}.amazonaws.com/studID-{2}_progressReport1.pdf".format(
+                custombucket,
+                s3_location,
+                session['studID'])
+            
+            progressReport2_url = "https://{0}.s3.{1}.amazonaws.com/studID-{2}_progressReport2.pdf".format(
+                custombucket,
+                s3_location,
+                session['studID'])
+            
+            progressReport3_url = "https://{0}.s3.{1}.amazonaws.com/studID-{2}_progressReport3.pdf".format(
+                custombucket,
+                s3_location,
+                session['studID'])
+            
+            finalReport_url = "https://{0}.s3.{1}.amazonaws.com/studID-{2}_finalReport.pdf".format(
+                custombucket,
+                s3_location,
+                session['studID'])
+            
+            rptStatus = 1 # means already submit
+            # Check whether reports submitted or not, just take one report for checking
+            response = requests.head(finalReport_url)
+            if response.status_code != 200:
+                rptStatus = 0  # means havent submit
             
             # Pass the user's information to the template
             return render_template('student/home.html', user=user, 
                                    compAcceptanceForm_url=compAcceptanceForm_url, 
                                    parrentAckForm_url=parrentAckForm_url,
                                    letterOfIndemnity_url=letterOfIndemnity_url,
-                                   hiredEvidence_url=hiredEvidence_url)
+                                   progressReport1_url=progressReport1_url,
+                                   progressReport2_url=progressReport2_url,
+                                   progressReport3_url=progressReport3_url,
+                                   finalReport_url=finalReport_url, 
+                                   rptStatus=rptStatus)
     
     return render_template('student/home.html')
 
