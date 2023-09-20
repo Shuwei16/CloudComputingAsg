@@ -196,10 +196,13 @@
               <div class="row">
                 <div class="d-flex justify-content-center mb-2">
                   <button type="button" class="btn btn-outline-primary ms-1" style="float: right;"
-                    data-bs-toggle="modal" data-bs-target="#editModal" data-action="edit">Edit</button>
-                  <button type="button" class="btn btn-outline-danger ms-1"
-                    onclick="confirm('Are you sure to delete this job?')">Delete</button>
-                </div>
+                    data-bs-toggle="modal" data-bs-target="#editModal{{ job['jobID'] }}" data-action="edit" data-job-id="{{ job['jobID'] }}">Edit</button>
+                    <form method="POST" action="{{ url_for('companyHome') }}" data-action="delete" onsubmit="return confirm('Are you sure to delete this job?')">
+                      <input type="hidden" name="action" value="delete">
+                      <input type="hidden" name="job_id" id="deleteJobID" value="{{ job['jobID'] }}">
+                      <button type="submit" class="btn btn-outline-danger ms-1" value="delete">Delete</button>
+                    </form>
+                </div>        
               </div>
             </div>
           </div>
@@ -244,6 +247,7 @@
     <div class="modal-content">
       <form action="{{ url_for('companyHome') }}" method="POST" onsubmit="return confirm('Are you sure to this changes？')">
         <input type="hidden" name="action" value="editInfo">
+        <input type="hidden" name="companyEmail" id="editCompEmail" value="{{ company.compEmail }}">
         <div class="modal-header">
           <h5 class="modal-title" id="exampleModalLabel">Edit Company Info</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -252,19 +256,19 @@
           <div class="panel-body">
             <div class="form-group">
               <label for="companyName">Company Name</label>
-              <input type="text" class="form-control" id="companyName" placeholder="" value="Microsoft Corporation">
+              <input type="text" class="form-control" name="companyName" id="companyName" placeholder="" value="{{ company.compName }}">
             </div>
             <br />
             <div class="form-group">
               <label for="companyDescription">Company Description</label>
-              <textarea class="form-control" id="companyDescription"
-                rows="3">We develop and market software, services, and hardware devices that deliver new opportunities, greater convenience, and enhanced value to people's lives. We do business worldwide and have offices in more than 100 countries.</textarea>
+              <textarea class="form-control" id="companyDescription" name="companyDescription"
+                rows="3">{{ company.compDesc }}</textarea>
             </div>
             <br />
             <div class="form-group">
               <label for="location">Location</label>
-              <textarea class="form-control" id="location"
-                rows="3">Sunway Nexis Soho, D-5-7 No.1, Jalan PJU 5/1 Dataran Sunway, Kota Damansara, 47810 Petaling Jaya, Selangor.</textarea>
+              <textarea class="form-control" id="location" name="companyLocation"
+                rows="3">{{ company.compLocation }}</textarea>
             </div>
             <br />
             <div class="form-group">
@@ -272,26 +276,26 @@
               <div class="row">
                 <div class="col">
                   <label for="startDay">Start Day</label>
-                  <select class="form-select" aria-label="startDay">
-                    <option value="Monday" selected>Monday</option>
-                    <option value="Tuesday">Tuesday</option>
-                    <option value="Wednesday">Wednesday</option>
-                    <option value="Thursday">Thursday</option>
-                    <option value="Friday">Friday</option>
-                    <option value="Saturday">Saturday</option>
-                    <option value="Sunday">Sunday</option>
+                  <select class="form-select" aria-label="startDay" name="workingStartDay">
+                    <option value="Monday" {% if company.workingStartDay == "Monday" %}selected{% endif %}>Monday</option>
+                    <option value="Tuesday" {% if company.workingStartDay == "Tuesday" %}selected{% endif %}>Tuesday</option>
+                    <option value="Wednesday" {% if company.workingStartDay == "Wednesday" %}selected{% endif %}>Wednesday</option>
+                    <option value="Thursday" {% if company.workingStartDay == "Thursday" %}selected{% endif %}>Thursday</option>
+                    <option value="Friday" {% if company.workingStartDay == "Friday" %}selected{% endif %}>Friday</option>
+                    <option value="Saturday" {% if company.workingStartDay == "Saturday" %}selected{% endif %}>Saturday</option>
+                    <option value="Sunday" {% if company.workingStartDay == "Sunday" %}selected{% endif %}>Sunday</option>
                   </select>
                 </div>
                 <div class="col">
                   <label for="endDay">End Day</label>
-                  <select class="form-select" aria-label="endDay">
-                    <option value="Monday">Monday</option>
-                    <option value="Tuesday">Tuesday</option>
-                    <option value="Wednesday">Wednesday</option>
-                    <option value="Thursday">Thursday</option>
-                    <option value="Friday" selected>Friday</option>
-                    <option value="Saturday">Saturday</option>
-                    <option value="Sunday">Sunday</option>
+                  <select class="form-select" aria-label="endDay" name="workingEndDay">
+                    <option value="Monday" {% if company.workingEndDay == "Monday" %}selected{% endif %}>Monday</option>
+                    <option value="Tuesday" {% if company.workingEndDay == "Tuesday" %}selected{% endif %}>Tuesday</option>
+                    <option value="Wednesday" {% if company.workingEndDay == "Wednesday" %}selected{% endif %}>Wednesday</option>
+                    <option value="Thursday" {% if company.workingEndDay == "Thursday" %}selected{% endif %}>Thursday</option>
+                    <option value="Friday" {% if company.workingEndDay == "Friday" %}selected{% endif %}>Friday</option>
+                    <option value="Saturday" {% if company.workingEndDay == "Saturday" %}selected{% endif %}>Saturday</option>
+                    <option value="Sunday" {% if company.workingEndDay == "Sunday" %}selected{% endif %}>Sunday</option>
                   </select>
                 </div>
               </div>
@@ -302,42 +306,42 @@
               <div class="row">
                 <div class="col">
                   <label for="startTime">Start Time</label>
-                  <input type="time" class="form-control" placeholder="" value="09:45">
+                  <input type="time" class="form-control" placeholder="" value="{{ company.workingStartTime }}" name="workingStartTime">
                 </div>
                 <div class="col">
                   <label for="endTime">End Time</label>
-                  <input type="time" class="form-control" placeholder="" value="18:00">
+                  <input type="time" class="form-control" placeholder="" value="{{ company.workingEndTime }}" name="workingEndTime">
                 </div>
               </div>
             </div>
             <br />
-            <div class="form-group">
+            <!-- <div class="form-group">
               <label for="email">Email</label>
               <input type="email" id="email" class="form-control" placeholder="e.g. xxx@xxx.com"
                 value="example@example.com">
-            </div>
+            </div> -->
             <br />
             <div class="form-group">
               <label for="contact">Contact</label>
               <input type="text" id="contact" class="form-control" pattern="\d{2,3}-\d{7,8}"
-                placeholder="e.g. 019-9999999" value="03-2345678">
+                placeholder="e.g. 019-9999999" value="03-2345678" name="compPhone" value="{{ company.compPhone }}">
             </div>
             <br />
             <div class="form-group">
-              <label for="accessory">Provided Accessory</label>
-              <input type="text" id="accessory" class="form-control" placeholder="" value="Laptop">
+              <label for="accessories">Provided Accessory</label>
+              <input type="text" id="accessories" class="form-control" placeholder="" value="{{ company.accessories }}" name="accessories">
             </div>
             <br />
             <div class="form-group">
               <label for="accomodation">Accomodation</label>
               <div class="form-check">
-                <input class="form-check-input" type="radio" name="hasAccomodation" id="hasAccomodation">
-                <label class="form-check-label" for="hasAccomodation">
+                <input class="form-check-input" type="radio" name="accomodation" id="accomodation" value="Yes" {% if company.accomodation == "Yes" %}checked{% endif %}>
+                <label class="form-check-label" for="accomodation">
                   Yes
                 </label>
               </div>
               <div class="form-check">
-                <input class="form-check-input" type="radio" name="noAccomodation" id="noAccomodation" checked>
+                <input class="form-check-input" type="radio" name="accomodation" id="noAccomodation" value="No" {% if company.accomodation == "No" %}checked{% endif %}>
                 <label class="form-check-label" for="noAccomodation">
                   No
                 </label>
@@ -388,13 +392,13 @@
             <div class="form-group">
               <label for="openFor">Open For</label><br />
               <div class="form-check">
-                <input class="form-check-input" name="open_for[]" type="checkbox" value="" id="diploma" checked>
+                <input class="form-check-input" name="open_for" type="checkbox" value="Diploma" id="diploma" checked>
                 <label class="form-check-label" for="diploma">
                   Diploma
                 </label>
               </div>
               <div class="form-check">
-                <input class="form-check-input" name="open_for[]" type="checkbox" value="" id="degree" checked>
+                <input class="form-check-input" name="open_for" type="checkbox" value="Degree" id="degree" checked>
                 <label class="form-check-label" for="degree">
                   Degree
                 </label>
@@ -420,47 +424,58 @@
   </div>
 </div>
 
+{% for job in jobs %}
+{% for minimum in minimums %}
 <!-- Edit Job Modal -->
-<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="editModal{{ job['jobID'] }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
-      <form action="{{ url_for('companyHome') }}" method="POST" onsubmit="return confirm('Are you sure to this changes？')">
+      <form action="{{ url_for('companyHome', job_id=job['jobID']) }}" method="POST" onsubmit="return confirm('Are you sure to this changes？')">
         <input type="hidden" name="action" value="editJob">
+        <input type="hidden" name="job_id" id="editJobID" value="{{ job['jobID'] }}">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Edit Job</h5>
+          <h5 class="modal-title" id="exampleModalLabel{{ job['jobID'] }}">Edit Job</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
           <div class="panel-body">
             <div class="form-group">
-              <label for="jobTitle">Job Title</label>
-              <input type="text" name="jobTitle" class="form-control" id="jobTitle" placeholder="" value="">
+              <label for="jobTitle{{ job['jobID'] }}">Job Title</label>
+              <input type="text" name="jobTitle" class="form-control" id="jobTitle{{ job['jobID'] }}" placeholder="" value="{{ job['jobTitle'] }}">
             </div>
             <br />
+            {% for min in minimums %}
+            {% if min['jobID'] == job['jobID'] %}
+            {% for max in maximums %}
+            {% if max['jobID'] == job['jobID'] %}
             <div class="form-group">
               <label for="jobTitle">Allowance (RM)</label>
               <div class="row">
                 <div class="col">
                   <label for="minimum">Minimum</label>
-                  <input type="text" name="minimum" class="form-control" placeholder="e.g. 800.00" pattern="\d+\.\d{2}" value="">
+                  <input type="text" name="minimum" class="form-control" placeholder="e.g. 800.00" pattern="\d+\.\d{2}" value="{{ min['min_allowance'] }}">
                 </div>
                 <div class="col">
                   <label for="maximum">Maximum</label>
-                  <input type="text" name="maximum" class="form-control" placeholder="e.g. 1000.00" pattern="\d+\.\d{2}" value="">
+                  <input type="text" name="maximum" class="form-control" placeholder="e.g. 1000.00" pattern="\d+\.\d{2}" value="{{ max['max_allowance'] }}">
                 </div>
               </div>
             </div>
+            {% endif %}
+            {% endfor %}
+            {% endif %}
+            {% endfor %}
             <br />
             <div class="form-group">
               <label for="openFor">Open For</label><br />
               <div class="form-check">
-                <input class="form-check-input" name="diploma" type="checkbox" value="" id="diploma" checked>
+                <input class="form-check-input" name="open_for" type="checkbox" value="Diploma" id="diploma" checked>
                 <label class="form-check-label" for="diploma">
                   Diploma
                 </label>
               </div>
               <div class="form-check">
-                <input class="form-check-input" name="degree" type="checkbox" value="" id="degree" checked>
+                <input class="form-check-input" name="open_for" type="checkbox" value="Degree" id="degree" checked>
                 <label class="form-check-label" for="degree" checked>
                   Degree
                 </label>
@@ -468,12 +483,12 @@
             </div>
             <br />
             <div class="form-group">
-              <label for="jobDescription">Job Description</label>
-              <textarea class="form-control" name="jobDescription" id="jobDescription" rows="3"></textarea>
+              <label for="jobDesc{{ job['jobID'] }}">Job Description</label>
+              <textarea class="form-control" name="jobDescription" id="jobDesc{{ job['jobID'] }}" rows="3">{{ job['jobDesc'] }}</textarea>
             </div>
             <div class="form-group">
-              <label for="jobRequirement">Job Requirement</label>
-              <textarea class="form-control" name="jobRequirement" id="jobRequirement" rows="3"></textarea>
+              <label for="jobReq{{ job['jobID'] }}">Job Requirement</label>
+              <textarea class="form-control" name="jobRequirement" id="jobReq{{ job['jobID'] }}" rows="3">{{ job['jobReq'] }}</textarea>
             </div>
           </div>
         </div>
@@ -485,5 +500,6 @@
     </div>
   </div>
 </div>
-
+{% endfor %}
+{% endfor %}
 </html>

@@ -228,8 +228,11 @@ def studentHome():
             bucket_location = boto3.client('s3').get_bucket_location(Bucket=custombucket)
             s3_location = (bucket_location['LocationConstraint'])
             
-            if s3_location is None:
-                s3_location = 'us-east-1'
+            # # Initialize files url
+            # compAcceptanceForm_url = None
+            # parrentAckForm_url = None
+            # letterOfIndemnity_url = None
+            # hiredEvidence_url = None
             
             compAcceptanceForm_url = "https://{0}.s3.{1}.amazonaws.com/studID-{2}_compAcceptanceForm.pdf".format(
                 custombucket,
@@ -511,7 +514,7 @@ def companyHome():
             jobTitle = request.form['jobTitle']
             minimum = request.form['minimum']
             maximum = request.form['maximum']
-            open_for = request.form.getlist('open_for[]')
+            open_for = request.form.getlist('open_for')
             jobDescription = request.form['jobDescription']
             jobRequirement = request.form['jobRequirement']
             compEmail = session['compEmail']
@@ -546,26 +549,56 @@ def companyHome():
             jobTitle = request.form['jobTitle']
             minimum = request.form['minimum']
             maximum = request.form['maximum']
-            open_for = request.form.getlist('open_for[]')
+            open_for = request.form.getlist('open_for')
             jobDescription = request.form['jobDescription']
             jobRequirement = request.form['jobRequirement']
 
             allowance = f"{minimum} - {maximum}"
 
+            print(f"Received data: job_id={job_id}, jobTitle={jobTitle}, allowance={allowance}, open_for={open_for}, jobDescription={jobDescription}, jobRequirement={jobRequirement}")
+
             cursor = db_conn.cursor()
-            cursor.execute("UPDATE jobs SET jobTitle = %s, allowance = %s, open_for = %s, jobDescription = %s, jobRequirement = %s WHERE id = %s", (jobTitle, allowance, ','.join(open_for), jobDescription, jobRequirement, job_id))
+            cursor.execute("UPDATE jobs SET jobTitle = %s, allowance = %s, level = %s, jobDesc = %s, jobReq = %s WHERE jobID = %s", (jobTitle, allowance, ','.join(open_for), jobDescription, jobRequirement, job_id))
             db_conn.commit()
             cursor.close()
+
+            print("Data updated successfully")
             # return render_template('company/home.html', job=job, minimum=minimum, maximum=maximum)
-    
+
+        elif action == 'editInfo':
+            
+            compEmail = request.form['companyEmail']
+            compName = request.form['companyName']
+            compDesc = request.form['companyDescription']
+            compLocation = request.form['companyLocation']
+            workingStartDay = request.form['workingStartDay']
+            workingEndDay = request.form['workingEndDay']
+            workingStartTime = request.form['workingStartTime']
+            workingEndTime = request.form['workingEndTime']
+            compPhone = request.form['compPhone']
+            accessories = request.form['accessories']
+            accomodation = request.form['accomodation']
+
+            # print(f"Received data: job_id={job_id}, jobTitle={jobTitle}, allowance={allowance}, open_for={open_for}, jobDescription={jobDescription}, jobRequirement={jobRequirement}")
+
+            cursor = db_conn.cursor()
+            cursor.execute("UPDATE company SET compName = %s, compDesc = %s, compLocation = %s, workingStartDay = %s, workingEndDay = %s, workingStartTime = %s, workingEndTime = %s, compPhone = %s, accessories = %s, accomodation = %s WHERE compEmail = %s", (compName, compDesc, compLocation, workingStartDay, workingEndDay, workingStartTime, workingEndTime, compPhone, accessories, accomodation, compEmail))
+            db_conn.commit()
+            cursor.close()
+
+            # print("Data updated successfully")
+        
+
         elif action == 'delete':
             # Handle the DELETE request (e.g., delete a job)
             # Extract the job ID from the request data
             job_id = request.form['job_id']
+            print(f"Received job_id for deletion: {job_id}")
             cursor = db_conn.cursor()
-            cursor.execute("DELETE FROM jobs WHERE id = %s", (job_id,))
+            cursor.execute("DELETE FROM jobs WHERE jobID = %s", (job_id,))
             db_conn.commit()
             cursor.close()
+            print("Record deleted successfully")
         
     cursor = db_conn.cursor()
     # cursor.execute('SELECT * FROM jobs')
