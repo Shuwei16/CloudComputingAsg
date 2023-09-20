@@ -367,12 +367,12 @@ def companyLogin():
     if request.method == 'POST':
         email = request.form['email']
         password = request.form['password']
-        
+
         cursor = db_conn.cursor()
         cursor.execute("SELECT * FROM company WHERE compEmail = %s AND compPassword = %s", (email, password))
         user = cursor.fetchone()
         cursor.close()
-        
+
         if user:
              # Access the 'compEmail' from the tuple using integer index
             compEmail = user[0]  # Assuming 'compEmail' is the first column in your SELECT statement
@@ -382,7 +382,7 @@ def companyLogin():
         else:
             error_message = 'Login failed. Please check your email and password.'
             return render_template('company/login.html', error_message=error_message)
-    
+
     return render_template('company/login.html', error_message=error_message)
 
 @app.route("/company/register", methods=['GET', 'POST'])
@@ -405,7 +405,7 @@ def companyRegister():
         db_conn.commit()
         cursor.close()
         
-        return redirect(url_for('studentRegisterSuccess'))
+        return redirect(url_for('companyRegisterSuccess'))
     
     return render_template('company/register.html')
 
@@ -413,72 +413,157 @@ def companyRegister():
 def companyRegisterSuccess():
     return render_template('company/registerSuccess.html')
 
-@app.route("/company/home")
+@app.route("/company/home", methods=['GET', 'POST'])
 def companyHome():
-    if request.method == 'GET':
-        cursor = db_conn.cursor()
-        cursor.execute('SELECT * FROM jobs')
-        jobs = cursor.fetchall()
-        cursor.close()
+    if request.method == 'POST':
+        action = request.form.get('action')
+
+        if action == 'addJob':
+            jobTitle = request.form['jobTitle']
+            minimum = request.form['minimum']
+            maximum = request.form['maximum']
+            open_for = request.form.getlist('open_for[]')
+            jobDescription = request.form['jobDescription']
+            jobRequirement = request.form['jobRequirement']
+            compEmail = session['compEmail']
+
+            allowance = f"{minimum} - {maximum}"
+
+            # Automatically generate a new job ID by incrementing the maximum job ID
+            cursor = db_conn.cursor()
+            cursor.execute("SELECT MAX(jobID) FROM jobs")
+            max_id = cursor.fetchone()[0]  # Get the maximum job ID
+
+            if max_id is not None:
+                # Extract the numeric part and increment it
+                numeric_part = int(max_id[1:])  # Convert 'J001' to 1
+                new_numeric_part = numeric_part + 1
     
-        return render_template('company/home.html', jobs=jobs)
+                # Format the new jobID with the same pattern ('J' + 3-digit numeric part)
+                new_job_id = 'J{:03d}'.format(new_numeric_part)
+            else:
+                # If there are no jobs, start with 'J001'
+                new_job_id = 'J001'
+            
 
-    elif request.method == 'POST':
-        jobTitle = request.form['jobTitle']
-        minimum = request.form['minimum']
-        maximum = request.form['maximum']
-        open_for = request.form.getlist('open_for[]')
-        jobDescription = request.form['jobDescription']
-        jobRequirement = request.form['jobRequirement']
-
-        allowance = f"{minimum} - {maximum}"
-
-        # Automatically generate a new job ID by incrementing the maximum job ID
-        cursor = db_conn.cursor()
-        cursor.execute("SELECT MAX(id) FROM jobs")
-        max_id = cursor.fetchone()[0]  # Get the maximum job ID
-        new_job_id = max_id + 1 if max_id is not None else 1  # Increment the maximum job ID by 1 or start at 1 if no jobs exist
-
-        cursor = db_conn.cursor()
-        cursor.execute("INSERT INTO jobs (jobID, jobTitle, allowance, open_for, jobDescription, jobRequirement) VALUES (%s, %s, %s, %s, %s, %s)", (new_job_id, jobTitle, allowance, ','.join(open_for), jobDescription, jobRequirement))
-        db_conn.commit()
-        cursor.close()
-        return render_template('company/home.html')
+            cursor = db_conn.cursor()
+            cursor.execute("INSERT INTO jobs (jobID, jobTitle, allowance, level, jobDesc, jobReq, compEmail) VALUES (%s, %s, %s, %s, %s, %s, %s)", (new_job_id, jobTitle, allowance, ','.join(open_for), jobDescription, jobRequirement, compEmail))
+            db_conn.commit()
+            cursor.close()
+            return render_template('company/home.html')
+        
+        elif action == 'editJob':
     
-    elif request.method == 'PUT':
-        job_id = request.form['job_id']  # Get the job ID from the form
-        jobTitle = request.form['jobTitle']
-        minimum = request.form['minimum']
-        maximum = request.form['maximum']
-        open_for = request.form.getlist('open_for[]')
-        jobDescription = request.form['jobDescription']
-        jobRequirement = request.form['jobRequirement']
+            # job_id = request.form['job_id']  # Get the job ID from the form
+            jobTitle = request.form['jobTitle']
+            minimum = request.form['minimum']
+            maximum = request.form['maximum']
+            open_for = request.form.getlist('open_for[]')
+            jobDescription = request.form['jobDescription']
+            jobRequirement = request.form['jobRequirement']
 
-        allowance = f"{minimum} - {maximum}"
+            allowance = f"{minimum} - {maximum}"
 
-        cursor = db_conn.cursor()
-        cursor.execute('SELECT * FROM jobs WHERE id = %s', (job_id,))
-        job = cursor.fetchone()
-        cursor.close()
+            cursor = db_conn.cursor()
+            cursor.execute("""
+                    SELECT jobs.jobID
+                    FROM jobs 
+                    JOIN company ON jobs.compEmail = company.compEmail
+                    WHERE company.compEmail = %s
+                    """, (session['compEmail']),)
+            job_id = cursor.fetchone()
+            
 
-        allowance = job['allowance']
-        minimum, maximum = map(float, allowance.split(' - '))
+            cursor = db_conn.cursor()
+            cursor.execute('SELECT * FROM jobs WHERE jobs.jobID = %s', (job_id,))
+            job = cursor.fetchone()
+            
 
-        cursor = db_conn.cursor()
-        cursor.execute("UPDATE jobs SET jobTitle = %s, allowance = %s, open_for = %s, jobDescription = %s, jobRequirement = %s WHERE id = %s", (jobTitle, allowance, ','.join(open_for), jobDescription, jobRequirement, job_id))
-        db_conn.commit()
-        cursor.close()
-        return render_template('company/home.html', job=job, minimum=minimum, maximum=maximum)
+            allowance = job['allowance']
+            minimum, maximum = map(float, allowance.split(' - '))
+
+            cursor = db_conn.cursor()
+            cursor.execute("UPDATE jobs SET jobTitle = %s, allowance = %s, open_for = %s, jobDescription = %s, jobRequirement = %s WHERE id = %s", (jobTitle, allowance, ','.join(open_for), jobDescription, jobRequirement, job_id))
+            db_conn.commit()
+            cursor.close()
+            return render_template('company/home.html', job=job, minimum=minimum, maximum=maximum)
     
-    elif request.method == 'DELETE':
-        # Handle the DELETE request (e.g., delete a job)
-        # Extract the job ID from the request data
-        job_id = request.form['job_id']
+        elif action == 'delete':
+            # Handle the DELETE request (e.g., delete a job)
+            # Extract the job ID from the request data
+            job_id = request.form['job_id']
+            cursor = db_conn.cursor()
+            cursor.execute("DELETE FROM jobs WHERE id = %s", (job_id,))
+            db_conn.commit()
+            cursor.close()
+            return redirect(url_for('companyHome', message="Job deleted successfully"))
+        
         cursor = db_conn.cursor()
-        cursor.execute("DELETE FROM jobs WHERE id = %s", (job_id,))
-        db_conn.commit()
+        # cursor.execute('SELECT * FROM jobs')
+        # jobs = cursor.fetchall()
+        # cursor.execute('SELECT * FROM company')
+        # companies = cursor.fetchall()
+        cursor.execute("""
+                    SELECT company.*
+                    FROM company 
+                    JOIN jobs ON company.compEmail = jobs.compEmail
+                    WHERE company.compEmail = %s
+                    """, (session['compEmail']),)
+        company_data = cursor.fetchone()
+        
+
+        if company_data:
+            # Convert the user record to a dictionary
+            company = {
+                'compEmail': company_data[0],
+                'compPassword': company_data[1],
+                'compName': company_data[2],
+                'compDesc': company_data[3],
+                'category': company_data[4],
+                'compLocation': company_data[5],
+                'workingStartDay': company_data[6],
+                'workingEndDay': company_data[7],
+                'workingStartTime': company_data[8],
+                'workingEndTime': company_data[9],
+                'compPhone': company_data[10],
+                'accessories': company_data[11],
+                'accomodation': company_data[12],
+                # Add other fields as needed
+            }
+        
+            cursor.execute("""
+                    SELECT jobs.*
+                    FROM jobs 
+                    JOIN company ON jobs.compEmail = company.compEmail
+                    WHERE company.compEmail = %s
+                    """, (session['compEmail']),)
+            job_data = cursor.fetchall()
+            
+        
+        if job_data:
+        # Initialize an empty list to store job dictionaries
+            jobs = []
+
+            for row in job_data:
+            # Convert each row to a dictionary
+                job = {
+                    'jobID': row[0],
+                    'jobTitle': row[1],
+                    'allowance': row[2],  # Access the 'allowance' column
+                    'level': row[3],
+                    'jobDesc': row[4],
+                    'jobReq': row[5],
+                    'compEmail': row[6],
+                    # Add other fields as needed
+            }
+
+            # Append the job dictionary to the list of jobs
+            jobs.append(job)
+
         cursor.close()
-        return redirect(url_for('companyHome', message="Job deleted successfully"))
+        print(jobs)
+        return render_template('company/home.html', company=company, jobs=jobs)
+    
     return render_template('company/home.html')
 
 @app.route("/company/studentApplication")
