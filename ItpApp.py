@@ -221,43 +221,39 @@ def studentHome():
                 # Add other fields as needed
             }
             
-            # Get the s3 bucket location
-            bucket_location = boto3.client('s3').get_bucket_location(Bucket=custombucket)
-            s3_location = (bucket_location['LocationConstraint'])
+            # # Get the s3 bucket location
+            # bucket_location = boto3.client('s3').get_bucket_location(Bucket=custombucket)
+            # s3_location = (bucket_location['LocationConstraint'])
             
-            # Initialize files url
-            compAcceptanceForm_url = None
-            parrentAckForm_url = None
-            letterOfIndemnity_url = None
-            hiredEvidence_url = None
+            # # Initialize files url
+            # compAcceptanceForm_url = None
+            # parrentAckForm_url = None
+            # letterOfIndemnity_url = None
+            # hiredEvidence_url = None
             
-            # Retrieve files from s3 bucket
-            compAcceptanceForm_url = "https://s3{0}.amazonaws.com/{1}/{2}".format(
-                s3_location,
-                custombucket,
-                compAcceptanceForm_in_s3)
+            # # Retrieve files from s3 bucket
+            # compAcceptanceForm_url = "https://s3{0}.amazonaws.com/{1}/{2}".format(
+            #     s3_location,
+            #     custombucket,
+            #     compAcceptanceForm_in_s3)
             
-            parrentAckForm_url = "https://s3{0}.amazonaws.com/{1}/{2}".format(
-                s3_location,
-                custombucket,
-                parrentAckForm_in_s3)
+            # parrentAckForm_url = "https://s3{0}.amazonaws.com/{1}/{2}".format(
+            #     s3_location,
+            #     custombucket,
+            #     parrentAckForm_in_s3)
             
-            letterOfIndemnity_url = "https://s3{0}.amazonaws.com/{1}/{2}".format(
-                s3_location,
-                custombucket,
-                letterOfIndemnity_in_s3)
+            # letterOfIndemnity_url = "https://s3{0}.amazonaws.com/{1}/{2}".format(
+            #     s3_location,
+            #     custombucket,
+            #     letterOfIndemnity_in_s3)
             
-            hiredEvidence_url = "https://s3{0}.amazonaws.com/{1}/{2}".format(
-                s3_location,
-                custombucket,
-                hiredEvidence_in_s3)
+            # hiredEvidence_url = "https://s3{0}.amazonaws.com/{1}/{2}".format(
+            #     s3_location,
+            #     custombucket,
+            #     hiredEvidence_in_s3)
             
             # Pass the user's information to the template
-            return render_template('student/home.html', user=user, 
-                                   compAcceptanceForm_url=compAcceptanceForm_url,
-                                   parrentAckForm_url=parrentAckForm_url,
-                                   letterOfIndemnity_url=letterOfIndemnity_url,
-                                   hiredEvidence_url=hiredEvidence_url)
+            return render_template('student/home.html', user=user)
     
     return render_template('student/home.html')
 
