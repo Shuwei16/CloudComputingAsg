@@ -25,7 +25,6 @@ db_conn = connections.Connection(
     db=customdb
 
 )
-
 # output = {}
 # table = 'employee'
 
@@ -222,39 +221,43 @@ def studentHome():
                 # Add other fields as needed
             }
             
-            # # Get the s3 bucket location
-            # bucket_location = boto3.client('s3').get_bucket_location(Bucket=custombucket)
-            # s3_location = (bucket_location['LocationConstraint'])
+            # Get the s3 bucket location
+            bucket_location = boto3.client('s3').get_bucket_location(Bucket=custombucket)
+            s3_location = (bucket_location['LocationConstraint'])
             
-            # # Initialize files url
-            # compAcceptanceForm_url = None
-            # parrentAckForm_url = None
-            # letterOfIndemnity_url = None
-            # hiredEvidence_url = None
+            # Initialize files url
+            compAcceptanceForm_url = None
+            parrentAckForm_url = None
+            letterOfIndemnity_url = None
+            hiredEvidence_url = None
             
-            # # Retrieve files from s3 bucket
-            # compAcceptanceForm_url = "https://s3{0}.amazonaws.com/{1}/{2}".format(
-            #     s3_location,
-            #     custombucket,
-            #     compAcceptanceForm_in_s3)
+            # Retrieve files from s3 bucket
+            compAcceptanceForm_url = "https://s3{0}.amazonaws.com/{1}/{2}".format(
+                s3_location,
+                custombucket,
+                compAcceptanceForm_in_s3)
             
-            # parrentAckForm_url = "https://s3{0}.amazonaws.com/{1}/{2}".format(
-            #     s3_location,
-            #     custombucket,
-            #     parrentAckForm_in_s3)
+            parrentAckForm_url = "https://s3{0}.amazonaws.com/{1}/{2}".format(
+                s3_location,
+                custombucket,
+                parrentAckForm_in_s3)
             
-            # letterOfIndemnity_url = "https://s3{0}.amazonaws.com/{1}/{2}".format(
-            #     s3_location,
-            #     custombucket,
-            #     letterOfIndemnity_in_s3)
+            letterOfIndemnity_url = "https://s3{0}.amazonaws.com/{1}/{2}".format(
+                s3_location,
+                custombucket,
+                letterOfIndemnity_in_s3)
             
-            # hiredEvidence_url = "https://s3{0}.amazonaws.com/{1}/{2}".format(
-            #     s3_location,
-            #     custombucket,
-            #     hiredEvidence_in_s3)
+            hiredEvidence_url = "https://s3{0}.amazonaws.com/{1}/{2}".format(
+                s3_location,
+                custombucket,
+                hiredEvidence_in_s3)
             
             # Pass the user's information to the template
-            return render_template('student/home.html', user=user)
+            return render_template('student/home.html', user=user, 
+                                   compAcceptanceForm_url=compAcceptanceForm_url,
+                                   parrentAckForm_url=parrentAckForm_url,
+                                   letterOfIndemnity_url=letterOfIndemnity_url,
+                                   hiredEvidence_url=hiredEvidence_url)
     
     return render_template('student/home.html')
 
@@ -419,7 +422,7 @@ def companyHome():
             jobTitle = request.form['jobTitle']
             minimum = request.form['minimum']
             maximum = request.form['maximum']
-            open_for = request.form.getlist('open_for[]')
+            open_for = request.form.getlist('open_for')
             jobDescription = request.form['jobDescription']
             jobRequirement = request.form['jobRequirement']
             compEmail = session['compEmail']
@@ -447,53 +450,63 @@ def companyHome():
             cursor.execute("INSERT INTO jobs (jobID, jobTitle, allowance, level, jobDesc, jobReq, compEmail) VALUES (%s, %s, %s, %s, %s, %s, %s)", (new_job_id, jobTitle, allowance, ','.join(open_for), jobDescription, jobRequirement, compEmail))
             db_conn.commit()
             cursor.close()
-            return render_template('company/home.html')
         
         elif action == 'editJob':
     
-            # job_id = request.form['job_id']  # Get the job ID from the form
+            job_id = request.form['job_id']  # Get the job ID from the form
             jobTitle = request.form['jobTitle']
             minimum = request.form['minimum']
             maximum = request.form['maximum']
-            open_for = request.form.getlist('open_for[]')
+            open_for = request.form.getlist('open_for')
             jobDescription = request.form['jobDescription']
             jobRequirement = request.form['jobRequirement']
 
             allowance = f"{minimum} - {maximum}"
 
-            cursor = db_conn.cursor()
-            cursor.execute("""
-                    SELECT jobs.jobID
-                    FROM jobs 
-                    JOIN company ON jobs.compEmail = company.compEmail
-                    WHERE company.compEmail = %s
-                    """, (session['compEmail']),)
-            job_id = cursor.fetchone()
-            
+            print(f"Received data: job_id={job_id}, jobTitle={jobTitle}, allowance={allowance}, open_for={open_for}, jobDescription={jobDescription}, jobRequirement={jobRequirement}")
 
             cursor = db_conn.cursor()
-            cursor.execute('SELECT * FROM jobs WHERE jobs.jobID = %s', (job_id,))
-            job = cursor.fetchone()
-            
-
-            allowance = job['allowance']
-            minimum, maximum = map(float, allowance.split(' - '))
-
-            cursor = db_conn.cursor()
-            cursor.execute("UPDATE jobs SET jobTitle = %s, allowance = %s, open_for = %s, jobDescription = %s, jobRequirement = %s WHERE id = %s", (jobTitle, allowance, ','.join(open_for), jobDescription, jobRequirement, job_id))
+            cursor.execute("UPDATE jobs SET jobTitle = %s, allowance = %s, level = %s, jobDesc = %s, jobReq = %s WHERE jobID = %s", (jobTitle, allowance, ','.join(open_for), jobDescription, jobRequirement, job_id))
             db_conn.commit()
             cursor.close()
-            return render_template('company/home.html', job=job, minimum=minimum, maximum=maximum)
-    
+
+            print("Data updated successfully")
+            # return render_template('company/home.html', job=job, minimum=minimum, maximum=maximum)
+
+        elif action == 'editInfo':
+            
+            compEmail = request.form['companyEmail']
+            compName = request.form['companyName']
+            compDesc = request.form['companyDescription']
+            compLocation = request.form['companyLocation']
+            workingStartDay = request.form['workingStartDay']
+            workingEndDay = request.form['workingEndDay']
+            workingStartTime = request.form['workingStartTime']
+            workingEndTime = request.form['workingEndTime']
+            compPhone = request.form['compPhone']
+            accessories = request.form['accessories']
+            accomodation = request.form['accomodation']
+
+            # print(f"Received data: job_id={job_id}, jobTitle={jobTitle}, allowance={allowance}, open_for={open_for}, jobDescription={jobDescription}, jobRequirement={jobRequirement}")
+
+            cursor = db_conn.cursor()
+            cursor.execute("UPDATE company SET compName = %s, compDesc = %s, compLocation = %s, workingStartDay = %s, workingEndDay = %s, workingStartTime = %s, workingEndTime = %s, compPhone = %s, accessories = %s, accomodation = %s WHERE compEmail = %s", (compName, compDesc, compLocation, workingStartDay, workingEndDay, workingStartTime, workingEndTime, compPhone, accessories, accomodation, compEmail))
+            db_conn.commit()
+            cursor.close()
+
+            # print("Data updated successfully")
+        
+
         elif action == 'delete':
             # Handle the DELETE request (e.g., delete a job)
             # Extract the job ID from the request data
             job_id = request.form['job_id']
+            print(f"Received job_id for deletion: {job_id}")
             cursor = db_conn.cursor()
-            cursor.execute("DELETE FROM jobs WHERE id = %s", (job_id,))
+            cursor.execute("DELETE FROM jobs WHERE jobID = %s", (job_id,))
             db_conn.commit()
             cursor.close()
-            return redirect(url_for('companyHome', message="Job deleted successfully"))
+            print("Record deleted successfully")
         
     cursor = db_conn.cursor()
     # cursor.execute('SELECT * FROM jobs')
@@ -538,6 +551,8 @@ def companyHome():
     
     # Initialize an empty list to store job dictionaries
     jobs = []
+    minimums = []  # Initialize an empty list for minimums
+    maximums = []  # Initialize an empty list for maximums
     for row in job_data:
     # Convert each row to a dictionary
         job = {
@@ -552,9 +567,15 @@ def companyHome():
         }    
         # Append the job dictionary to the list of jobs
         jobs.append(job)
+
+        allowance = job['allowance']
+        min_allowance, max_allowance = map(float, allowance.split(' - '))
+
+    # Append a dictionary containing jobID and minimum allowance to the minimums list
+        minimums.append({'jobID': job['jobID'], 'min_allowance': min_allowance})
+        maximums.append({'jobID': job['jobID'], 'max_allowance': max_allowance})
         
-    print(jobs)
-    return render_template('company/home.html', company=company, jobs=jobs)
+    return render_template('company/home.html', company=company, jobs=jobs, minimums=minimums, maximums=maximums)
 
 @app.route("/company/studentApplication")
 def companyStudentApplication():
