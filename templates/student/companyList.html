@@ -79,148 +79,23 @@
 
             <div class="row portfolio-container">
 
-              <div class="col-lg-4 col-md-6 portfolio-item filter-software wow fadeInUp">
+              {% for row in companies %}
+              <div class="col-lg-4 col-md-6 portfolio-item filter-{{ row['category']|lower }} wow fadeInUp">
                 <div class="portfolio-wrap">
                   <figure class="h-50">
-                    <img src="{{ url_for('static', filename='img/company/techtics.jpg') }}" class="techtics-img img-fluid w-100" alt="">
-                    <a href="{{ url_for('studentCompanyDetail') }}" class="link-details" title="More Details" target="_blank"><i
+                    <img src="{{ url_for('static', filename='img/company/techtics.jpg')}}" class="techtics-img img-fluid w-100" alt="">
+                    <a href="{{ url_for('studentCompanyDetail', company=row['compName']) }}" class="link-details" title="More Details" target="_blank"><i
                         class="bx bx-link"></i></a>
                   </figure>
 
                   <div class="portfolio-info ">
-                    <h4><a href="{{ url_for('studentCompanyDetail') }}">Techtics Solutions Sdn Bhd</a></h4>
-                    <p>Software</p>
-                    <p>RM 800.00 - RM 1000.00</p>
+                    <h4><a href="{{ url_for('studentCompanyDetail', company=row['compName']) }}" target="_blank">{{ row['compName'] }}</a></h4>
+                    <p>{{ row['category'] }}</p>
                   </div>
                 </div>
               </div>
+              {% endfor %}
 
-              <div class="col-lg-4 col-md-6 portfolio-item filter-security wow fadeInUp" data-wow-delay="0.1s">
-                <div class="portfolio-wrap">
-                  <figure class="h-50">
-                    <img src="../assets/img/company/ecloud_sdn_bhd_logo.jpg" class="eCloud-img img-fluid w-100" alt="">
-                    <a href="companyDetail.html" class="link-details" title="More Details" target="_blank"><i
-                        class="bx bx-link"></i></a>
-                  </figure>
-
-                  <div class="portfolio-info">
-                    <h4><a href="{{ url_for('studentCompanyDetail') }}">eCloud Sdn Bhd</a></h4>
-                    <p>Security</p>
-                    <p>RM 800.00 - RM 1000.00</p>
-                  </div>
-                </div>
-              </div>
-
-              <div class="col-lg-4 col-md-6 portfolio-item filter-hardware wow fadeInUp" data-wow-delay="0.2s">
-                <div class="portfolio-wrap">
-                  <figure class="h-50">
-                    <img src="../assets/img/company/Intego.png" class="intego-img img-fluid w-100" alt="">
-                    <a href="companyDetail.html" class="link-details" title="More Details" target="_blank"><i
-                        class="bx bx-link"></i></a>
-                  </figure>
-
-                  <div class="portfolio-info">
-                    <h4><a href="{{ url_for('studentCompanyDetail') }}">INTEGO TECHNOLOGIES SDN BHD</a></h4>
-                    <p>Hardware</p>
-                    <p>RM 800.00 - RM 1000.00</p>
-                  </div>
-                </div>
-              </div>
-
-              <div class="col-lg-4 col-md-6 portfolio-item filter-security wow fadeInUp">
-                <div class="portfolio-wrap">
-                  <figure class="h-50">
-                    <img src="../assets/img/company/infowhiz.png" class="infowhiz-img img-fluid w-100" alt="">
-                    <a href="companyDetail.html" class="link-details" title="More Details" target="_blank"><i
-                        class="bx bx-link"></i></a>
-                  </figure>
-
-                  <div class="portfolio-info">
-                    <h4><a href="{{ url_for('studentCompanyDetail') }}">Infowhiz Solutions (M) Sdn Bhd</a></h4>
-                    <p>Security</p>
-                    <p>RM 800.00 - RM 1000.00</p>
-                  </div>
-                </div>
-              </div>
-
-              <div class="col-lg-4 col-md-6 portfolio-item filter-security wow fadeInUp" data-wow-delay="0.1s">
-                <div class="portfolio-wrap">
-                  <figure class="h-50">
-                    <img src="../assets/img/company/public.jpg" class="public-img img-fluid w-100" alt="">
-                    <a href="companyDetail.html" class="link-details" title="More Details" target="_blank"><i
-                        class="bx bx-link"></i></a>
-                  </figure>
-
-                  <div class="portfolio-info">
-                    <h4><a href="{{ url_for('studentCompanyDetail') }}">Public Mutual Berhad</a></h4>
-                    <p>Security</p>
-                    <p>RM 800.00 - RM 1000.00</p>
-                  </div>
-                </div>
-              </div>
-
-              <div class="col-lg-4 col-md-6 portfolio-item filter-software wow fadeInUp" data-wow-delay="0.2s">
-                <div class="portfolio-wrap">
-                  <figure class="h-50">
-                    <img src="../assets/img/company/hatio.png" class="hatio-img img-fluid w-100" alt="">
-                    <a href="companyDetail.html" class="link-details" title="More Details" target="_blank"><i
-                        class="bx bx-link"></i></a>
-                  </figure>
-
-                  <div class="portfolio-info">
-                    <h4><a href="{{ url_for('studentCompanyDetail') }}">Hatio Sea Sdn Bhd</a></h4>
-                    <p>Software</p>
-                    <p>RM 800.00 - RM 1000.00</p>
-                  </div>
-                </div>
-              </div>
-
-              <div class="col-lg-4 col-md-6 portfolio-item filter-software wow fadeInUp">
-                <div class="portfolio-wrap">
-                  <figure class="h-50">
-                    <img src="../assets/img/company/bigpay-logo-512.png" class="bigpay-img img-fluid w-100" alt="">
-                    <a href="companyDetail.html" class="link-details" title="More Details" target="_blank"><i
-                        class="bx bx-link"></i></a>
-                  </figure>
-
-                  <div class="portfolio-info">
-                    <h4><a href="{{ url_for('studentCompanyDetail') }}">Bigpay Malaysia Sdn Bhd</a></h4>
-                    <p>Software</p>
-                    <p>RM 800.00 - RM 1000.00</p>
-                  </div>
-                </div>
-              </div>
-
-              <div class="col-lg-4 col-md-6 portfolio-item filter-hardware wow fadeInUp" data-wow-delay="0.1s">
-                <div class="portfolio-wrap">
-                  <figure class="h-50">
-                    <img src="../assets/img/company/GHL.png" class="GHL-img img-fluid w-100" alt="">
-                    <a href="companyDetail.html" class="link-details" title="More Details" target="_blank"><i
-                        class="bx bx-link"></i></a>
-                  </figure>
-
-                  <div class="portfolio-info">
-                    <h4><a href="{{ url_for('studentCompanyDetail') }}">GHL SYSTEMS BERHAD</a></h4>
-                    <p>Hardware</p>
-                    <p>RM 800.00 - RM 1000.00</p>
-                  </div>
-                </div>
-              </div>
-
-              <div class="col-lg-4 col-md-6 portfolio-item filter-hardware wow fadeInUp" data-wow-delay="0.2s">
-                <div class="portfolio-wrap">
-                  <figure class="h-50">
-                    <img src="../assets/img/company/CTC.jpg" class="CTC-img img-fluid w-100" alt="">
-                    <a href="companyDetail.html" class="link-details" title="More Details" target="_blank"><i
-                        class="bx bx-link"></i></a>
-                  </figure>
-                  <div class="portfolio-info">
-                    <h4><a href="{{ url_for('studentCompanyDetail') }}">CTC Global Sdn Bhd</a></h4>
-                    <p>Hardware</p>
-                    <p>RM 800.00 - RM 1000.00</p>
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
         </section>

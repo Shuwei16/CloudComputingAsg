@@ -65,14 +65,14 @@
   <!-- ======= Auth Section ======= -->
   <section id="auth" class="d-flex flex-column justify-content-center align-items-center">
     <div class="container text-center text-md-left" data-aos="fade-up">
-      <form action="{{ url_for('adminHome') }}">
+      <form action="{{ url_for('adminLogin') }}" method="POST">
         <h3>Admin Login</h3>
 
         <label for="email">Email</label>
-        <input type="email" placeholder="e.g. admin@xxx.com" id="email" required>
+        <input type="email" placeholder="e.g. admin@xxx.com" id="email" name="email" required>
 
         <label for="password">Password</label>
-        <input type="password" placeholder="e.g. adminpassword123" id="password" required>
+        <input type="password" placeholder="e.g. adminpassword123" id="password" name="password" required>
 
         <button>Log In</button>
       </form>

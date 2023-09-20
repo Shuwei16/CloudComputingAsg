@@ -32,6 +32,8 @@ db_conn = connections.Connection(
 # Main
 @app.route("/")
 def index():
+    if session:
+        session.clear()
     return render_template('index.html')
 
 # Student
@@ -49,7 +51,10 @@ def studentLogin():
         cursor.close()
 
         if user:
-            session['studID'] = user['studID']
+            # Access the 'studID' from the tuple using integer index
+            studID = user[0]  # Assuming 'studID' is the first column in your SELECT statement
+            # Store 'studID' in the session
+            session['studID'] = studID
             return redirect(url_for('studentHome'))
         else:
             error_message = 'Login failed. Please check your email and nric.'
@@ -88,7 +93,19 @@ def studentRegister():
         
         return redirect(url_for('studentRegisterSuccess'))
     
-    return render_template('student/register.html')
+    cursor = db_conn.cursor()
+    # Execute a SQL query to fetch data from the database
+    cursor.execute("SELECT cohortID FROM cohort")
+    cohort = cursor.fetchall()  # Fetch all rows
+    cursor.close()
+    
+    cursor = db_conn.cursor()
+    # Execute a SQL query to fetch data from the database
+    cursor.execute("SELECT lecEmail, lecName FROM lecturer")
+    lecturer = cursor.fetchall()  # Fetch all rows
+    cursor.close()
+    
+    return render_template('student/register.html', cohort=cohort, lecturer=lecturer)
 
 @app.route("/student/registerSuccess")
 def studentRegisterSuccess():
@@ -96,39 +113,213 @@ def studentRegisterSuccess():
 
 @app.route("/student/home", methods=['GET', 'POST'])
 def studentHome():
-    print(session['studID'])
     if 'studID' in session:
-        studID = session['studID']
+        
+        if request.method == 'POST':
+            action = request.form.get('action')
+            
+            # Edit student info
+            if action == 'editInfo':
+                contactNo = request.form['contactNo']
+                cgpa = request.form['cgpa']
+                
+                # Update data in student table
+                cursor = db_conn.cursor()
+                cursor.execute("""
+                            UPDATE student
+                            SET studPhone = %s, cgpa = %s
+                            WHERE studID = %s
+                            """, 
+                            (contactNo, cgpa, session['studID']),)
+                db_conn.commit()
+                cursor.close()
+            
+            # Edit company info
+            if action == 'editCompany':
+                companyName = request.form['companyName']
+                companyAddress = request.form['companyAddress']
+                allowance = request.form['allowance']
+                compSupervisorName = request.form['compSupervisorName']
+                compSupervisorEmail = request.form['compSupervisorEmail']
+                compSupervisorContact = request.form['compSupervisorContact']
+                compAcceptanceForm = request.files['compAcceptanceForm']
+                parrentAckForm = request.files['parrentAckForm']
+                letterOfIndemnity = request.files['letterOfIndemnity']
+                hiredEvidence = request.files['hiredEvidence']
+
+                # Update data in student table
+                cursor = db_conn.cursor()
+                
+                # Uplaod image file in S3
+                compAcceptanceForm_in_s3 = "studID-" + str(session['studID']) + "_compAcceptanceForm"
+                parrentAckForm_in_s3 = "studID-" + str(session['studID']) + "_parrentAckForm"
+                letterOfIndemnity_in_s3 = "studID-" + str(session['studID']) + "_letterOfIndemnity"
+                hiredEvidence_in_s3 = "studID-" + str(session['studID']) + "_hiredEvidence"
+                s3 = boto3.resource('s3')
+                
+                cursor.execute("""
+                            UPDATE student
+                            SET compName = %s, compAddr = %s, monthlyAllowance = %s, compSupervisorName = %s, compSupervisorEmail = %s, compSupervisorPhone = %s
+                            WHERE studID = %s
+                            """, 
+                            (companyName, companyAddress, allowance, compSupervisorName, compSupervisorEmail, compSupervisorContact, session['studID']),)
+                db_conn.commit()
+                
+                try:
+                    s3.Bucket(custombucket).put_object(Key=compAcceptanceForm_in_s3, Body=compAcceptanceForm)
+                    s3.Bucket(custombucket).put_object(Key=parrentAckForm_in_s3, Body=parrentAckForm)
+                    s3.Bucket(custombucket).put_object(Key=letterOfIndemnity_in_s3, Body=letterOfIndemnity)
+                    s3.Bucket(custombucket).put_object(Key=hiredEvidence_in_s3, Body=hiredEvidence)
+                    bucket_location = boto3.client('s3').get_bucket_location(Bucket=custombucket)
+                    s3_location = (bucket_location['LocationConstraint'])
+
+                    if s3_location is None:
+                        s3_location = ''
+                    else:
+                        s3_location = '-' + s3_location
+                    
+                except Exception as e:
+                    return str(e)
+
+                cursor.close()
         
         # Fetch the user's information from the database based on studID
         cursor = db_conn.cursor()
+        
         cursor.execute("""
-                       SELECT students.*, cohorts.startDate AS startDate, cohorts.endDate AS endDate, lecturers.name AS lectName
-                       FROM students
-                       JOIN cohorts ON students.cohortID = cohorts.cohortID
-                       JOIN lecturers ON students.lectEmail = lecturers.email
-                       WHERE studID = %s
-                       """, (studID))
-        user = cursor.fetchone()
+                    SELECT student.*, lecturer.lecName, cohort.internStartDate, cohort.internEndDate
+                    FROM student 
+                    JOIN lecturer ON student.lectEmail = lecturer.lecEmail
+                    JOIN cohort ON student.cohort = cohort.cohortID
+                    WHERE studID = %s
+                    """, (session['studID']),)
+        user_data = cursor.fetchone()
         cursor.close()
         
-        if user:
+        if user_data:
+            # Convert the user record to a dictionary
+            user = {
+                'studID': user_data[0],
+                'studEmail': user_data[1],
+                'studIC': user_data[2],
+                'gender': user_data[3],
+                'studName': user_data[4],
+                'course': user_data[5],
+                'studPhone': user_data[6],
+                'cgpa': user_data[7],
+                'lecEmail': user_data[8],
+                'cohort': user_data[9],
+                'compName': user_data[10],
+                'compAddr': user_data[11],
+                'monthlyAllowance': user_data[12],
+                'compSupervisorName': user_data[13],
+                'compSupervisorEmail': user_data[14],
+                'compSupervisorPhone': user_data[15],
+                'lecName': user_data[16],
+                'internStartDate': user_data[17],
+                'internEndDate': user_data[18],
+                # Add other fields as needed
+            }
+            
+            # Get the s3 bucket location
+            bucket_location = boto3.client('s3').get_bucket_location(Bucket=custombucket)
+            s3_location = (bucket_location['LocationConstraint'])
+            
+            # Initialize files url
+            compAcceptanceForm_url = None
+            parrentAckForm_url = None
+            letterOfIndemnity_url = None
+            hiredEvidence_url = None
+            
+            # Retrieve files from s3 bucket
+            compAcceptanceForm_url = "https://s3{0}.amazonaws.com/{1}/{2}".format(
+                s3_location,
+                custombucket,
+                compAcceptanceForm_in_s3)
+            
+            parrentAckForm_url = "https://s3{0}.amazonaws.com/{1}/{2}".format(
+                s3_location,
+                custombucket,
+                parrentAckForm_in_s3)
+            
+            letterOfIndemnity_url = "https://s3{0}.amazonaws.com/{1}/{2}".format(
+                s3_location,
+                custombucket,
+                letterOfIndemnity_in_s3)
+            
+            hiredEvidence_url = "https://s3{0}.amazonaws.com/{1}/{2}".format(
+                s3_location,
+                custombucket,
+                hiredEvidence_in_s3)
+            
             # Pass the user's information to the template
-            return render_template('student/home.html', user=session,)
+            return render_template('student/home.html', user=user, 
+                                   compAcceptanceForm_url=compAcceptanceForm_url,
+                                   parrentAckForm_url=parrentAckForm_url,
+                                   letterOfIndemnity_url=letterOfIndemnity_url,
+                                   hiredEvidence_url=hiredEvidence_url)
     
     return render_template('student/home.html')
-def editStudentInfo():
-    if request.method == 'POST':
-        contactNo = request.form['contactNo']
-        cgpa = request.form['cgpa']
 
 @app.route("/student/companyList")
 def studentCompanyList():
-    return render_template('student/companyList.html')
+    
+    cursor = db_conn.cursor()
+    # Execute a SQL query to fetch data from the database
+    cursor.execute("SELECT compName, category FROM company")
+    companies_data = cursor.fetchall()  # Fetch all rows
+    cursor.close()
+    
+    # Initialize an empty list to store dictionaries
+    companies = []
+
+    # Iterate through the fetched data and create dictionaries
+    for row in companies_data:
+        company_dict = {
+            'compName': row[0],
+            'category': row[1],
+            # Add other fields as needed
+        }
+        companies.append(company_dict)
+    
+    return render_template('student/companyList.html', companies=companies)
 
 @app.route("/student/companyDetail")
 def studentCompanyDetail():
-    return render_template('student/companyDetail.html')
+    # Retrieve the company query parameter from the URL
+    companyName = request.args.get('company')
+    
+    # Fetch the user's information from the database based on studID
+    cursor = db_conn.cursor()
+        
+    cursor.execute("""
+                SELECT *
+                FROM company 
+                WHERE compName = %s
+                """, (companyName),)
+    company_data = cursor.fetchone()
+    cursor.close()
+    
+    if company_data:
+        # Convert the user record to a dictionary
+        company = {
+            'compEmail': company_data[0],
+            'compName': company_data[2],
+            'compDesc': company_data[3],
+            'category': company_data[4],
+            'compLocation': company_data[5],
+            'workingStartDay': company_data[6],
+            'workingEndDay': company_data[7],
+            'workingStartTime': company_data[8],
+            'workingEndTime': company_data[9],
+            'compPhone': company_data[10],
+            'accessories': company_data[11],
+            'accomodation': company_data[12],
+            # Add other fields as needed
+        }
+    
+    # Pass the company's information to the template
+    return render_template('student/companyDetail.html', company=company)
 
 @app.route("/student/applicationHistory")
 def studentApplicationHistory():
@@ -144,15 +335,19 @@ def lecturerLogin():
         password = request.form['password']
         
         cursor = db_conn.cursor()
-        cursor.execute("SELECT * FROM lecturers WHERE email = %s AND password = %s", (email, password))
+        cursor.execute("SELECT * FROM lecturer WHERE lecEmail = %s AND lecPassword = %s", (email, password))
         user = cursor.fetchone()
         cursor.close()
         
         if user:
-            session['user'] = user
-            return render_template('lecturer/home.html')
+            # Access the 'lecEmail' from the tuple using integer index
+            lecEmail = user[0]  # Assuming 'lecEmail' is the first column in your SELECT statement
+            # Store 'lecEmail' in the session
+            session['lecEmail'] = lecEmail
+            return redirect(url_for('lecturerHome'))
         else:
             error_message = 'Login failed. Please check your email and password.'
+            return render_template('lecturer/login.html', error_message=error_message)
     
     return render_template('lecturer/login.html', error_message=error_message)
 
@@ -179,8 +374,11 @@ def companyLogin():
         cursor.close()
         
         if user:
-            session['email'] = user['email']
-            return render_template('company/home.html')
+             # Access the 'compEmail' from the tuple using integer index
+            compEmail = user[0]  # Assuming 'compEmail' is the first column in your SELECT statement
+            # Store 'studID' in the session
+            session['compEmail'] = compEmail
+            return redirect(url_for('companyHome'))
         else:
             error_message = 'Login failed. Please check your email and password.'
             return render_template('company/login.html', error_message=error_message)
@@ -297,15 +495,19 @@ def adminLogin():
         password = request.form['password']
         
         cursor = db_conn.cursor()
-        cursor.execute("SELECT * FROM admins WHERE email = %s AND password = %s", (email, password))
+        cursor.execute("SELECT * FROM admin WHERE adminEmail = %s AND adminPassword = %s", (email, password))
         user = cursor.fetchone()
         cursor.close()
         
         if user:
-            session['email'] = user['email']
-            return render_template('admin/home.html')
+            # Access the 'adminEmail' from the tuple using integer index
+            adminEmail = user[0]  # Assuming 'adminEmail' is the first column in your SELECT statement
+            # Store 'adminEmail' in the session
+            session['adminEmail'] = adminEmail
+            return redirect(url_for('adminHome'))
         else:
             error_message = 'Login failed. Please check your email and password.'
+            return render_template('admin/login.html', error_message=error_message)
     
     return render_template('admin/login.html', error_message=error_message)
 
