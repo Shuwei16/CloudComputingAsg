@@ -75,22 +75,33 @@ def studentRegister():
         contactNo = request.form['contactNo']
         programme = request.form['programme']
         cohort = request.form['cohort']
-        lecturerName = request.form['lecturerName']
+        lecturer = request.form['lecturer']
         cgpa = request.form['cgpa']
-        resume = request.form['resume']
+        resume = request.files['resume']
         
-        # Search for lecturer email
-        cursor = db_conn.cursor()
-        cursor.execute("SELECT lecEmail FROM lecturer WHERE lecName = %s", (lecturerName))
-        lecturerEmail = cursor.fetchone()
-        cursor.close()
-
         # Insert the new user into the database (Assuming you have a 'students' table)
         cursor = db_conn.cursor()
-        cursor.execute("INSERT INTO student (studID, studEmail, studIC, gender, studName, course, studPhone, cgpa, lectEmail) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)", 
-                       (studentID, email, nric, gender, name, programme, contactNo, cgpa, lecturerEmail))
+        cursor.execute("INSERT INTO student (studID, studEmail, studIC, gender, studName, course, studPhone, cgpa, lectEmail, cohort) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", 
+                       (studentID, email, nric, gender, name, programme, contactNo, cgpa, lecturer, cohort))
         db_conn.commit()
         cursor.close()
+        
+        # Uplaod file in S3
+        resume_in_s3 = "studID-" + studentID + "_resume.pdf"
+        s3 = boto3.resource('s3')
+        
+        try:
+            s3.Bucket(custombucket).put_object(Key=resume_in_s3, Body=resume)
+            bucket_location = boto3.client('s3').get_bucket_location(Bucket=custombucket)
+            s3_location = (bucket_location['LocationConstraint'])
+
+            if s3_location is None:
+                s3_location = ''
+            else:
+                s3_location = '-' + s3_location
+        
+        except Exception as e:
+            return str(e)
         
         return redirect(url_for('studentRegisterSuccess'))
     
@@ -123,6 +134,7 @@ def studentHome():
             if action == 'editInfo':
                 contactNo = request.form['contactNo']
                 cgpa = request.form['cgpa']
+                resume = request.files['resume']
                 
                 # Update data in student table
                 cursor = db_conn.cursor()
@@ -134,6 +146,24 @@ def studentHome():
                             (contactNo, cgpa, session['studID']),)
                 db_conn.commit()
                 cursor.close()
+                
+                if resume is not None:
+                    # Uplaod file in S3
+                    resume_in_s3 = "studID-" + str(session['studID']) + "_resume.pdf"
+                    s3 = boto3.resource('s3')
+                    
+                    try:
+                        s3.Bucket(custombucket).put_object(Key=resume_in_s3, Body=resume)
+                        bucket_location = boto3.client('s3').get_bucket_location(Bucket=custombucket)
+                        s3_location = (bucket_location['LocationConstraint'])
+
+                        if s3_location is None:
+                            s3_location = ''
+                        else:
+                            s3_location = '-' + s3_location
+                    
+                    except Exception as e:
+                        return str(e)
             
             # Edit company info
             if action == 'editCompany':
@@ -150,7 +180,7 @@ def studentHome():
                 # Update data in student table
                 cursor = db_conn.cursor()
                 
-                # Uplaod image file in S3
+                # Uplaod file in S3
                 compAcceptanceForm_in_s3 = "studID-" + str(session['studID']) + "_compAcceptanceForm.pdf"
                 parrentAckForm_in_s3 = "studID-" + str(session['studID']) + "_parrentAckForm.pdf"
                 letterOfIndemnity_in_s3 = "studID-" + str(session['studID']) + "_letterOfIndemnity.pdf"
@@ -189,7 +219,7 @@ def studentHome():
                 finalReport = request.files['finalReport']
                 s3 = boto3.resource('s3')
                 
-                # Uplaod image file in S3
+                # Uplaod file in S3
                 progressReport1_in_s3 = "studID-" + str(session['studID']) + "_progressReport1.pdf"
                 progressReport2_in_s3 = "studID-" + str(session['studID']) + "_progressReport2.pdf"
                 progressReport3_in_s3 = "studID-" + str(session['studID']) + "_progressReport3.pdf"
@@ -259,6 +289,10 @@ def studentHome():
                 s3_location = 'us-east-1'
             
             # Initial declaration
+            resume_url = "https://{0}.s3.{1}.amazonaws.com/studID-{2}_resume.pdf".format(
+                custombucket,
+                s3_location,
+                session['studID'])
             
             compAcceptanceForm_url = "https://{0}.s3.{1}.amazonaws.com/studID-{2}_compAcceptanceForm.pdf".format(
                 custombucket,
@@ -303,6 +337,7 @@ def studentHome():
             
             # Pass the user's information to the template
             return render_template('student/home.html', user=user, 
+                                   resume_url=resume_url,
                                    compAcceptanceForm_url=compAcceptanceForm_url, 
                                    parrentAckForm_url=parrentAckForm_url,
                                    letterOfIndemnity_url=letterOfIndemnity_url,
@@ -319,7 +354,7 @@ def studentCompanyList():
     
     cursor = db_conn.cursor()
     # Execute a SQL query to fetch data from the database
-    cursor.execute("SELECT compName, category FROM company")
+    cursor.execute("SELECT compName, category FROM company WHERE status = 'approved'")
     companies_data = cursor.fetchall()  # Fetch all rows
     cursor.close()
     
