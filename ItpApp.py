@@ -225,7 +225,7 @@ def studentHome():
             bucket_location = boto3.client('s3').get_bucket_location(Bucket=custombucket)
             s3_location = (bucket_location['LocationConstraint'])
             
-            # Initialize files url
+            # Initialize files url 
             compAcceptanceForm_url = None
             parrentAckForm_url = None
             letterOfIndemnity_url = None
@@ -613,11 +613,96 @@ def adminHome():
 
 @app.route("/admin/companyList")
 def adminCompanyList():
-    return render_template('admin/companyList.html')
+    
 
-@app.route("/admin/companyDetail")
+    cursor = db_conn.cursor()
+    cursor.execute("""
+            SELECT company.status, company.category, company.compName
+                    FROM company""")
+
+    company_data = cursor.fetchall()
+    cursor.close()
+    
+    # Initialize an empty list to store job dictionaries
+    companies = []
+    for row in company_data:
+    # Convert each row to a dictionary
+        company = {
+            'status': row[0],
+            'category': row[1],
+            'compName': row[2],
+    #         # Add other fields as needed
+         }    
+    #     # Append the job dictionary to the list of jobs
+        companies.append(company)
+    
+        print("Companies:", companies)
+
+    return render_template('admin/companyList.html', companies=companies)
+
+@app.route("/admin/companyDetail", methods=['GET', 'POST'])
 def adminCompanyDetail():
-    return render_template('admin/companyDetail.html')
+
+    company = {}  # Initialize with an empty dictionary as a default value
+
+    if request.method == 'POST':
+        action = request.form.get('action') 
+
+        if action == 'approve':
+
+            comp_name = request.form['comp_name']  # Get the job ID from the form
+            print(comp_name)
+            cursor = db_conn.cursor()
+            cursor.execute("UPDATE company SET status = 'Approved' WHERE compName = %s", (comp_name))
+            db_conn.commit()
+            cursor.close()
+
+            print("Data updated successfully")
+
+            return redirect(url_for('adminCompanyList'))
+        
+        elif action == 'reject':
+
+            comp_name = request.form['comp_name']  # Get the job ID from the form
+            print(comp_name)
+            cursor = db_conn.cursor()
+            cursor.execute("UPDATE company SET status = 'Rejected' WHERE compName = %s", (comp_name))
+            db_conn.commit()
+            cursor.close()
+
+            print("Data updated successfully")
+
+            return redirect(url_for('adminCompanyList'))
+
+    companyName = request.args.get('comp_name')
+
+    cursor = db_conn.cursor()
+    cursor.execute("SELECT * FROM company WHERE compName = %s", (companyName,))
+    company_data = cursor.fetchone()
+    print("Companies:", company_data)
+    cursor.close()
+
+    if company_data:
+        # Convert the retrieved data to a dictionary or other suitable format
+        company = {
+            'compEmail': company_data[0],
+            'compName': company_data[2],
+            'compDesc': company_data[3],
+            'category': company_data[4],
+            'compLocation': company_data[5],
+            'workingStartDay': company_data[6],
+            'workingEndDay': company_data[7],
+            'workingStartTime': company_data[8],
+            'workingEndTime': company_data[9],
+            'compPhone': company_data[10],
+            'accessories': company_data[11],
+            'accomodation': company_data[12],
+            'status' : company_data[13],
+            # Add other fields as needed
+        }
+        # print("Companies:", company)
+    
+    return render_template('admin/companyDetail.html', company=company)
 
 @app.route("/admin/lecturerList")
 def adminLecturerList():
