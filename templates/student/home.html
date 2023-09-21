@@ -145,7 +145,7 @@
                                     <p class="mb-0">Resume</p>
                                 </div>
                                 <div class="col-sm-9">
-                                    <p class="text-muted mb-0"><a href="">click to view resume</a></p>
+                                    <p class="text-muted mb-0"><a href="{{ resume_url }}" target="_blank">click to view resume</a></p>
                                 </div>
                             </div>
                             <hr>
@@ -203,22 +203,57 @@
                     </div>
                     <br />
                     <h4 class="my-3 text-primary"><b>Report Submission</b></h4>
+                    {% if rptStatus == 0 %}<p style="font-size:12px">(All report must be in pdf format)</p>{% endif %}
                     <div class="card mb-4">
                         <div class="card-body">
-                            <form action="{{ url_for('studentHome') }}" method=""
+                            <form action="{{ url_for('studentHome') }}" method="POST" enctype="multipart/form-data"
                                 onsubmit="return confirm('Are you sure to submit these reports? Once submitted, cannot be changed anymore.')">
+                                <input type="hidden" name="action" value="submitReport">
                                 <div class="form-group">
-                                    <label for="monthlyReport" class="col-form-label">Monthly Reports (Upload all your
-                                        monthly reports in once)</label>
-                                    <input type="file" class="form-control" id="monthlyReport" name="monthlyReport" placeholder=""
-                                        multiple="multiple" required>
+                                    {% if rptStatus == 0 %}
+                                    <label for="progressReport1" class="col-form-label">Progress Report 1</label>
+                                    <input type="file" class="form-control" id="progressReport1" name="progressReport1" placeholder="" required accept=".pdf">
+                                    <br />
+                                    {% else %}
+                                    <a href="{{ progressReport1_url }}" class="btn btn-secondary ms-1"
+                                        style="margin: 5px; width: 100%; text-align: center;"
+                                        target="_blank">Progress Report 1</a>
+                                    {% endif %}
                                 </div>
-                                <br />
                                 <div class="form-group">
+                                    {% if rptStatus == 0 %}
+                                    <label for="progressReport2" class="col-form-label">Progress Report 2</label>
+                                    <input type="file" class="form-control" id="progressReport2" name="progressReport2" placeholder="" required accept=".pdf">
+                                    <br />
+                                    {% else %}
+                                    <a href="{{ progressReport2_url }}" class="btn btn-secondary ms-1"
+                                        style="margin: 5px; width: 100%; text-align: center;"
+                                        target="_blank">Progress Report 2</a>
+                                    {% endif %}
+                                </div>
+                                <div class="form-group">
+                                    {% if rptStatus == 0 %}
+                                    <label for="progressReport3" class="col-form-label">Progress Report 3</label>
+                                    <input type="file" class="form-control" id="progressReport3" name="progressReport3" placeholder="" required accept=".pdf">
+                                    <br />
+                                    {% else %}
+                                    <a href="{{ progressReport3_url }}" class="btn btn-secondary ms-1"
+                                        style="margin: 5px; width: 100%; text-align: center;"
+                                        target="_blank">Progress Report 3</a>
+                                    {% endif %}
+                                </div>
+                                <div class="form-group">
+                                    {% if rptStatus == 0 %}
                                     <label for="finalReport" class="col-form-label">Final Report</label>
-                                    <input type="file" class="form-control" id="finalReport" name="finalReport" placeholder="" required>
+                                    <input type="file" class="form-control" id="finalReport" name="finalReport" placeholder="" required accept=".pdf">
+                                    {% else %}
+                                    <a href="{{ finalReport_url }}" class="btn btn-secondary ms-1"
+                                        style="margin: 5px; width: 100%; text-align: center;"
+                                        target="_blank">Final Report</a>
+                                    {% endif %}
                                 </div>
                                 <br />
+                                {% if rptStatus == 0 %}
                                 <hr>
                                 <div class="row">
                                     <div class="d-flex justify-content-center mb-2">
@@ -226,6 +261,7 @@
                                             style="float: right;">Submit</button>
                                     </div>
                                 </div>
+                                {% endif %}
                             </form>
                         </div>
                     </div>
@@ -235,7 +271,7 @@
                     <div class="card mb-4 mb-lg-0">
                         <div class="card-body p-0">
                             <div class="card-body">
-                                <form action="{{ url_for('studentHome') }}" method="POST"
+                                <form action="{{ url_for('studentHome') }}" method="POST" enctype="multipart/form-data"
                                     onsubmit="return confirm('Are you sure to submit this company? Once submitted, cannot be changed anymore.')">
                                     <input type="hidden" name="action" value="editCompany">
                                     <div class="form-group">
@@ -248,14 +284,14 @@
                                     <div class="form-group">
                                         <label for="companyAddress" class="col-form-label">Company Address</label>
                                         <textarea class="form-control" id="companyAddress" placeholder="your internship company address" rows="3" name="companyAddress" {% if user.compAddr %}disabled{% endif %}
-                                            required>{% if user.compAddr %}{{ user.compAddr }}{% endif %}</textarea>
+                                            required>{% if user.compName %}{{ user.compAddr }}{% endif %}</textarea>
                                     </div>
                                     <br />
                                     <div class="form-group">
                                         <label for="allowance" class="col-form-label">Monthy Allowance (RM)</label>
                                         <input type="text" class="form-control" id="allowance"
                                             placeholder="e.g. 1000.00" pattern="\d+\.\d{2}" name="allowance"
-                                            {% if user.monthlyAllowance %} value="{{ user.monthlyAllowance }}" disabled {% endif %}
+                                            {% if user.compName %} value="{{ user.monthlyAllowance }}" disabled {% endif %}
                                             required>
                                     </div>
                                     <br />
@@ -263,7 +299,7 @@
                                         <label for="compSupervisorName" class="col-form-label">Com. Supervisor
                                             Name</label>
                                         <input type="text" class="form-control" id="compSupervisorName" placeholder="your internship company supervisor name" name="compSupervisorName"
-                                            {% if user.compSupervisorName %} value="{{ user.compSupervisorName }}" disabled {% endif %}
+                                            {% if user.compName %} value="{{ user.compSupervisorName }}" disabled {% endif %}
                                             required>
                                     </div>
                                     <br />
@@ -271,7 +307,7 @@
                                         <label for="compSupervisorEmail" class="col-form-label">Com. Supervisor
                                             Email</label>
                                         <input type="email" class="form-control" id="compSupervisorEmail" name="compSupervisorEmail"
-                                            {% if user.compSupervisorEmail %} value="{{ user.compSupervisorEmail }}" disabled {% endif %}
+                                            {% if user.compName %} value="{{ user.compSupervisorEmail }}" disabled {% endif %}
                                             placeholder="e.g. xxx@xxx.com" required>
                                     </div>
                                     <br />
@@ -279,39 +315,55 @@
                                         <label for="compSupervisorContact" class="col-form-label">Com. Supervisor
                                             Contact</label>
                                         <input type="text" class="form-control" id="compSupervisorContact" name="compSupervisorContact"
-                                            {% if user.compSupervisorPhone %} value="{{ user.compSupervisorPhone }}" disabled {% endif %}
+                                            {% if user.compName %} value="{{ user.compSupervisorPhone }}" disabled {% endif %}
                                             placeholder="e.g. 019-9999999" pattern="\d{2,3}-\d{7,8}" required>
                                     </div>
                                     <br />
                                     <h5 class="my-3 text-secondary"><b>Forms Submission</b></h5>
+                                    {% if user.compName is none %}<p style="font-size:12px">(All forms must be in pdf format)</p>{% endif %} 
                                     <div class="form-group">
+                                        {% if user.compName %}
+                                        <a href="{{ compAcceptanceForm_url }}" class="btn btn-secondary ms-1"
+                                        style="margin: 5px; width: 100%; text-align: center;"
+                                        target="_blank">Com. Acceptance Form</a>
+                                        {% else %} 
                                         <label for="compAcceptanceForm" class="col-form-label">Com. Acceptance Form</label>
-                                        <input type="file" class="form-control" id="compAcceptanceForm" name="compAcceptanceForm" placeholder="" required>
+                                        <input type="file" class="form-control" id="compAcceptanceForm" name="compAcceptanceForm" placeholder="" required accept=".pdf">
+                                        <br />
+                                        {% endif %}
                                     </div>
-                                    <br />
                                     <div class="form-group">
+                                        {% if user.compName %}
+                                        <a href="{{ parrentAckForm_url }}" class="btn btn-secondary ms-1"
+                                        style="margin: 5px; width: 100%; text-align: center;"
+                                        target="_blank">Parent Ack. Form</a>
+                                        {% else %} 
                                         <label for="parrentAckForm" class="col-form-label">Parent Ack. Form</label>
-                                        <input type="file" class="form-control" id="parrentAckForm" name="parrentAckForm" placeholder="" required>
+                                        <input type="file" class="form-control" id="parrentAckForm" name="parrentAckForm" placeholder="" required accept=".pdf">
+                                        <br />
+                                        {% endif %}
                                     </div>
-                                    <br />
                                     <div class="form-group">
+                                        {% if user.compName %}
+                                        <a href="{{ letterOfIndemnity_url }}" class="btn btn-secondary ms-1"
+                                        style="margin: 5px; width: 100%; text-align: center;"
+                                        target="_blank">Letter of Indemnity</a>
+                                        {% else %} 
                                         <label for="letterOfIndemnity" class="col-form-label">Letter of Indemnity</label>
-                                        <input type="file" class="form-control" id="letterOfIndemnity" name="letterOfIndemnity" placeholder="" required>                                  </div>
-                                    <br />
-                                    <div class="form-group">
-                                        <label for="hiredEvidence" class="col-form-label">Hired Evidence (if any)</label>
-                                        <input type="file" class="form-control" id="hireEvidence" name="hireEvidence" placeholder="">
+                                        <input type="file" class="form-control" id="letterOfIndemnity" name="letterOfIndemnity" placeholder="" required accept=".pdf">
+                                        <br />
+                                        {% endif %}
                                     </div>
                                     <br />
+                                    {% if user.compName is none %}
                                     <hr>
                                     <div class="row">
                                         <div class="d-flex justify-content-center mb-2">
-                                            {% if user.compName is none %}
                                             <button type="submit" class="btn btn-primary ms-1"
                                                 style="float: right;">Submit</button>
-                                                {% endif %}
                                         </div>
                                     </div>
+                                    {% endif %}
                                 </form>
                             </div>
                         </div>
@@ -388,7 +440,7 @@
 <div class="modal fade" id="editInfoModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form action="{{ url_for('studentHome') }}" method="POST" onsubmit="return confirm('Are you sure to this changes？')">
+            <form action="{{ url_for('studentHome') }}" method="POST" enctype="multipart/form-data" onsubmit="return confirm('Are you sure to this changes？')">
                 <input type="hidden" name="action" value="editInfo">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Edit Info</h5>
@@ -410,7 +462,7 @@
                         <br />
                         <div class="form-group">
                             <label for="cgpa">Upload new resume (if any)</label>
-                            <input type="file" class="form-control" placeholder="" id="resume" name="resume">
+                            <input type="file" class="form-control" placeholder="" id="resume" name="resume" accept=".pdf">
                         </div>
                     </div>
                 </div>

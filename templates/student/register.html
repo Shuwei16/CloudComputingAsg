@@ -58,7 +58,7 @@
   <!-- ======= Auth Section ======= -->
   <section id="auth" class="d-flex flex-column justify-content-center align-items-center" style="height: 220vh">
     <div class="container text-center text-md-left" data-aos="fade-up">
-      <form action="{{ url_for('studentRegister') }}" method="POST">
+      <form action="{{ url_for('studentRegister') }}" method="POST" enctype="multipart/form-data">
         <h3>Student Registration</h3>
 
         <label for="name">Full Name</label>
@@ -103,7 +103,7 @@
         </select>
 
         <label for="lecturerName">UC Supervisor</label>
-        <select class="form-select" aria-label="lecturerName" id="lecturerName" name="lecturerName" required>
+        <select class="form-select" aria-label="lecturer" id="lecturer" name="lecturer" required>
           {% for row in lecturer %}
             <option value="{{ row[0] }}">{{ row[1] }}</option>
           {% endfor %}

@@ -67,8 +67,9 @@
               <div class="col-lg-12">
                 <ul id="portfolio-flters">
                   <li data-filter="*" class="filter-active">All</li>
-                  <li data-filter="filter-JUL2022Y2">JUL2022Y2</li>
-                  <li data-filter="filter-NOV2022Y2">NOV2022Y2</li>
+                  {% for row in cohorts %}
+                  <li data-filter="filter-{{ row[0] }}">{{ row[0] }}</li>
+                  {% endfor %}
                 </ul>
               </div>
             </div>
@@ -83,108 +84,44 @@
                 </tr>
               </thead>
               <tbody>
-                <tr class="filter-JUL2022Y2">
+                {% for row in students %}
+                <tr class="filter-{{ row['cohort'] }}">
                   <td>
-                    JUL2022Y2
+                    {{ row['cohort'] }}
                   </td>
                   <td>
                     <div class="d-flex align-items-center">
                       <div class="ms-3">
-                        <p class="fw-bold mb-1">John Doe</p>
-                        <p class="text-muted mb-0">Bachelor degree in software engineering</p>
+                        <p class="fw-bold mb-1">{{ row['studName'] }}</p>
+                        <p class="text-muted mb-0">{{ row['course'] }}</p>
                         <p class="text-muted mb-0">22WMR00001</p>
-                        <p class="text-muted mb-0"><a href="mailto:xxx@student.tarc.edu.my">xxx@student.tarc.edu.my</a>
+                        <p class="text-muted mb-0"><a href="mailto:{{ row['studEmail'] }}">{{ row['studEmail'] }}</a>
                         </p>
-                        <p class="text-muted mb-0"><a href="tel:+60123456789">012-3456789</a></p>
+                        <p class="text-muted mb-0"><a href="tel:+6{{ row['studPhone'] }}">{{ row['studPhone'] }}</a></p>
                       </div>
                     </div>
                   </td>
                   <td>
                     <div class="d-flex align-items-center">
                       <div class="ms-3">
-                        <p class="fw-bold mb-1">John Doe</p>
-                        <p class="text-muted mb-0">Techtics Solutions Sdn Bhd</p>
-                        <p class="text-muted mb-0"><a href="mailto:xxx@xxx.com">xxx@xxx.com</a></p>
-                        <p class="text-muted mb-0"><a href="tel:+60123456789">012-3456789</a></p>
+                        <p class="fw-bold mb-1">{{ row['compSupervisorName'] }}</p>
+                        {% if row['compSupervisorName'] is not none %}
+                        <p class="text-muted mb-0">{{ row['compName'] }}</p>
+                        <p class="text-muted mb-0"><a href="mailto:{{ row['compSupervisorEmail'] }}">{{ row['compSupervisorEmail'] }}</a></p>
+                        <p class="text-muted mb-0"><a href="tel:+6{{ row['compSupervisorPhone'] }}">{{ row['compSupervisorPhone'] }}</a></p>
+                        {% endif %}
                       </div>
                     </div>
                   </td>
 
                   <td>
-                    <button type="button" class="btn btn-outline-primary btn-sm btn-rounded"
-                      onclick="window.location.href='studentDetail.html';">
-                      View Details
+                    <button type="button" onclick='window.location.href="{{ url_for('lecStudentDetail', studID=row['studID']) }}";'
+                        class="btn btn-outline-primary btn-sm btn-rounded">
+                        View Details
                     </button>
                   </td>
                 </tr>
-                <tr class="filter-JUL2022Y2">
-                  <td>
-                    JUL2022Y2
-                  </td>
-                  <td>
-                    <div class="d-flex align-items-center">
-                      <div class="ms-3">
-                        <p class="fw-bold mb-1">John Doe</p>
-                        <p class="text-muted mb-0">Bachelor degree in software engineering</p>
-                        <p class="text-muted mb-0">22WMR00001</p>
-                        <p class="text-muted mb-0"><a href="mailto:xxx@student.tarc.edu.my">xxx@student.tarc.edu.my</a>
-                        </p>
-                        <p class="text-muted mb-0"><a href="tel:+60123456789">012-3456789</a></p>
-                      </div>
-                    </div>
-                  </td>
-                  <td>
-                    <div class="d-flex align-items-center">
-                      <div class="ms-3">
-                        <p class="fw-bold mb-1">John Doe</p>
-                        <p class="text-muted mb-0">Techtics Solutions Sdn Bhd</p>
-                        <p class="text-muted mb-0"><a href="mailto:xxx@xxx.com">xxx@xxx.com</a></p>
-                        <p class="text-muted mb-0"><a href="tel:+60123456789">012-3456789</a></p>
-                      </div>
-                    </div>
-                  </td>
-
-                  <td>
-                    <button type="button" class="btn btn-outline-primary btn-sm btn-rounded"
-                      onclick="window.location.href='studentDetail.html';">
-                      View Details
-                    </button>
-                  </td>
-                </tr>
-                <tr class="filter-NOV2022Y2">
-                  <td>
-                    NOV2022Y2
-                  </td>
-                  <td>
-                    <div class="d-flex align-items-center">
-                      <div class="ms-3">
-                        <p class="fw-bold mb-1">John Doe</p>
-                        <p class="text-muted mb-0">Bachelor degree in software engineering</p>
-                        <p class="text-muted mb-0">22WMR00001</p>
-                        <p class="text-muted mb-0"><a href="mailto:xxx@student.tarc.edu.my">xxx@student.tarc.edu.my</a>
-                        </p>
-                        <p class="text-muted mb-0"><a href="tel:+60123456789">012-3456789</a></p>
-                      </div>
-                    </div>
-                  </td>
-                  <td>
-                    <div class="d-flex align-items-center">
-                      <div class="ms-3">
-                        <p class="fw-bold mb-1">John Doe</p>
-                        <p class="text-muted mb-0">Techtics Solutions Sdn Bhd</p>
-                        <p class="text-muted mb-0"><a href="mailto:xxx@xxx.com">xxx@xxx.com</a></p>
-                        <p class="text-muted mb-0"><a href="tel:+60123456789">012-3456789</a></p>
-                      </div>
-                    </div>
-                  </td>
-
-                  <td>
-                    <button type="button" class="btn btn-outline-primary btn-sm btn-rounded"
-                      onclick="window.location.href='studentDetail.html';">
-                      View Details
-                    </button>
-                  </td>
-                </tr>
+                {% endfor %}
               </tbody>
             </table>
           </div>

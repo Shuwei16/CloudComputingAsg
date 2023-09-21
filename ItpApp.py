@@ -1,9 +1,10 @@
 # rmb to change after
 
-from flask import Flask, render_template, request, redirect, url_for, flash, session
+from flask import Flask, render_template, request,  redirect, url_for, flash, session
 from pymysql import connections
 import os
 import boto3
+import requests
 from config import *
 
 import secrets
@@ -74,22 +75,33 @@ def studentRegister():
         contactNo = request.form['contactNo']
         programme = request.form['programme']
         cohort = request.form['cohort']
-        lecturerName = request.form['lecturerName']
+        lecturer = request.form['lecturer']
         cgpa = request.form['cgpa']
-        resume = request.form['resume']
+        resume = request.files['resume']
         
-        # Search for lecturer email
-        cursor = db_conn.cursor()
-        cursor.execute("SELECT lecEmail FROM lecturer WHERE lecName = %s", (lecturerName))
-        lecturerEmail = cursor.fetchone()
-        cursor.close()
-
         # Insert the new user into the database (Assuming you have a 'students' table)
         cursor = db_conn.cursor()
-        cursor.execute("INSERT INTO student (studID, studEmail, studIC, gender, studName, course, studPhone, cgpa, lectEmail) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)", 
-                       (studentID, email, nric, gender, name, programme, contactNo, cgpa, lecturerEmail))
+        cursor.execute("INSERT INTO student (studID, studEmail, studIC, gender, studName, course, studPhone, cgpa, lectEmail, cohort) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", 
+                       (studentID, email, nric, gender, name, programme, contactNo, cgpa, lecturer, cohort))
         db_conn.commit()
         cursor.close()
+        
+        # Uplaod file in S3
+        resume_in_s3 = "studID-" + studentID + "_resume.pdf"
+        s3 = boto3.resource('s3')
+        
+        try:
+            s3.Bucket(custombucket).put_object(Key=resume_in_s3, Body=resume)
+            bucket_location = boto3.client('s3').get_bucket_location(Bucket=custombucket)
+            s3_location = (bucket_location['LocationConstraint'])
+
+            if s3_location is None:
+                s3_location = ''
+            else:
+                s3_location = '-' + s3_location
+        
+        except Exception as e:
+            return str(e)
         
         return redirect(url_for('studentRegisterSuccess'))
     
@@ -122,6 +134,7 @@ def studentHome():
             if action == 'editInfo':
                 contactNo = request.form['contactNo']
                 cgpa = request.form['cgpa']
+                resume = request.files['resume']
                 
                 # Update data in student table
                 cursor = db_conn.cursor()
@@ -133,6 +146,24 @@ def studentHome():
                             (contactNo, cgpa, session['studID']),)
                 db_conn.commit()
                 cursor.close()
+                
+                if resume is not None:
+                    # Uplaod file in S3
+                    resume_in_s3 = "studID-" + str(session['studID']) + "_resume.pdf"
+                    s3 = boto3.resource('s3')
+                    
+                    try:
+                        s3.Bucket(custombucket).put_object(Key=resume_in_s3, Body=resume)
+                        bucket_location = boto3.client('s3').get_bucket_location(Bucket=custombucket)
+                        s3_location = (bucket_location['LocationConstraint'])
+
+                        if s3_location is None:
+                            s3_location = ''
+                        else:
+                            s3_location = '-' + s3_location
+                    
+                    except Exception as e:
+                        return str(e)
             
             # Edit company info
             if action == 'editCompany':
@@ -145,16 +176,14 @@ def studentHome():
                 compAcceptanceForm = request.files['compAcceptanceForm']
                 parrentAckForm = request.files['parrentAckForm']
                 letterOfIndemnity = request.files['letterOfIndemnity']
-                hiredEvidence = request.files['hiredEvidence']
-
+                
                 # Update data in student table
                 cursor = db_conn.cursor()
                 
-                # Uplaod image file in S3
-                compAcceptanceForm_in_s3 = "studID-" + str(session['studID']) + "_compAcceptanceForm"
-                parrentAckForm_in_s3 = "studID-" + str(session['studID']) + "_parrentAckForm"
-                letterOfIndemnity_in_s3 = "studID-" + str(session['studID']) + "_letterOfIndemnity"
-                hiredEvidence_in_s3 = "studID-" + str(session['studID']) + "_hiredEvidence"
+                # Uplaod file in S3
+                compAcceptanceForm_in_s3 = "studID-" + str(session['studID']) + "_compAcceptanceForm.pdf"
+                parrentAckForm_in_s3 = "studID-" + str(session['studID']) + "_parrentAckForm.pdf"
+                letterOfIndemnity_in_s3 = "studID-" + str(session['studID']) + "_letterOfIndemnity.pdf"
                 s3 = boto3.resource('s3')
                 
                 cursor.execute("""
@@ -169,7 +198,6 @@ def studentHome():
                     s3.Bucket(custombucket).put_object(Key=compAcceptanceForm_in_s3, Body=compAcceptanceForm)
                     s3.Bucket(custombucket).put_object(Key=parrentAckForm_in_s3, Body=parrentAckForm)
                     s3.Bucket(custombucket).put_object(Key=letterOfIndemnity_in_s3, Body=letterOfIndemnity)
-                    s3.Bucket(custombucket).put_object(Key=hiredEvidence_in_s3, Body=hiredEvidence)
                     bucket_location = boto3.client('s3').get_bucket_location(Bucket=custombucket)
                     s3_location = (bucket_location['LocationConstraint'])
 
@@ -182,6 +210,37 @@ def studentHome():
                     return str(e)
 
                 cursor.close()
+            
+            # Submit report
+            if action == 'submitReport':
+                progressReport1 = request.files['progressReport1']
+                progressReport2 = request.files['progressReport2']
+                progressReport3 = request.files['progressReport3']
+                finalReport = request.files['finalReport']
+                s3 = boto3.resource('s3')
+                
+                # Uplaod file in S3
+                progressReport1_in_s3 = "studID-" + str(session['studID']) + "_progressReport1.pdf"
+                progressReport2_in_s3 = "studID-" + str(session['studID']) + "_progressReport2.pdf"
+                progressReport3_in_s3 = "studID-" + str(session['studID']) + "_progressReport3.pdf"
+                finalReport_in_s3 = "studID-" + str(session['studID']) + "_finalReport.pdf"
+                s3 = boto3.resource('s3')
+                
+                try:
+                    s3.Bucket(custombucket).put_object(Key=progressReport1_in_s3, Body=progressReport1)
+                    s3.Bucket(custombucket).put_object(Key=progressReport2_in_s3, Body=progressReport2)
+                    s3.Bucket(custombucket).put_object(Key=progressReport3_in_s3, Body=progressReport3)
+                    s3.Bucket(custombucket).put_object(Key=finalReport_in_s3, Body=finalReport)
+                    bucket_location = boto3.client('s3').get_bucket_location(Bucket=custombucket)
+                    s3_location = (bucket_location['LocationConstraint'])
+
+                    if s3_location is None:
+                        s3_location = ''
+                    else:
+                        s3_location = '-' + s3_location
+                    
+                except Exception as e:
+                    return str(e)
         
         # Fetch the user's information from the database based on studID
         cursor = db_conn.cursor()
@@ -222,42 +281,71 @@ def studentHome():
             }
             
             # Get the s3 bucket location
+            s3 = boto3.resource('s3')
             bucket_location = boto3.client('s3').get_bucket_location(Bucket=custombucket)
             s3_location = (bucket_location['LocationConstraint'])
             
-            # Initialize files url 
-            compAcceptanceForm_url = None
-            parrentAckForm_url = None
-            letterOfIndemnity_url = None
-            hiredEvidence_url = None
+            if s3_location is None:
+                s3_location = 'us-east-1'
             
-            # Retrieve files from s3 bucket
-            compAcceptanceForm_url = "https://s3{0}.amazonaws.com/{1}/{2}".format(
-                s3_location,
+            # Initial declaration
+            resume_url = "https://{0}.s3.{1}.amazonaws.com/studID-{2}_resume.pdf".format(
                 custombucket,
-                compAcceptanceForm_in_s3)
+                s3_location,
+                session['studID'])
             
-            parrentAckForm_url = "https://s3{0}.amazonaws.com/{1}/{2}".format(
-                s3_location,
+            compAcceptanceForm_url = "https://{0}.s3.{1}.amazonaws.com/studID-{2}_compAcceptanceForm.pdf".format(
                 custombucket,
-                parrentAckForm_in_s3)
+                s3_location,
+                session['studID'])
+
+            parrentAckForm_url = "https://{0}.s3.{1}.amazonaws.com/studID-{2}_parrentAckForm.pdf".format(
+                custombucket,
+                s3_location,
+                session['studID'])
+
+            letterOfIndemnity_url = "https://{0}.s3.{1}.amazonaws.com/studID-{2}_letterOfIndemnity.pdf".format(
+                custombucket,
+                s3_location,
+                session['studID'])
             
-            letterOfIndemnity_url = "https://s3{0}.amazonaws.com/{1}/{2}".format(
-                s3_location,
+            progressReport1_url = "https://{0}.s3.{1}.amazonaws.com/studID-{2}_progressReport1.pdf".format(
                 custombucket,
-                letterOfIndemnity_in_s3)
+                s3_location,
+                session['studID'])
             
-            hiredEvidence_url = "https://s3{0}.amazonaws.com/{1}/{2}".format(
-                s3_location,
+            progressReport2_url = "https://{0}.s3.{1}.amazonaws.com/studID-{2}_progressReport2.pdf".format(
                 custombucket,
-                hiredEvidence_in_s3)
+                s3_location,
+                session['studID'])
+            
+            progressReport3_url = "https://{0}.s3.{1}.amazonaws.com/studID-{2}_progressReport3.pdf".format(
+                custombucket,
+                s3_location,
+                session['studID'])
+            
+            finalReport_url = "https://{0}.s3.{1}.amazonaws.com/studID-{2}_finalReport.pdf".format(
+                custombucket,
+                s3_location,
+                session['studID'])
+            
+            rptStatus = 1 # means already submit
+            # Check whether reports submitted or not, just take one report for checking, since if one exist, others exist as well
+            response = requests.head(finalReport_url)
+            if response.status_code != 200:
+                rptStatus = 0  # means havent submit
             
             # Pass the user's information to the template
             return render_template('student/home.html', user=user, 
-                                   compAcceptanceForm_url=compAcceptanceForm_url,
+                                   resume_url=resume_url,
+                                   compAcceptanceForm_url=compAcceptanceForm_url, 
                                    parrentAckForm_url=parrentAckForm_url,
                                    letterOfIndemnity_url=letterOfIndemnity_url,
-                                   hiredEvidence_url=hiredEvidence_url)
+                                   progressReport1_url=progressReport1_url,
+                                   progressReport2_url=progressReport2_url,
+                                   progressReport3_url=progressReport3_url,
+                                   finalReport_url=finalReport_url, 
+                                   rptStatus=rptStatus)
     
     return render_template('student/home.html')
 
@@ -266,7 +354,7 @@ def studentCompanyList():
     
     cursor = db_conn.cursor()
     # Execute a SQL query to fetch data from the database
-    cursor.execute("SELECT compName, category FROM company")
+    cursor.execute("SELECT compName, category FROM company WHERE status = 'approved'")
     companies_data = cursor.fetchall()  # Fetch all rows
     cursor.close()
     
@@ -284,12 +372,45 @@ def studentCompanyList():
     
     return render_template('student/companyList.html', companies=companies)
 
-@app.route("/student/companyDetail")
+@app.route("/student/companyDetail", methods=['GET', 'POST'])
 def studentCompanyDetail():
+    
+    if request.method == 'POST':
+        jobID = request.form['jobID']
+        
+        # Automatically generate a new application ID by incrementing the maximum application ID
+        cursor = db_conn.cursor()
+        cursor.execute("SELECT MAX(applicationID) FROM application")
+        max_id = cursor.fetchone()[0]  # Get the maximum application ID
+        
+        if max_id is not None:
+            # Extract the numeric part and increment it
+            numeric_part = int(max_id[1:])  # Convert 'A00001' to 1
+            new_numeric_part = numeric_part + 1
+    
+            # Format the new applicationID with the same pattern ('A' + 5-digit numeric part)
+            new_app_id = 'A{:05d}'.format(new_numeric_part)
+        else:
+            # If there are no application, start with 'A00001'
+            new_app_id = 'A00001'
+        
+        print(new_app_id)
+        print(jobID)
+        print(session['studID'])
+        
+        # Insert the new application into the database
+        cursor = db_conn.cursor()
+        cursor.execute("INSERT INTO application (applicationID, jobID, studID, applicationStatus) VALUES (%s, %s, %s, %s)", 
+                       (new_app_id, jobID, session['studID'], 'Pending'))
+        db_conn.commit()
+        cursor.close()
+        
+        return redirect(url_for('studentApplicationHistory'))
+    
     # Retrieve the company query parameter from the URL
     companyName = request.args.get('company')
     
-    # Fetch the user's information from the database based on studID
+    # Fetch the company's information from the database based on studID
     cursor = db_conn.cursor()
         
     cursor.execute("""
@@ -301,7 +422,7 @@ def studentCompanyDetail():
     cursor.close()
     
     if company_data:
-        # Convert the user record to a dictionary
+        # Convert the company record to a dictionary
         company = {
             'compEmail': company_data[0],
             'compName': company_data[2],
@@ -318,12 +439,68 @@ def studentCompanyDetail():
             # Add other fields as needed
         }
     
+        # Fetch the job's information from the database based on studID
+        cursor = db_conn.cursor()
+        cursor.execute("""
+                SELECT *
+                FROM jobs 
+                WHERE compEmail = %s
+                """, (company['compEmail']),)
+        job_data = cursor.fetchall()
+        cursor.close()
+        
+        # Initialize an empty list to store job dictionaries
+        jobs = []
+        for row in job_data:
+        # Convert each row to a dictionary
+            job = {
+                'jobID': row[0],
+                'jobTitle': row[1],
+                'allowance': row[2],  # Access the 'allowance' column
+                'level': row[3],
+                'jobDesc': row[4],
+                'jobReq': row[5],
+                'compEmail': row[6],
+                # Add other fields as needed
+            }    
+            # Append the job dictionary to the list of jobs
+            jobs.append(job)
+    
     # Pass the company's information to the template
-    return render_template('student/companyDetail.html', company=company)
+    return render_template('student/companyDetail.html', company=company, jobs=jobs)
 
 @app.route("/student/applicationHistory")
 def studentApplicationHistory():
-    return render_template('student/applicationHistory.html')
+    
+    cursor = db_conn.cursor()
+    # Execute a SQL query to fetch data from the database
+    cursor.execute("""
+                   SELECT company.compName, company.compLocation, company.compEmail, company.compPhone, jobs.jobTitle, application.applicationStatus
+                   FROM application
+                   JOIN jobs ON application.jobID = jobs.jobID
+                   JOIN company ON jobs.compEmail = company.compEmail
+                   WHERE application.studID = %s
+                   """, session['studID'])
+    apps_data = cursor.fetchall()  # Fetch all rows
+    cursor.close()
+    
+    # Initialize an empty list to store dictionaries
+    apps = []
+
+    # Iterate through the fetched data and create dictionaries
+    for row in apps_data:
+        app_dict = {
+            'compName': row[0],
+            'compAddr': row[1],
+            'compEmail': row[2],
+            'compPhone': row[3],
+            'job': row[4],
+            'status': row[5],
+            # Add other fields as needed
+        }
+        apps.append(app_dict)
+        
+    return render_template('student/applicationHistory.html', apps=apps)
 
 # Lecturer
 @app.route("/lecturer/login", methods=['GET', 'POST'])
@@ -353,11 +530,146 @@ def lecturerLogin():
 
 @app.route("/lecturer/home")
 def lecturerHome():
-    return render_template('lecturer/home.html')
+    
+    cursor = db_conn.cursor()
+    # Execute a SQL query to fetch data from the database
+    cursor.execute("SELECT cohortID FROM cohort")
+    cohorts = cursor.fetchall()  # Fetch all rows
+    
+    # Execute a SQL query to fetch data from the database
+    cursor.execute("""
+                   SELECT *
+                   FROM student
+                   WHERE lectEmail = %s
+                   """, session['lecEmail'])
+    stud_data = cursor.fetchall()  # Fetch all rows
+    
+    cursor.close()
+    
+    # Initialize an empty list to store dictionaries
+    students = []
+
+    # Iterate through the fetched data and create dictionaries
+    for row in stud_data:
+        app_dict = {
+            'studID': row[0],
+            'studEmail': row[1],
+            'studName': row[4],
+            'course': row[5],
+            'studPhone': row[6],
+            'cohort': row[9],
+            'compName': row[10],
+            'compSupervisorName': row[13],
+            'compSupervisorEmail': row[14],
+            'compSupervisorPhone': row[15],
+            # Add other fields as needed
+        }
+        students.append(app_dict)
+    
+    return render_template('lecturer/home.html', cohorts=cohorts, students=students)
 
 @app.route("/lecturer/studentDetail")
-def lecturerDetail():
-    return render_template('lecturer/studentDetail.html')
+def lecStudentDetail():
+    
+    # Retrieve the studID query parameter from the URL
+    studID = request.args.get('studID')
+    
+    # Fetch the company's information from the database based on studID
+    cursor = db_conn.cursor()
+        
+    cursor.execute("""
+                SELECT *
+                FROM student 
+                JOIN cohort ON student.cohort = cohort.cohortID
+                WHERE studID = %s
+                """, (studID),)
+    student_data = cursor.fetchone()
+    cursor.close()
+    
+    if student_data:
+        # Convert the user record to a dictionary
+        student = {
+            'studID': student_data[0],
+            'studEmail': student_data[1],
+            'studIC': student_data[2],
+            'gender': student_data[3],
+            'studName': student_data[4],
+            'course': student_data[5],
+            'studPhone': student_data[6],
+            'cgpa': student_data[7],
+            'lecEmail': student_data[8],
+            'cohort': student_data[9],
+            'compName': student_data[10],
+            'compAddr': student_data[11],
+            'monthlyAllowance': student_data[12],
+            'compSupervisorName': student_data[13],
+            'compSupervisorEmail': student_data[14],
+            'compSupervisorPhone': student_data[15],
+            'internStartDate': student_data[17],
+            'internEndDate': student_data[18],
+            # Add other fields as needed
+        }
+        
+        # Get the s3 bucket location
+        s3 = boto3.resource('s3')
+        bucket_location = boto3.client('s3').get_bucket_location(Bucket=custombucket)
+        s3_location = (bucket_location['LocationConstraint'])
+        
+        if s3_location is None:
+            s3_location = 'us-east-1'
+        
+        # Initial declaration
+        compAcceptanceForm_url = "https://{0}.s3.{1}.amazonaws.com/studID-{2}_compAcceptanceForm.pdf".format(
+            custombucket,
+            s3_location,
+            student['studID'])
+        
+        parrentAckForm_url = "https://{0}.s3.{1}.amazonaws.com/studID-{2}_parrentAckForm.pdf".format(
+            custombucket,
+            s3_location,
+            student['studID'])
+        
+        letterOfIndemnity_url = "https://{0}.s3.{1}.amazonaws.com/studID-{2}_letterOfIndemnity.pdf".format(
+            custombucket,
+            s3_location,
+            student['studID'])
+        
+        progressReport1_url = "https://{0}.s3.{1}.amazonaws.com/studID-{2}_progressReport1.pdf".format(
+            custombucket,
+            s3_location,
+            student['studID'])
+        
+        progressReport2_url = "https://{0}.s3.{1}.amazonaws.com/studID-{2}_progressReport2.pdf".format(
+            custombucket,
+            s3_location,
+            student['studID'])
+        
+        progressReport3_url = "https://{0}.s3.{1}.amazonaws.com/studID-{2}_progressReport3.pdf".format(
+            custombucket,
+            s3_location,
+            student['studID'])
+        
+        finalReport_url = "https://{0}.s3.{1}.amazonaws.com/studID-{2}_finalReport.pdf".format(
+            custombucket,
+            s3_location,
+            student['studID'])
+        
+        rptStatus = 1 # means already submit
+        # Check whether reports submitted or not, just take one report for checking, since if one exist, others exist as well
+        response = requests.head(finalReport_url)
+        if response.status_code != 200:
+            rptStatus = 0  # means havent submit
+    
+    return render_template('lecturer/studentDetail.html', 
+                           student=student,
+                           compAcceptanceForm_url=compAcceptanceForm_url,
+                           parrentAckForm_url=parrentAckForm_url,
+                           letterOfIndemnity_url=letterOfIndemnity_url,
+                           progressReport1_url=progressReport1_url,
+                           progressReport2_url=progressReport2_url,
+                           progressReport3_url=progressReport3_url,
+                           finalReport_url=finalReport_url,
+                           rptStatus=rptStatus)
 
 # Company
 @app.route("/company/login", methods=['GET', 'POST'])
