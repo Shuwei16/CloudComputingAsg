@@ -330,7 +330,7 @@ def studentHome():
                 session['studID'])
             
             rptStatus = 1 # means already submit
-            # Check whether reports submitted or not, just take one report for checking
+            # Check whether reports submitted or not, just take one report for checking, since if one exist, others exist as well
             response = requests.head(finalReport_url)
             if response.status_code != 200:
                 rptStatus = 0  # means havent submit
@@ -530,11 +530,146 @@ def lecturerLogin():
 
 @app.route("/lecturer/home")
 def lecturerHome():
-    return render_template('lecturer/home.html')
+    
+    cursor = db_conn.cursor()
+    # Execute a SQL query to fetch data from the database
+    cursor.execute("SELECT cohortID FROM cohort")
+    cohorts = cursor.fetchall()  # Fetch all rows
+    
+    # Execute a SQL query to fetch data from the database
+    cursor.execute("""
+                   SELECT *
+                   FROM student
+                   WHERE lectEmail = %s
+                   """, session['lecEmail'])
+    stud_data = cursor.fetchall()  # Fetch all rows
+    
+    cursor.close()
+    
+    # Initialize an empty list to store dictionaries
+    students = []
+
+    # Iterate through the fetched data and create dictionaries
+    for row in stud_data:
+        app_dict = {
+            'studID': row[0],
+            'studEmail': row[1],
+            'studName': row[4],
+            'course': row[5],
+            'studPhone': row[6],
+            'cohort': row[9],
+            'compName': row[10],
+            'compSupervisorName': row[13],
+            'compSupervisorEmail': row[14],
+            'compSupervisorPhone': row[15],
+            # Add other fields as needed
+        }
+        students.append(app_dict)
+    
+    return render_template('lecturer/home.html', cohorts=cohorts, students=students)
 
 @app.route("/lecturer/studentDetail")
-def lecturerDetail():
-    return render_template('lecturer/studentDetail.html')
+def lecStudentDetail():
+    
+    # Retrieve the studID query parameter from the URL
+    studID = request.args.get('studID')
+    
+    # Fetch the company's information from the database based on studID
+    cursor = db_conn.cursor()
+        
+    cursor.execute("""
+                SELECT *
+                FROM student 
+                JOIN cohort ON student.cohort = cohort.cohortID
+                WHERE studID = %s
+                """, (studID),)
+    student_data = cursor.fetchone()
+    cursor.close()
+    
+    if student_data:
+        # Convert the user record to a dictionary
+        student = {
+            'studID': student_data[0],
+            'studEmail': student_data[1],
+            'studIC': student_data[2],
+            'gender': student_data[3],
+            'studName': student_data[4],
+            'course': student_data[5],
+            'studPhone': student_data[6],
+            'cgpa': student_data[7],
+            'lecEmail': student_data[8],
+            'cohort': student_data[9],
+            'compName': student_data[10],
+            'compAddr': student_data[11],
+            'monthlyAllowance': student_data[12],
+            'compSupervisorName': student_data[13],
+            'compSupervisorEmail': student_data[14],
+            'compSupervisorPhone': student_data[15],
+            'internStartDate': student_data[17],
+            'internEndDate': student_data[18],
+            # Add other fields as needed
+        }
+        
+        # Get the s3 bucket location
+        s3 = boto3.resource('s3')
+        bucket_location = boto3.client('s3').get_bucket_location(Bucket=custombucket)
+        s3_location = (bucket_location['LocationConstraint'])
+        
+        if s3_location is None:
+            s3_location = 'us-east-1'
+        
+        # Initial declaration
+        compAcceptanceForm_url = "https://{0}.s3.{1}.amazonaws.com/studID-{2}_compAcceptanceForm.pdf".format(
+            custombucket,
+            s3_location,
+            student['studID'])
+        
+        parrentAckForm_url = "https://{0}.s3.{1}.amazonaws.com/studID-{2}_parrentAckForm.pdf".format(
+            custombucket,
+            s3_location,
+            student['studID'])
+        
+        letterOfIndemnity_url = "https://{0}.s3.{1}.amazonaws.com/studID-{2}_letterOfIndemnity.pdf".format(
+            custombucket,
+            s3_location,
+            student['studID'])
+        
+        progressReport1_url = "https://{0}.s3.{1}.amazonaws.com/studID-{2}_progressReport1.pdf".format(
+            custombucket,
+            s3_location,
+            student['studID'])
+        
+        progressReport2_url = "https://{0}.s3.{1}.amazonaws.com/studID-{2}_progressReport2.pdf".format(
+            custombucket,
+            s3_location,
+            student['studID'])
+        
+        progressReport3_url = "https://{0}.s3.{1}.amazonaws.com/studID-{2}_progressReport3.pdf".format(
+            custombucket,
+            s3_location,
+            student['studID'])
+        
+        finalReport_url = "https://{0}.s3.{1}.amazonaws.com/studID-{2}_finalReport.pdf".format(
+            custombucket,
+            s3_location,
+            student['studID'])
+        
+        rptStatus = 1 # means already submit
+        # Check whether reports submitted or not, just take one report for checking, since if one exist, others exist as well
+        response = requests.head(finalReport_url)
+        if response.status_code != 200:
+            rptStatus = 0  # means havent submit
+    
+    return render_template('lecturer/studentDetail.html', 
+                           student=student,
+                           compAcceptanceForm_url=compAcceptanceForm_url,
+                           parrentAckForm_url=parrentAckForm_url,
+                           letterOfIndemnity_url=letterOfIndemnity_url,
+                           progressReport1_url=progressReport1_url,
+                           progressReport2_url=progressReport2_url,
+                           progressReport3_url=progressReport3_url,
+                           finalReport_url=finalReport_url,
+                           rptStatus=rptStatus)
 
 # Company
 @app.route("/company/login", methods=['GET', 'POST'])
