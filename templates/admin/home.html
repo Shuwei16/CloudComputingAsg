@@ -6,7 +6,7 @@
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-    <title>Admin Home</title>
+    <title>Lanternship: Admin</title>
     <meta content="" name="description">
     <meta content="" name="keywords">
 
@@ -120,12 +120,14 @@
                                         <div class="d-flex align-items-center">
                                             <div class="ms-3">
                                                 <p class="fw-bold mb-1">{{ student['compSupervisorName'] }}</p>
+                                                {% if student['compSupervisorName'] is not none%}
                                                 <p class="text-muted mb-0">{{ student['compName'] }}</p>
                                                 <p class="text-muted mb-0">{{ student['compAddr'] }}</p>
                                                 <p class="text-muted mb-0"><a href="mailto:xxx@xxx.com">{{ student['compSupervisorEmail'] }}</a>
                                                 </p>
                                                 <p class="text-muted mb-0"><a href="tel:+60123456789">{{ student['compSupervisorPhone'] }}</a>
                                                 </p>
+                                                {% endif %}
                                             </div>
                                         </div>
                                     </td>

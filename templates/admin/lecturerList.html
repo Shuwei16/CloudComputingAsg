@@ -61,12 +61,16 @@
             <h2>Internship Supervisor List<br />
                 <hr>
             </h2> 
-            <div class="input-group mb-3">
+            <div class="input-group"> 
                 <form action="{{ url_for('adminLecturerList') }}" method="POST">
                     <input type="hidden" name="action" value="searchLecturer">
-                    <input type="text" name="search" class="form-control" placeholder="Search lecturer..."
-                           aria-label="Search lecturer" aria-describedby="basic-addon2">
-                    <button type="submit" class="btn btn-outline-primary" id="searchButton">Search</button>
+                    <div class="input-group mb-3">
+                        <input type="text" name="search" class="form-control" placeholder="Search lecturer..."
+                           aria-label="Search lecturer" aria-describedby="basic-addon2" required>
+                        <div class="input-group-append">
+                          <button type="submit" class="btn btn-outline-secondary" id="searchButton">Search</button>
+                        </div>
+                      </div>
                 </form>
             </div>
             <br />
@@ -77,7 +81,7 @@
                         <th class="ps-2">Email</th>
                         <th>Password</th>
                         <th>Contact No.</th>
-                        <th>Total Number of Students Handled</th>
+                        <th>Total Number of Students</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -120,11 +124,11 @@
                             </div>
                         </td>
                         <td>
-                            <button type="button" class="btn btn-outline-primary btn-sm btn-rounded"
+                            <button type="button" class="btn btn-outline-primary btn-sm btn-rounded" style="float: left; margin: 2px;"
                                 data-bs-toggle="modal" data-bs-target="#editModal{{ supervisor['lecEmail'] }}" data-action="edit" data-job-id="{{ supervisor['lecEmail'] }}">
                                 Edit
                             </button>
-                            <form method="POST" action="{{ url_for('adminLecturerList') }}" data-action="delete" onsubmit="return confirm('Are you sure to delete this lecturer?')">
+                            <form method="POST" action="{{ url_for('adminLecturerList') }}" style="float: left; margin: 2px;" data-action="delete" onsubmit="return confirm('Are you sure to delete this lecturer?')">
                                 <input type="hidden" name="action" value="delete">
                                 <input type="hidden" name="lec_email" id="deleteLecEmail" value="{{ supervisor['lecEmail'] }}">
                                 <button type="submit" class="btn btn-outline-danger btn-sm btn-rounded">Delete</button>
