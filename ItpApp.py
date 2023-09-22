@@ -4,7 +4,7 @@ from flask import Flask, render_template, request,  redirect, url_for, flash, se
 from pymysql import connections
 import os
 import boto3
-# import requests
+import requests
 from config import *
 
 import secrets
@@ -36,6 +36,27 @@ def index():
     if session:
         session.clear()
     return render_template('index.html')
+
+# Portfolio
+@app.route("/portfolio/goonhei")
+def goonhei():
+    return render_template('/portfolio/goonhei.html')
+
+@app.route("/portfolio/jiayi")
+def jiayi():
+    return render_template('/portfolio/jiayi.html')
+
+@app.route("/portfolio/junxi")
+def junxi():
+    return render_template('/portfolio/junxi.html')
+
+@app.route("/portfolio/shuwei")
+def shuwei():
+    return render_template('/portfolio/shuwei.html')
+
+@app.route("/portfolio/xinzhi")
+def xinzhi():
+    return render_template('/portfolio/xinzhi.html')
 
 # Student
 @app.route("/student/login", methods=['GET', 'POST'])
@@ -681,7 +702,9 @@ def companyLogin():
         password = request.form['password']
 
         cursor = db_conn.cursor()
-        cursor.execute("SELECT * FROM company WHERE compEmail = %s AND compPassword = %s", (email, password))
+        cursor.execute("""SELECT * FROM company 
+                       WHERE compEmail = %s AND compPassword = %s
+                       AND status = %s""", (email, password, 'Approved'))
         user = cursor.fetchone()
         cursor.close()
 
@@ -692,7 +715,7 @@ def companyLogin():
             session['compEmail'] = compEmail
             return redirect(url_for('companyHome'))
         else:
-            error_message = 'Login failed. Please check your email and password.'
+            error_message = 'Login failed. This may because of incorrect email or password, or your company has not been approved yet.'
             return render_template('company/login.html', error_message=error_message)
 
     return render_template('company/login.html', error_message=error_message)
@@ -707,7 +730,7 @@ def companyRegister():
         contactNo = request.form['contactNo']
         email = request.form['email']
         address = request.form['line1'] + ', ' + request.form['line2'] + ', ' + request.form['city'] + ', ' + request.form['postcode'] + ', ' + request.form['state'] + '.'
-        companyLogo = request.form['companyLogo']
+        companyLogo = request.files['companyLogo']
         password = request.form['password']
 
         # Insert the new user into the database (Assuming you have a 'students' table)
@@ -716,6 +739,23 @@ def companyRegister():
                        (email, password, companyName, companyDescription, category, address, contactNo))
         db_conn.commit()
         cursor.close()
+        
+        # Uplaod file in S3
+        companyLogo_in_s3 = "comp-" + companyName + "_logo.pdf"
+        s3 = boto3.resource('s3')
+        
+        try:
+            s3.Bucket(custombucket).put_object(Key=companyLogo_in_s3, Body=companyLogo)
+            bucket_location = boto3.client('s3').get_bucket_location(Bucket=custombucket)
+            s3_location = (bucket_location['LocationConstraint'])
+
+            if s3_location is None:
+                s3_location = ''
+            else:
+                s3_location = '-' + s3_location
+        
+        except Exception as e:
+            return str(e)
         
         return redirect(url_for('companyRegisterSuccess'))
     

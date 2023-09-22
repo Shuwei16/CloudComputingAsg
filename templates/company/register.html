@@ -56,7 +56,7 @@
   <!-- ======= Auth Section ======= -->
   <section id="auth" class="d-flex flex-column justify-content-center align-items-center" style="height: 220vh">
     <div class="container text-center text-md-left" data-aos="fade-up">
-      <form action="{{ url_for('companyRegister') }}" method="POST" onsubmit="return validateForm()">
+      <form action="{{ url_for('companyRegister') }}" method="POST" onsubmit="return validateForm()" enctype="multipart/form-data">
         <h3>Company Registration</h3>
 
         <label for="companyName">Company Name</label>
@@ -86,7 +86,8 @@
         <input type="text" placeholder="state" id="state" name="state" required>
 
         <label for="companyLogo">Company Logo</label>
-        <input type="file" placeholder="" id="companyLogo" name="companyLogo" required>
+        <input type="file" placeholder="" id="companyLogo" name="companyLogo" required accept=".jpg">
+        <p style="font-size:12px">*please upload the logo in .jpg format.</p>
 
         <label for="password">Password</label>
         <input type="password" placeholder="" id="password" name="password" required>

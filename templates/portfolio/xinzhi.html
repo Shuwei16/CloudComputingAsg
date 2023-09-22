@@ -1,0 +1,171 @@
+<!-- Homepage -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>Internship Management System</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link href="{{ url_for('static', filename='img/favicon.png') }}" rel="icon">
+
+  <!-- Google Fonts -->
+  <link
+    href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+    rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="{{ url_for('static', filename='vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+  <link href="{{ url_for('static', filename='vendor/bootstrap-icons/bootstrap-icons.css') }}" rel="stylesheet">
+  <link href="{{ url_for('static', filename='vendor/boxicons/css/boxicons.min.css') }}" rel="stylesheet">
+  <link href="{{ url_for('static', filename='vendor/glightbox/css/glightbox.min.css') }}" rel="stylesheet">
+  <link href="{{ url_for('static', filename='vendor/swiper/swiper-bundle.min.css') }}" rel="stylesheet">
+
+  <!-- Template Main CSS File -->
+  <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+</head>
+
+<body>
+
+  <!-- ======= Header ======= -->
+  <header id="header" class="fixed-top d-flex align-items-center">
+    <div class="container d-flex align-items-center">
+
+      <div class="logo me-auto">
+        <h1><a href="{{ url_for('index') }}">Lanternship</a></h1>
+      </div>
+
+      <nav id="navbar" class="navbar order-last order-lg-0">
+        <ul>
+          <li class="dropdown"><a href="#"><span>Login</span> <i class="bi bi-chevron-down"></i></a>
+            <ul>
+              <li><a href="{{ url_for('studentLogin') }}">Student</a></li>
+              <li><a href="{{ url_for('companyLogin') }}">Company</a></li>
+              <li><a href="{{ url_for('lecturerLogin') }}">Lecturer</a></li>
+              <li><a href="{{ url_for('adminLogin') }}">Admin</a></li>
+            </ul>
+          </li>
+        </ul>
+        <i class="bi bi-list mobile-nav-toggle"></i>
+      </nav><!-- .navbar -->
+    </div>
+  </header><!-- End Header -->
+
+  <!-- ======= Hero Section ======= -->
+  <section id="hero" class="d-flex flex-column justify-content-center align-items-center">
+    <div class="container text-center text-md-left" data-aos="fade-up">
+        <h2>PORTFOLIO</h2>
+        <h1><span>Teoh Xin Zhi</span></h1>
+    </div>
+  </section><!-- End Hero -->
+
+  <main id="main">
+
+    <!-- ======= About Section ======= -->
+    <div id="about_us" class="about-sestion container-fluid">
+        <div class="container">
+            <div class="session-title row">
+                <h2>About Me</h2>
+            </div>
+            <div class="about-row row">
+                <div class="col-md-5">
+                    <img src="{{ url_for('static', filename='img/ourTeam/xinzhi.jpg') }}" alt="">
+                </div>
+                <div class="col-md-7">
+                    <p style="text-align: justify;">
+                      Greetings! I'm <b>Teoh Xin Zhi</b>, currently a degree year 2 student at TARUMT.
+                      As a software engineering enthusiast, I am on a relentless quest to turn innovative 
+                      ideas into tangible solutions. My fascination with technology ignited my journey, and 
+                      I've since cultivated a deep expertise in programming languages like Python, C++, 
+                      and Java. Through internships and personal projects, I've learned to adapt to the dynamic 
+                      world of software development. Collaboration is my forte, and I thrive in interdisciplinary 
+                      teams where I can blend my technical skills with effective communication. With a passion for 
+                      lifelong learning and a desire to make a meaningful impact in the tech industry, I am excited 
+                      to see where my coding adventures take me.
+                    </p>
+                    <br/>
+                    <p>
+                      <i class="bi bi-envelope"></i> <a href="mailto:teohxz-wm20@student.tarc.edu.my">teohxz-wm20@student.tarc.edu.my</a><br/>
+                      <i class="bi bi-telephone"></i> <a href="tel:+60129124684">+6012-912 4684</a><br/>
+                      <i class="bi bi-instagram"></i> <a href="https://www.instagram.com/jaketeoh_02/">jaketeoh_02</a><br/>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ======= Services Section ======= -->
+    <section id="services" class="services section-bg">
+        <div class="container">
+  
+          <div class="section-title">
+            <h2>Personality Traits</h2>
+            <p>Here are what am I.</p>
+          </div>
+  
+          <div class="row">
+            <div class="col-md-6">
+              <div class="icon-box">
+                <i class="bi bi-briefcase"></i>
+                <h4>Assertiveness</h4>
+                <p>Confident and comfortable expressing opinions and needs.</p>
+              </div>
+            </div>
+            <div class="col-md-6 mt-4 mt-lg-0">
+              <div class="icon-box">
+                <i class="bi bi-card-checklist"></i>
+                <h4>Leadership</h4>
+                <p>Charisma, decisiveness, and the ability to inspire and guide others.</p>
+              </div>
+            </div>
+            <div class="col-md-6 mt-4">
+              <div class="icon-box">
+                <i class="bi bi-bar-chart"></i>
+                <h4>Resilience</h4>
+                <p>Can bounce back from adversity and maintain a positive outlook.</p>
+              </div>
+            </div>
+            <div class="col-md-6 mt-4">
+              <div class="icon-box">
+                <i class="bi bi-binoculars"></i>
+                <h4>Resourcefulness</h4>
+                <p>Skilled at finding creative solutions to problems and challenges.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section><!-- End Services Section -->
+
+  </main><!-- End #main -->
+
+  <!-- ======= Footer ======= -->
+  <footer id="footer">
+    <div class="container d-md-flex py-4">
+      <div class="copyright">
+        &copy; 2023 - Internship Management System
+      </div>
+    </div>
+  </footer><!-- End Footer -->
+
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
+      class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Vendor JS Files -->
+  <script src="{{ url_for('static', filename='vendor/purecounter/purecounter_vanilla.js') }}"></script>
+  <script src="{{ url_for('static', filename='vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='vendor/glightbox/js/glightbox.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='vendor/isotope-layout/isotope.pkgd.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='vendor/swiper/swiper-bundle.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='vendor/waypoints/noframework.waypoints.js') }}"></script>
+  <script src="{{ url_for('static', filename='vendor/php-email-form/validate.js') }}"></script>
+
+  <!-- Template Main JS File -->
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+
+</body>
+
+</html>

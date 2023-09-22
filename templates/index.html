@@ -36,7 +36,7 @@
     <div class="container d-flex align-items-center">
 
       <div class="logo me-auto">
-        <h1><a href="index.html{{ url_for('index') }}">Lanternship</a></h1>
+        <h1><a href="{{ url_for('index') }}">Lanternship</a></h1>
       </div>
 
       <nav id="navbar" class="navbar order-last order-lg-0">
@@ -105,6 +105,95 @@
 
       </div>
     </section><!-- End What We Is Section -->
+
+    <!-- ======= Testimonials Section ======= -->
+    <section id="testimonials" class="testimonials section-bg">
+      <div class="container">
+
+        <div class="section-title">
+          <h2>Our Team</h2>
+          <p>We are students from RSWS3(G5).</p>
+        </div>
+
+        <div class="testimonials-slider swiper" data-aos="fade-up" data-aos-delay="100">
+          <div class="swiper-wrapper">
+
+            <div class="swiper-slide">
+              <div class="testimonial-item">
+                <img src="{{ url_for('static', filename='img/ourTeam/xinzhi.jpg') }}" class="testimonial-img" alt="">
+                <h3><a href="{{ url_for('xinzhi') }}" target="_blank">Teoh Xin Zhi</a></h3>
+                <h4>@jaketeoh_02</h4>
+                <br/>
+                <p>
+                  <i class="bx bxs-quote-alt-left quote-icon-left"></i>
+                  Software engineering students are the architects of the digital future.
+                  <i class="bx bxs-quote-alt-right quote-icon-right"></i>
+                </p>
+              </div>
+            </div><!-- End testimonial item -->
+
+            <div class="swiper-slide">
+              <div class="testimonial-item">
+                <img src="{{ url_for('static', filename='img/ourTeam/junxi.jpg') }}" class="testimonial-img" alt="">
+                <h3><a href="{{ url_for('junxi') }}" target="_blank">Heah Jun Xi</a></h3>
+                <h4>@junxiheah</h4>
+                <br/>
+                <p>
+                  <i class="bx bxs-quote-alt-left quote-icon-left"></i>
+                  In the world of software engineering, students are the builders of tomorrow's technology landscape.
+                  <i class="bx bxs-quote-alt-right quote-icon-right"></i>
+                </p>
+              </div>
+            </div><!-- End testimonial item -->
+
+            <div class="swiper-slide">
+              <div class="testimonial-item">
+                <img src="{{ url_for('static', filename='img/ourTeam/goonhei.jpg') }}" class="testimonial-img" alt="">
+                <h3><a href="{{ url_for('goonhei') }}" target="_blank">Leau Goon Hei</a></h3>
+                <h4>@goon.hei</h4>
+                <br/>
+                <p>
+                  <i class="bx bxs-quote-alt-left quote-icon-left"></i>
+                  Software engineering students are like sponges, soaking up knowledge to shape the future of technology.
+                  <i class="bx bxs-quote-alt-right quote-icon-right"></i>
+                </p>
+              </div>
+            </div><!-- End testimonial item -->
+
+            <div class="swiper-slide">
+              <div class="testimonial-item">
+                <img src="{{ url_for('static', filename='img/ourTeam/jiayi.jpg') }}" class="testimonial-img" alt="">
+                <h3><a href="{{ url_for('jiayi') }}" target="_blank">Mah Jia Yi</a></h3>
+                <h4>@__just13</h4>
+                <br/>
+                <p>
+                  <i class="bx bxs-quote-alt-left quote-icon-left"></i>
+                  Software engineering students are the code warriors, armed with knowledge and creativity.
+                  <i class="bx bxs-quote-alt-right quote-icon-right"></i>
+                </p>
+              </div>
+            </div><!-- End testimonial item -->
+
+            <div class="swiper-slide">
+              <div class="testimonial-item">
+                <img src="{{ url_for('static', filename='img/ourTeam/shuwei.jpg') }}" class="testimonial-img" alt="">
+                <h3><a href="{{ url_for('shuwei') }}" target="_blank">Wang Shu Wei</a></h3>
+                <h4>@sw_416_</h4>
+                <br/>
+                <p>
+                  <i class="bx bxs-quote-alt-left quote-icon-left"></i>
+                  The journey of a software engineering student is marked by curiosity, persistence, and the pursuit of innovation.
+                  <i class="bx bxs-quote-alt-right quote-icon-right"></i>
+                </p>
+              </div>
+            </div><!-- End testimonial item -->
+
+          </div>
+          <div class="swiper-pagination"></div>
+        </div>
+
+      </div>
+    </section><!-- End Testimonials Section -->
 
   </main><!-- End #main -->
 
