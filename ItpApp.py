@@ -983,11 +983,10 @@ def adminHome():
     
     # Execute a SQL query to fetch data from the database
     cursor.execute("""
-                   SELECT DISTINCT student.*, company.compLocation, lecturer.lecName, cohort.internStartDate, cohort.internEndDate
+                   SELECT DISTINCT student.*, lecturer.lecName, cohort.internStartDate, cohort.internEndDate
                    FROM student
                     JOIN lecturer ON student.lectEmail = lecturer.lecEmail
                     JOIN admin ON admin.adminEmail= lecturer.adminEmail
-                    JOIN company ON company.adminEmail = lecturer.adminEmail
                     JOIN cohort ON student.cohort = cohort.cohortID
                    WHERE admin.adminEmail = %s
                    """, session['adminEmail'])
@@ -1009,13 +1008,13 @@ def adminHome():
             'studPhone': row[6],
             'cohort': row[9],
             'compName': row[10],
+            'compAddr': row[11],
             'compSupervisorName': row[13],
             'compSupervisorEmail': row[14],
             'compSupervisorPhone': row[15],
-            'compLocation': row[16],
-            'lecName': row[17],
-            'internStartDate': row[18],
-            'internEndDate': row[19],
+            'lecName': row[16],
+            'internStartDate': row[17],
+            'internEndDate': row[18],
             # Add other fields as needed
         }
         students.append(app_dict)
@@ -1115,9 +1114,135 @@ def adminCompanyDetail():
     
     return render_template('admin/companyDetail.html', company=company)
 
-@app.route("/admin/lecturerList")
+@app.route("/admin/lecturerList", methods=['GET', 'POST'])
 def adminLecturerList():
-    return render_template('admin/lecturerList.html')
+
+    if request.method == 'POST':
+        action = request.form.get('action')
+
+        if action == 'addLecturer':
+            lecturerName = request.form['lecturerName']
+            email = request.form['email']
+            contactNo = request.form['contactNo']
+            adminEmail = session['adminEmail']
+
+            # Generate a random password of length 12
+            password = secrets.token_hex(6)  # Change 6 to the desired length
+            
+            cursor = db_conn.cursor()
+            cursor.execute("INSERT INTO lecturer (lecName, lecEmail, lecPhoneNum, lecPassword, adminEmail) VALUES (%s, %s, %s, %s, %s)", (lecturerName, email, contactNo, password, adminEmail))
+            db_conn.commit()
+            cursor.close()
+        
+        elif action == 'editLecturer':
+    
+            lec_email = request.form['lec_email']  
+            lecturerName = request.form['lecturerName']
+            contactNo = request.form['contactNo']
+
+            print(f"Received data: lec_email={lec_email}, lecturerName={lecturerName}, contactNo={contactNo}")
+
+            cursor = db_conn.cursor()
+            cursor.execute("UPDATE lecturer SET lecName = %s, lecPhoneNum = %s WHERE lecEmail = %s", (lecturerName,  contactNo, lec_email))
+            db_conn.commit()
+            cursor.close()
+
+            print("Data updated successfully")
+            # return render_template('company/home.html', job=job, minimum=minimum, maximum=maximum)    
+
+        elif action == 'delete':
+            # Handle the DELETE request (e.g., delete a job)
+            # Extract the job ID from the request data
+            lec_email = request.form['lec_email']
+            print(f"Received lec_email for deletion: {lec_email}")
+            cursor = db_conn.cursor()
+            cursor.execute("DELETE FROM lecturer WHERE lecEmail  = %s", (lec_email,))
+            db_conn.commit()
+            cursor.close()
+            print("Record deleted successfully")
+
+        elif action == 'searchLecturer':
+            search_term = request.form.get('search')
+            cursor = db_conn.cursor()
+
+            # Use a WHERE clause to filter lecturers based on the search term
+            query = """
+                SELECT lecturer.*
+                FROM lecturer
+                WHERE lecturer.adminEmail = %s
+            """
+            
+            if search_term:
+                query += " AND lecturer.lecName LIKE %s"
+                search_term = f"%{search_term}%"  # Add wildcards for partial matching
+
+            cursor.execute(query, (session['adminEmail'], search_term))
+            lecturer_data = cursor.fetchall()
+
+            # Retrieve the count of students for each lecturer
+            cursor.execute("""
+                SELECT lectEmail, COUNT(studID) AS student_count
+                FROM student
+                GROUP BY lectEmail
+            """)
+            student_counts = {row[0]: row[1] for row in cursor.fetchall()}
+            cursor.close()
+
+            supervisors = []
+
+            for row in lecturer_data:
+                # Convert each row to a dictionary
+                lecturer_email = row[0]
+                supervisor = {
+                    'lecEmail': lecturer_email,
+                    'lecPassword': row[1],
+                    'lecName': row[2],
+                    'lecPhoneNum': row[3],
+                    'studID': student_counts.get(lecturer_email, 0),
+                    # Add other fields as needed
+                }    
+                # Append the job dictionary to the list of jobs
+                supervisors.append(supervisor)
+
+            return render_template('admin/lecturerList.html', supervisors=supervisors)
+        
+    cursor = db_conn.cursor()
+    # Retrieve all lecturers
+    cursor.execute("""
+        SELECT lecturer.*
+        FROM lecturer
+        WHERE lecturer.adminEmail = %s
+                   """, session['adminEmail'])
+    lecturer_data = cursor.fetchall()
+
+    # Retrieve the count of students for each lecturer
+    cursor.execute("""
+        SELECT lectEmail, COUNT(studID) AS student_count
+        FROM student
+        GROUP BY lectEmail
+    """)
+    student_counts = {row[0]: row[1] for row in cursor.fetchall()}
+    cursor.close()
+        # print(supervisor_data)
+
+    supervisors = []
+
+    for row in lecturer_data:
+                # Convert each row to a dictionary
+        lecturer_email = row[0]
+        supervisor = {
+                'lecEmail': lecturer_email,
+                'lecPassword': row[1],
+                'lecName': row[2],
+                'lecPhoneNum': row[3],
+                'studID': student_counts.get(lecturer_email, 0),  # Get the student count from the dictionary
+    #         # Add other fields as needed
+            }    
+    #     # Append the job dictionary to the list of jobs
+        supervisors.append(supervisor)
+    print("Supervisors:",supervisors)
+
+    return render_template('admin/lecturerList.html', supervisors=supervisors)
 
 # logout
 @app.route("/logout")

@@ -60,264 +60,79 @@
             </div>
             <h2>Internship Supervisor List<br />
                 <hr>
-            </h2>
+            </h2> 
             <div class="input-group mb-3">
-                <input type="text" id="search" class="form-control" placeholder="Search lecturer..."
-                    aria-label="Search lecturer" aria-describedby="basic-addon2">
+                <form action="{{ url_for('adminLecturerList') }}" method="POST">
+                    <input type="hidden" name="action" value="searchLecturer">
+                    <input type="text" name="search" class="form-control" placeholder="Search lecturer..."
+                           aria-label="Search lecturer" aria-describedby="basic-addon2">
+                    <button type="submit" class="btn btn-outline-primary" id="searchButton">Search</button>
+                </form>
             </div>
             <br />
             <table class="table align-middle mb-0 bg-white" id="lecturerTable">
                 <thead class="bg-light">
                     <tr>
                         <th>Lecturer Name</th>
-                        <th>Email</th>
+                        <th class="ps-2">Email</th>
+                        <th>Password</th>
                         <th>Contact No.</th>
                         <th>Total Number of Students Handled</th>
                         <th>Action</th>
                     </tr>
                 </thead>
+                {% for supervisor in supervisors %}
                 <tbody>
                     <tr>
                         <td>
                             <div class="d-flex align-items-center">
                                 <div class="ms-3">
-                                    <p class="text-muted mb-0">Lim Ji Ji</p>
+                                    <p class="text-muted mb-0">{{ supervisor['lecName'] }}</p>
                                 </div>
                             </div>
                         </td>
                         <td>
                             <div class="d-flex align-items-center">
                                 <div class="ms-3">
-                                    <p class="text-muted mb-0"><a href="mailto:xxx@xxx.com">xxx@xxx.com</a></p>
+                                    <p class="text-muted mb-0"><a href="mailto:xxx@xxx.com">{{ supervisor['lecEmail'] }}</a></p>
                                 </div>
                             </div>
                         </td>
                         <td>
                             <div class="d-flex align-items-center">
                                 <div class="ms-3">
-                                    <p class="text-muted mb-0"><a href="tel:+6011-1111111">011-11111111</a></p>
+                                    <p class="text-muted mb-0">{{ supervisor['lecPassword'] }}</p>
                                 </div>
                             </div>
                         </td>
                         <td>
                             <div class="d-flex align-items-center">
                                 <div class="ms-3">
-                                    <p class="text-muted mb-0">100</p>
+                                    <p class="text-muted mb-0"><a href="tel:+6011-1111111">{{ supervisor['lecPhoneNum'] }}</a></p>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="ms-3">
+                                    <p class="text-muted mb-0">{{ supervisor['studID'] }}</p>
                                 </div>
                             </div>
                         </td>
                         <td>
                             <button type="button" class="btn btn-outline-primary btn-sm btn-rounded"
-                                data-bs-toggle="modal" data-bs-target="#editModal">
+                                data-bs-toggle="modal" data-bs-target="#editModal{{ supervisor['lecEmail'] }}" data-action="edit" data-job-id="{{ supervisor['lecEmail'] }}">
                                 Edit
                             </button>
-                            <button type="button" class="btn btn-outline-danger btn-sm btn-rounded"
-                                onclick="confirm('Are you sure to delete this lecturer?')">
-                                Delete
-                            </button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="d-flex align-items-center">
-                                <div class="ms-3">
-                                    <p class="text-muted mb-0">Lim Ji Ji</p>
-                                </div>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="d-flex align-items-center">
-                                <div class="ms-3">
-                                    <p class="text-muted mb-0"><a href="mailto:xxx@xxx.com">xxx@xxx.com</a></p>
-                                </div>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="d-flex align-items-center">
-                                <div class="ms-3">
-                                    <p class="text-muted mb-0"><a href="tel:+6011-1111111">011-11111111</a></p>
-                                </div>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="d-flex align-items-center">
-                                <div class="ms-3">
-                                    <p class="text-muted mb-0">100</p>
-                                </div>
-                            </div>
-                        </td>
-                        <td>
-                            <button type="button" class="btn btn-outline-primary btn-sm btn-rounded"
-                                data-bs-toggle="modal" data-bs-target="#editModal">
-                                Edit
-                            </button>
-                            <button type="button" class="btn btn-outline-danger btn-sm btn-rounded"
-                                onclick="confirm('Are you sure to delete this lecturer?')">
-                                Delete
-                            </button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="d-flex align-items-center">
-                                <div class="ms-3">
-                                    <p class="text-muted mb-0">Lim Ji Ji</p>
-                                </div>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="d-flex align-items-center">
-                                <div class="ms-3">
-                                    <p class="text-muted mb-0"><a href="mailto:xxx@xxx.com">xxx@xxx.com</a></p>
-                                </div>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="d-flex align-items-center">
-                                <div class="ms-3">
-                                    <p class="text-muted mb-0"><a href="tel:+6011-1111111">011-11111111</a></p>
-                                </div>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="d-flex align-items-center">
-                                <div class="ms-3">
-                                    <p class="text-muted mb-0">100</p>
-                                </div>
-                            </div>
-                        </td>
-                        <td>
-                            <button type="button" class="btn btn-outline-primary btn-sm btn-rounded"
-                                data-bs-toggle="modal" data-bs-target="#editModal">
-                                Edit
-                            </button>
-                            <button type="button" class="btn btn-outline-danger btn-sm btn-rounded"
-                                onclick="confirm('Are you sure to delete this lecturer?')">
-                                Delete
-                            </button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="d-flex align-items-center">
-                                <div class="ms-3">
-                                    <p class="text-muted mb-0">Lim Ji Ji</p>
-                                </div>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="d-flex align-items-center">
-                                <div class="ms-3">
-                                    <p class="text-muted mb-0"><a href="mailto:xxx@xxx.com">xxx@xxx.com</a></p>
-                                </div>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="d-flex align-items-center">
-                                <div class="ms-3">
-                                    <p class="text-muted mb-0"><a href="tel:+6011-1111111">011-11111111</a></p>
-                                </div>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="d-flex align-items-center">
-                                <div class="ms-3">
-                                    <p class="text-muted mb-0">100</p>
-                                </div>
-                            </div>
-                        </td>
-                        <td>
-                            <button type="button" class="btn btn-outline-primary btn-sm btn-rounded"
-                                data-bs-toggle="modal" data-bs-target="#editModal">
-                                Edit
-                            </button>
-                            <button type="button" class="btn btn-outline-danger btn-sm btn-rounded"
-                                onclick="confirm('Are you sure to delete this lecturer?')">
-                                Delete
-                            </button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="d-flex align-items-center">
-                                <div class="ms-3">
-                                    <p class="text-muted mb-0">Lim Ji Ji</p>
-                                </div>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="d-flex align-items-center">
-                                <div class="ms-3">
-                                    <p class="text-muted mb-0"><a href="mailto:xxx@xxx.com">xxx@xxx.com</a></p>
-                                </div>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="d-flex align-items-center">
-                                <div class="ms-3">
-                                    <p class="text-muted mb-0"><a href="tel:+6011-1111111">011-11111111</a></p>
-                                </div>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="d-flex align-items-center">
-                                <div class="ms-3">
-                                    <p class="text-muted mb-0">100</p>
-                                </div>
-                            </div>
-                        </td>
-                        <td>
-                            <button type="button" class="btn btn-outline-primary btn-sm btn-rounded"
-                                data-bs-toggle="modal" data-bs-target="#editModal">
-                                Edit
-                            </button>
-                            <button type="button" class="btn btn-outline-danger btn-sm btn-rounded"
-                                onclick="confirm('Are you sure to delete this lecturer?')">
-                                Delete
-                            </button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="d-flex align-items-center">
-                                <div class="ms-3">
-                                    <p class="text-muted mb-0">Lim Ji Ji</p>
-                                </div>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="d-flex align-items-center">
-                                <div class="ms-3">
-                                    <p class="text-muted mb-0"><a href="mailto:xxx@xxx.com">xxx@xxx.com</a></p>
-                                </div>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="d-flex align-items-center">
-                                <div class="ms-3">
-                                    <p class="text-muted mb-0"><a href="tel:+6011-1111111">011-11111111</a></p>
-                                </div>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="d-flex align-items-center">
-                                <div class="ms-3">
-                                    <p class="text-muted mb-0">100</p>
-                                </div>
-                            </div>
-                        </td>
-                        <td>
-                            <button type="button" class="btn btn-outline-primary btn-sm btn-rounded"
-                                data-bs-toggle="modal" data-bs-target="#editModal">
-                                Edit
-                            </button>
-                            <button type="button" class="btn btn-outline-danger btn-sm btn-rounded"
-                                onclick="confirm('Are you sure to delete this lecturer?')">
-                                Delete
-                            </button>
+                            <form method="POST" action="{{ url_for('adminLecturerList') }}" data-action="delete" onsubmit="return confirm('Are you sure to delete this lecturer?')">
+                                <input type="hidden" name="action" value="delete">
+                                <input type="hidden" name="lec_email" id="deleteLecEmail" value="{{ supervisor['lecEmail'] }}">
+                                <button type="submit" class="btn btn-outline-danger btn-sm btn-rounded">Delete</button>
+                            </form>
                         </td>
                     </tr>
                 </tbody>
+                {% endfor %}
             </table>
         </div>
     </section>
@@ -349,31 +164,33 @@
     <!-- Template Main JS File -->
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </body>
-
+{% for supervisor in supervisors %}
 <!-- Add Lecturer Modal -->
 <div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form action="{{ url_for('adminHome') }}" method="" onsubmit="return confirm('Are you sure to add this lecturer？')">
+            <form action="{{ url_for('adminLecturerList') }}" method="POST" onsubmit="return confirm('Are you sure to add this lecturer？')">
+                <input type="hidden" name="action" value="addLecturer">
+                <input type="hidden" name="adminEmail" id="addAdminEmail" value="{{ supervisor['adminEmail'] }}">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Edit Job</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Add Lecturer</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <div class="panel-body">
                         <div class="form-group">
                             <label for="lecturerName">Lecturer Name</label>
-                            <input type="text" class="form-control" id="lecturerName" placeholder="">
+                            <input type="text" class="form-control" name="lecturerName" id="lecturerName" placeholder="">
                         </div>
                         <br />
                         <div class="form-group">
                             <label for="email">Email</label>
-                            <input type="email" class="form-control" id="email" placeholder="e.g. xxx@tarc.edu.my">
+                            <input type="email" class="form-control" name="email" id="email" placeholder="e.g. xxx@tarc.edu.my">
                         </div>
                         <br />
                         <div class="form-group">
                             <label for="contactNo">ContactNo</label>
-                            <input type="text" class="form-control" id="contactNo" placeholder="e.g. 019-9999999"
+                            <input type="text" class="form-control" name="contactNo" id="contactNo" placeholder="e.g. 019-9999999"
                                 id="contactNo" pattern="\d{2,3}-\d{7,8}" />
                         </div>
                     </div>
@@ -388,10 +205,12 @@
 </div>
 
 <!-- Edit Lecturer Modal -->
-<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="editModal{{ supervisor['lecEmail'] }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form action="home.html" method="" onsubmit="return confirm('Are you sure to this changes？')">
+            <form action="{{ url_for('adminLecturerList', lec_email=supervisor['lecEmail']) }}" method="POST" onsubmit="return confirm('Are you sure to this changes？')">
+                <input type="hidden" name="action" value="editLecturer">
+                <input type="hidden" name="lec_email" id="editLecEmail" value="{{ supervisor['lecEmail'] }}">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Edit Job</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -400,17 +219,17 @@
                     <div class="panel-body">
                         <div class="form-group">
                             <label for="lecturerName">Lecturer Name</label>
-                            <input type="text" class="form-control" id="lecturerName" placeholder="" value="Lim Ji Ji">
+                            <input type="text" class="form-control" name="lecturerName" id="lecturerName" placeholder="" value="{{ supervisor['lecName'] }}">
                         </div>
                         <br />
-                        <div class="form-group">
+                        <!-- <div class="form-group">
                             <label for="email">Email</label>
-                            <input type="email" class="form-control" id="email" placeholder="" value="xxx@xxx.com">
-                        </div>
+                            <input type="email" class="form-control" name="email" id="email" placeholder="" value="{{ supervisor['lecEmail'] }}">
+                        </div> -->
                         <br />
                         <div class="form-group">
                             <label for="contactNo">ContactNo</label>
-                            <input type="text" class="form-control" id="contactNo" placeholder="" value="011-11111111">
+                            <input type="text" class="form-control" name="contactNo" id="contactNo" placeholder="" value="{{ supervisor['lecPhoneNum'] }}">
                         </div>
                     </div>
                 </div>
@@ -422,5 +241,5 @@
         </div>
     </div>
 </div>
-
+{% endfor %}
 </html>
