@@ -55,7 +55,7 @@
     <section class="inner-page">
         <div class="container">
             <div class="container py-5">
-                <h2>Welcome: Admin!<br />
+                <h2>Welcome: {{ admin.adminName }}!<br />
                     <hr><br />
                 </h2>
                 <section id="portfolio" class="portfolio">
@@ -84,22 +84,23 @@
                                     <th>Company Supervisor</th>
                                 </tr>
                             </thead>
+                            {% for student in students %}
                             <tbody>
-                                <tr class="filter-JUL2022Y2">
+                                <tr class="filter-{{ student['cohort'] }}">
                                     <td>
-                                        <p class="fw-bold mb-1">JUL2022Y2</p>
-                                        <p class="text-muted mb-0">(19 Feb 2024 - 04 Aug 2024)</p>
+                                        <p class="fw-bold mb-1">{{ student['cohort'] }}</p>
+                                        <p class="text-muted mb-0">({{ student['internStartDate'] }} - {{ student['internEndDate'] }})</p>
                                     </td>
                                     <td>
                                         <div class="d-flex align-items-center">
                                             <div class="ms-3">
-                                                <p class="fw-bold mb-1">John Doe</p>
-                                                <p class="text-muted mb-0">Bachelor degree in software engineering</p>
-                                                <p class="text-muted mb-0">22WMR00001</p>
+                                                <p class="fw-bold mb-1">{{ student['studName'] }}</p>
+                                                <p class="text-muted mb-0">{{ student['course'] }}</p>
+                                                <p class="text-muted mb-0">{{ student['studID'] }}</p>
                                                 <p class="text-muted mb-0"><a
-                                                        href="mailto:xxx@student.tarc.edu.my">xxx@student.tarc.edu.my</a>
+                                                        href="mailto:xxx@student.tarc.edu.my">{{ student['studEmail'] }}</a>
                                                 </p>
-                                                <p class="text-muted mb-0"><a href="tel:+60123456789">012-3456789</a>
+                                                <p class="text-muted mb-0"><a href="tel:+60123456789">{{ student['studPhone'] }}</a>
                                                 </p>
                                             </div>
                                         </div>
@@ -107,7 +108,7 @@
                                     <td>
                                         <div class="d-flex align-items-center">
                                             <div class="ms-3">
-                                                <p class="fw-bold mb-1">Lim Ji Ji</p>
+                                                <p class="fw-bold mb-1">{{ student['lecName'] }}</p>
                                                 <p class="text-muted mb-0"><a href="mailto:xxx@xxx.com">xxx@xxx.com</a>
                                                 </p>
                                                 <p class="text-muted mb-0"><a href="tel:+60123456789">012-3456789</a>
@@ -118,111 +119,19 @@
                                     <td>
                                         <div class="d-flex align-items-center">
                                             <div class="ms-3">
-                                                <p class="fw-bold mb-1">Chris</p>
-                                                <p class="text-muted mb-0">Techtics Solutions Sdn Bhd</p>
-                                                <p class="text-muted mb-0">VO2-09-06, V Office 2, Lingkaran SV,, Sunway
-                                                    Velocity, Jalan Peel, 55100, Kuala Lumpur.</p>
-                                                <p class="text-muted mb-0"><a href="mailto:xxx@xxx.com">xxx@xxx.com</a>
+                                                <p class="fw-bold mb-1">{{ student['compSupervisorName'] }}</p>
+                                                <p class="text-muted mb-0">{{ student['compName'] }}</p>
+                                                <p class="text-muted mb-0">{{ student['compLocation'] }}</p>
+                                                <p class="text-muted mb-0"><a href="mailto:xxx@xxx.com">{{ student['compSupervisorEmail'] }}</a>
                                                 </p>
-                                                <p class="text-muted mb-0"><a href="tel:+60123456789">012-3456789</a>
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr class="filter-JUL2022Y2">
-                                    <td>
-                                        <p class="fw-bold mb-1">JUL2022Y2</p>
-                                        <p class="text-muted mb-0">(19 Feb 2024 - 04 Aug 2024)</p>
-                                    </td>
-                                    <td>
-                                        <div class="d-flex align-items-center">
-                                            <div class="ms-3">
-                                                <p class="fw-bold mb-1">John Doe</p>
-                                                <p class="text-muted mb-0">Bachelor degree in software engineering</p>
-                                                <p class="text-muted mb-0">22WMR00001</p>
-                                                <p class="text-muted mb-0"><a
-                                                        href="mailto:xxx@student.tarc.edu.my">xxx@student.tarc.edu.my</a>
-                                                </p>
-                                                <p class="text-muted mb-0"><a href="tel:+60123456789">012-3456789</a>
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="d-flex align-items-center">
-                                            <div class="ms-3">
-                                                <p class="fw-bold mb-1">Lim Ji Ji</p>
-                                                <p class="text-muted mb-0"><a href="mailto:xxx@xxx.com">xxx@xxx.com</a>
-                                                </p>
-                                                <p class="text-muted mb-0"><a href="tel:+60123456789">012-3456789</a>
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </td>
-
-                                    <td>
-                                        <div class="d-flex align-items-center">
-                                            <div class="ms-3">
-                                                <p class="fw-bold mb-1">Chris</p>
-                                                <p class="text-muted mb-0">Techtics Solutions Sdn Bhd</p>
-                                                <p class="text-muted mb-0">VO2-09-06, V Office 2, Lingkaran SV,, Sunway
-                                                    Velocity, Jalan Peel, 55100, Kuala Lumpur.</p>
-                                                <p class="text-muted mb-0"><a href="mailto:xxx@xxx.com">xxx@xxx.com</a>
-                                                </p>
-                                                <p class="text-muted mb-0"><a href="tel:+60123456789">012-3456789</a>
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr class="filter-NOV2022Y2">
-                                    <td>
-                                        <p class="fw-bold mb-1">NOV2022Y2</p>
-                                        <p class="text-muted mb-0">(19 Feb 2024 - 04 Aug 2024)</p>
-                                    </td>
-                                    <td>
-                                        <div class="d-flex align-items-center">
-                                            <div class="ms-3">
-                                                <p class="fw-bold mb-1">John Doe</p>
-                                                <p class="text-muted mb-0">Bachelor degree in software engineering</p>
-                                                <p class="text-muted mb-0">22WMR00001</p>
-                                                <p class="text-muted mb-0"><a
-                                                        href="mailto:xxx@student.tarc.edu.my">xxx@student.tarc.edu.my</a>
-                                                </p>
-                                                <p class="text-muted mb-0"><a href="tel:+60123456789">012-3456789</a>
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="d-flex align-items-center">
-                                            <div class="ms-3">
-                                                <p class="fw-bold mb-1">Lim Ji Ji</p>
-                                                <p class="text-muted mb-0"><a href="mailto:xxx@xxx.com">xxx@xxx.com</a>
-                                                </p>
-                                                <p class="text-muted mb-0"><a href="tel:+60123456789">012-3456789</a>
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </td>
-
-                                    <td>
-                                        <div class="d-flex align-items-center">
-                                            <div class="ms-3">
-                                                <p class="fw-bold mb-1">Chris</p>
-                                                <p class="text-muted mb-0">Techtics Solutions Sdn Bhd</p>
-                                                <p class="text-muted mb-0">VO2-09-06, V Office 2, Lingkaran SV,, Sunway
-                                                    Velocity, Jalan Peel, 55100, Kuala Lumpur.</p>
-                                                <p class="text-muted mb-0"><a href="mailto:xxx@xxx.com">xxx@xxx.com</a>
-                                                </p>
-                                                <p class="text-muted mb-0"><a href="tel:+60123456789">012-3456789</a>
+                                                <p class="text-muted mb-0"><a href="tel:+60123456789">{{ student['compSupervisorPhone'] }}</a>
                                                 </p>
                                             </div>
                                         </div>
                                     </td>
                                 </tr>
                             </tbody>
+                            {% endfor %}
                         </table>
                     </div>
                 </section>

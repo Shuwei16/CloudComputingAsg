@@ -4,7 +4,7 @@ from flask import Flask, render_template, request,  redirect, url_for, flash, se
 from pymysql import connections
 import os
 import boto3
-import requests
+# import requests
 from config import *
 
 import secrets
@@ -921,7 +921,66 @@ def adminLogin():
 
 @app.route("/admin/home")
 def adminHome():
-    return render_template('admin/home.html')
+
+    cursor = db_conn.cursor()
+    # Execute a SQL query to fetch data from the database
+    cursor.execute("SELECT cohortID FROM cohort")
+    cohorts = cursor.fetchall()  # Fetch all rows
+
+    cursor.execute("""SELECT admin.adminName 
+                   FROM admin 
+                   WHERE admin.adminEmail = %s
+                   """, (session['adminEmail']),)
+    admin_data = cursor.fetchone()  # Fetch all rows
+
+    if admin_data:
+        # Convert the user record to a dictionary
+        admin = {
+            'adminName': admin_data[0],
+
+            # Add other fields as needed
+        }
+    
+    # Execute a SQL query to fetch data from the database
+    cursor.execute("""
+                   SELECT DISTINCT student.*, company.compLocation, lecturer.lecName, cohort.internStartDate, cohort.internEndDate
+                   FROM student
+                    JOIN lecturer ON student.lectEmail = lecturer.lecEmail
+                    JOIN admin ON admin.adminEmail= lecturer.adminEmail
+                    JOIN company ON company.adminEmail = lecturer.adminEmail
+                    JOIN cohort ON student.cohort = cohort.cohortID
+                   WHERE admin.adminEmail = %s
+                   """, session['adminEmail'])
+    stud_data = cursor.fetchall()  # Fetch all rows
+    print(stud_data)
+    
+    cursor.close()
+    
+    # Initialize an empty list to store dictionaries
+    students = []
+
+    # Iterate through the fetched data and create dictionaries
+    for row in stud_data:
+        app_dict = {
+            'studID': row[0],
+            'studEmail': row[1],
+            'studName': row[4],
+            'course': row[5],
+            'studPhone': row[6],
+            'cohort': row[9],
+            'compName': row[10],
+            'compSupervisorName': row[13],
+            'compSupervisorEmail': row[14],
+            'compSupervisorPhone': row[15],
+            'compLocation': row[16],
+            'lecName': row[17],
+            'internStartDate': row[18],
+            'internEndDate': row[19],
+            # Add other fields as needed
+        }
+        students.append(app_dict)
+
+    return render_template('admin/home.html', admin=admin, cohorts=cohorts, students=students)
 
 @app.route("/admin/companyList")
 def adminCompanyList():
@@ -965,7 +1024,7 @@ def adminCompanyDetail():
             comp_name = request.form['comp_name']  # Get the job ID from the form
             print(comp_name)
             cursor = db_conn.cursor()
-            cursor.execute("UPDATE company SET status = 'Approved' WHERE compName = %s", (comp_name))
+            cursor.execute("UPDATE company SET status = 'Approved', adminEmail=%s WHERE compName = %s", (session['adminEmail'],comp_name))
             db_conn.commit()
             cursor.close()
 
