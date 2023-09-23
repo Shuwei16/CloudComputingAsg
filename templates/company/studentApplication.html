@@ -66,101 +66,56 @@
                         <th>Actions</th>
                     </tr>
                 </thead>
+                {% for application in applications %}
                 <tbody>
                     <tr>
                         <td>
                             <div class="d-flex align-items-center">
                                 <div class="ms-3">
-                                    <p class="fw-bold mb-1">John Doe</p>
-                                    <p class="text-muted mb-0">Bachelor degree in software engineering</p>
+                                    <p class="fw-bold mb-1">{{ application['studName'] }}</p>
+                                    <p class="text-muted mb-0">{{ application['course'] }}</p>
                                     <p class="text-muted mb-0"><a
-                                            href="mailto:xxx@student.tarc.edu.my">xxx@student.tarc.edu.my</a></p>
-                                    <p class="text-muted mb-0"><a href="tel:+60123456789">012-3456789</a></p>
-                                    <p class="text-muted mb-0">CGPA 4.0000</p>
+                                            href="mailto:xxx@student.tarc.edu.my">{{ application['studEmail'] }}</a></p>
+                                    <p class="text-muted mb-0"><a href="tel:+60123456789">{{ application['studPhone'] }}</a></p>
+                                    <p class="text-muted mb-0">CGPA {{ application['cgpa'] }}</p>
                                 </div>
                             </div>
                         </td>
                         <td>
-                            <button type="button" class="btn btn-outline-primary btn-sm btn-rounded">
-                                View Resume
-                            </button>
-                        </td>
-                        <td>
-                            <p class="fw-normal mb-1">Software engineer</p>
-                        </td>
-                        <td>
-                            Pending
-                        </td>
-
-                        <td>
-                            <button type="button" class="btn btn-success btn-sm btn-rounded"
-                                onclick="confirm('Are you sure to approve this application?')">
-                                Approve
-                            </button>
-                            <button type="button" class="btn btn-danger btn-sm btn-rounded"
-                                onclick="confirm('Are you sure to reject this application?')">
-                                Reject
-                            </button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="d-flex align-items-center">
-                                <div class="ms-3">
-                                    <p class="fw-bold mb-1">John Doe</p>
-                                    <p class="text-muted mb-0">Bachelor degree in software engineering</p>
-                                    <p class="text-muted mb-0"><a
-                                            href="mailto:xxx@student.tarc.edu.my">xxx@student.tarc.edu.my</a></p>
-                                    <p class="text-muted mb-0"><a href="tel:+60123456789">012-3456789</a></p>
-                                    <p class="text-muted mb-0">CGPA 4.0000</p>
-                                </div>
+                            <div class="col-sm-9">
+                                <p class="text-muted mb-0"><a href="{{ application['resume_url'] }}" target="_blank">click to view resume</a></p>
                             </div>
                         </td>
                         <td>
-                            <button type="button" class="btn btn-outline-primary btn-sm btn-rounded">
-                                View Resume
-                            </button>
+                            <p class="fw-normal mb-1">{{ application['jobTitle'] }}</p>
                         </td>
                         <td>
-                            <p class="fw-normal mb-1">Software engineer</p>
-                        </td>
-                        <td>
-                            Approved
+                            {{ application['applicationStatus'] }}
                         </td>
 
                         <td>
-
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="d-flex align-items-center">
-                                <div class="ms-3">
-                                    <p class="fw-bold mb-1">John Doe</p>
-                                    <p class="text-muted mb-0">Bachelor degree in software engineering</p>
-                                    <p class="text-muted mb-0"><a
-                                            href="mailto:xxx@student.tarc.edu.my">xxx@student.tarc.edu.my</a></p>
-                                    <p class="text-muted mb-0"><a href="tel:+60123456789">012-3456789</a></p>
-                                    <p class="text-muted mb-0">CGPA 4.0000</p>
-                                </div>
-                            </div>
-                        </td>
-                        <td>
-                            <button type="button" class="btn btn-outline-primary btn-sm btn-rounded">
-                                View Resume
-                            </button>
-                        </td>
-                        <td>
-                            <p class="fw-normal mb-1">Software engineer</p>
-                        </td>
-                        <td>
-                            Rejected
-                        </td>
-
-                        <td>
+                            <form method="POST" action="{{ url_for('companyStudentApplication') }}" onsubmit="return confirm('Are you sure to approve this application?')">
+                                <input type="hidden" name="action" value="approve">
+                                <input type="hidden" name="job_id" id="editStatus" value="{{ application['jobID'] }}">
+                                {% if application.applicationStatus == 'Approved' or application.applicationStatus == 'Rejected' %}
+                                <button type="submit" class="btn btn-success btn-sm btn-rounded" disabled>Approve</button>
+                                {% else %}
+                                <button type="submit" class="btn btn-success btn-sm btn-rounded">Approve</button>
+                                {% endif %}
+                            </form>
+                            <form method="POST" action="{{ url_for('companyStudentApplication') }}" onsubmit="return confirm('Are you sure to reject this application?')">
+                                <input type="hidden" name="action" value="reject">
+                                <input type="hidden" name="job_id" id="editStatus" value="{{ application['jobID'] }}">
+                                {% if application.applicationStatus == 'Approved' or application.applicationStatus == 'Rejected' %}
+                                <button type="submit" class="btn btn-danger btn-sm btn-rounded" disabled>Reject</button>
+                                {% else %}
+                                <button type="submit" class="btn btn-danger btn-sm btn-rounded">Reject</button>
+                                {% endif %}
+                            </form>
                         </td>
                     </tr>
                 </tbody>
+                {% endfor %}
             </table>
         </div>
     </section>

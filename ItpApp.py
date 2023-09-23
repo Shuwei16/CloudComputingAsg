@@ -929,9 +929,88 @@ def companyHome():
         
     return render_template('company/home.html', company=company, jobs=jobs, minimums=minimums, maximums=maximums)
 
-@app.route("/company/studentApplication")
+@app.route("/company/studentApplication", methods=['GET', 'POST'])
 def companyStudentApplication():
-    return render_template('company/studentApplication.html')
+
+    if request.method == 'POST':
+        action = request.form.get('action') 
+
+        if action == 'approve':
+
+            job_id = request.form['job_id']  # Get the job ID from the form
+            print(job_id)
+            cursor = db_conn.cursor()
+            cursor.execute("UPDATE application SET applicationStatus = 'Approved' WHERE jobID = %s", (job_id))
+            db_conn.commit()
+            cursor.close()
+
+            print("Data updated successfully")
+
+            return redirect(url_for('companyStudentApplication'))
+        
+        elif action == 'reject':
+
+            job_id = request.form['job_id']  # Get the job ID from the form
+            print(job_id)
+            cursor = db_conn.cursor()
+            cursor.execute("UPDATE application SET applicationStatus = 'Rejected' WHERE jobID = %s", (job_id))
+            db_conn.commit()
+            cursor.close()
+
+            print("Data updated successfully")
+
+            return redirect(url_for('companyStudentApplication'))   
+
+    cursor = db_conn.cursor()
+    # Execute a SQL query to fetch data from the database
+    
+    # Execute a SQL query to fetch data from the database
+    cursor.execute("""
+                   SELECT application.*, student.studName, student.course, student.studEmail, student.studPhone, student.cgpa, jobs.jobTitle
+                   FROM application
+                    JOIN student ON application.studID = student.studID
+                    JOIN jobs ON application.jobID= jobs.jobID
+                   WHERE jobs.compEmail = %s
+                   """, (session['compEmail']),)
+    application_data = cursor.fetchall()  # Fetch all rows
+    print(application_data)
+    cursor.close()
+
+    applications = []
+
+    # Iterate through the fetched data and create dictionaries
+    for row in application_data:
+
+        # Get the s3 bucket location
+        s3 = boto3.resource('s3')
+        bucket_location = boto3.client('s3').get_bucket_location(Bucket=custombucket)
+        s3_location = (bucket_location['LocationConstraint'])
+
+        if s3_location is None:
+            s3_location = 'us-east-1'
+        
+        # Initial declaration
+        resume_url = "https://{0}.s3.{1}.amazonaws.com/studID-{2}_resume.pdf".format(
+            custombucket,
+            s3_location,
+            row[2])
+
+        app_dict = {
+            'jobID': row[1],
+            'studID': row[2],
+            'applicationStatus': row[3],
+            'studName': row[4],
+            'course': row[5],
+            'studEmail': row[6],
+            'studPhone': row[7],
+            'cgpa': row[8],
+            'jobTitle': row[9],
+            'resume_url': resume_url,
+            # Add other fields as needed
+        }
+        applications.append(app_dict)
+
+    return render_template('company/studentApplication.html', applications=applications)
 
 # Admin
 @app.route("/admin/login", methods=['GET', 'POST'])
