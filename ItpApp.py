@@ -188,8 +188,7 @@ def studentHome():
             
             # Edit company info
             if action == 'editCompany':
-                companyName = request.form['companyName']
-                companyAddress = request.form['companyAddress']
+                companyEmail = request.form['company']
                 allowance = request.form['allowance']
                 compSupervisorName = request.form['compSupervisorName']
                 compSupervisorEmail = request.form['compSupervisorEmail']
@@ -208,11 +207,18 @@ def studentHome():
                 s3 = boto3.resource('s3')
                 
                 cursor.execute("""
+                    SELECT compName, compLocation
+                    FROM company
+                    WHERE compEmail = %s
+                    """, (companyEmail),)
+                company_data = cursor.fetchone()
+                
+                cursor.execute("""
                             UPDATE student
                             SET compName = %s, compAddr = %s, monthlyAllowance = %s, compSupervisorName = %s, compSupervisorEmail = %s, compSupervisorPhone = %s
                             WHERE studID = %s
                             """, 
-                            (companyName, companyAddress, allowance, compSupervisorName, compSupervisorEmail, compSupervisorContact, session['studID']),)
+                            (company_data[0], company_data[1], allowance, compSupervisorName, compSupervisorEmail, compSupervisorContact, session['studID']),)
                 db_conn.commit()
                 
                 try:
@@ -301,6 +307,19 @@ def studentHome():
                 # Add other fields as needed
             }
             
+            cursor = db_conn.cursor()
+            # Execute a SQL query to fetch data from the database
+            cursor.execute("""
+                           SELECT company.compName, company.compEmail
+                           FROM company
+                           JOIN jobs ON company.compEmail = jobs.compEmail
+                           JOIN application ON jobs.jobID = application.jobID
+                           WHERE application.studID = %s
+                           AND applicationStatus = %s
+                           """, (session['studID'], 'Approved'))
+            available_comps = cursor.fetchall()  # Fetch all rows
+            cursor.close()
+            
             # Get the s3 bucket location
             s3 = boto3.resource('s3')
             bucket_location = boto3.client('s3').get_bucket_location(Bucket=custombucket)
@@ -358,6 +377,7 @@ def studentHome():
             
             # Pass the user's information to the template
             return render_template('student/home.html', user=user, 
+                                   available_comps = available_comps,
                                    resume_url=resume_url,
                                    compAcceptanceForm_url=compAcceptanceForm_url, 
                                    parrentAckForm_url=parrentAckForm_url,
@@ -384,9 +404,24 @@ def studentCompanyList():
 
     # Iterate through the fetched data and create dictionaries
     for row in companies_data:
+        # Get the s3 bucket location
+        s3 = boto3.resource('s3')
+        bucket_location = boto3.client('s3').get_bucket_location(Bucket=custombucket)
+        s3_location = (bucket_location['LocationConstraint'])
+
+        if s3_location is None:
+            s3_location = 'us-east-1'
+
+        # Initial declaration
+        companyLogo_url = "https://{0}.s3.{1}.amazonaws.com/comp-{2}_logo.jpg".format(
+            custombucket,
+            s3_location,
+            row[0])
+        
         company_dict = {
             'compName': row[0],
             'category': row[1],
+            'logo' : companyLogo_url,
             # Add other fields as needed
         }
         companies.append(company_dict)
@@ -414,10 +449,6 @@ def studentCompanyDetail():
         else:
             # If there are no application, start with 'A00001'
             new_app_id = 'A00001'
-        
-        print(new_app_id)
-        print(jobID)
-        print(session['studID'])
         
         # Insert the new application into the database
         cursor = db_conn.cursor()
@@ -486,9 +517,23 @@ def studentCompanyDetail():
             }    
             # Append the job dictionary to the list of jobs
             jobs.append(job)
+        
+        # Get the s3 bucket location
+        s3 = boto3.resource('s3')
+        bucket_location = boto3.client('s3').get_bucket_location(Bucket=custombucket)
+        s3_location = (bucket_location['LocationConstraint'])
+
+        if s3_location is None:
+            s3_location = 'us-east-1'
+
+        # Initial declaration
+        companyLogo_url = "https://{0}.s3.{1}.amazonaws.com/comp-{2}_logo.jpg".format(
+            custombucket,
+            s3_location,
+            company['compName'])
     
     # Pass the company's information to the template
-    return render_template('student/companyDetail.html', company=company, jobs=jobs)
+    return render_template('student/companyDetail.html', company=company, jobs=jobs, companyLogo_url=companyLogo_url)
 
 @app.route("/student/applicationHistory")
 def studentApplicationHistory():
@@ -741,7 +786,7 @@ def companyRegister():
         cursor.close()
         
         # Uplaod file in S3
-        companyLogo_in_s3 = "comp-" + companyName + "_logo.pdf"
+        companyLogo_in_s3 = "comp-" + companyName + "_logo.jpg"
         s3 = boto3.resource('s3')
         
         try:
@@ -868,7 +913,7 @@ def companyHome():
     cursor.execute("""
                 SELECT company.*
                 FROM company 
-                JOIN jobs ON company.compEmail = jobs.compEmail
+                LEFT JOIN jobs ON company.compEmail = jobs.compEmail
                 WHERE company.compEmail = %s
                 """, (session['compEmail']),)
     company_data = cursor.fetchone()
@@ -892,6 +937,20 @@ def companyHome():
             'accomodation': company_data[12],
             # Add other fields as needed
         }
+        
+        # Get the s3 bucket location
+        s3 = boto3.resource('s3')
+        bucket_location = boto3.client('s3').get_bucket_location(Bucket=custombucket)
+        s3_location = (bucket_location['LocationConstraint'])
+
+        if s3_location is None:
+            s3_location = 'us-east-1'
+
+        # Initial declaration
+        companyLogo_url = "https://{0}.s3.{1}.amazonaws.com/comp-{2}_logo.jpg".format(
+            custombucket,
+            s3_location,
+            company['compName'])
     
     cursor.execute("""
             SELECT *
@@ -927,7 +986,7 @@ def companyHome():
         minimums.append({'jobID': job['jobID'], 'min_allowance': min_allowance})
         maximums.append({'jobID': job['jobID'], 'max_allowance': max_allowance})
         
-    return render_template('company/home.html', company=company, jobs=jobs, minimums=minimums, maximums=maximums)
+    return render_template('company/home.html', company=company, jobs=jobs, minimums=minimums, maximums=maximums, companyLogo_url=companyLogo_url)
 
 @app.route("/company/studentApplication")
 def companyStudentApplication():
@@ -1036,14 +1095,29 @@ def adminCompanyList():
     # Initialize an empty list to store job dictionaries
     companies = []
     for row in company_data:
-    # Convert each row to a dictionary
+        # Get the s3 bucket location
+        s3 = boto3.resource('s3')
+        bucket_location = boto3.client('s3').get_bucket_location(Bucket=custombucket)
+        s3_location = (bucket_location['LocationConstraint'])
+
+        if s3_location is None:
+            s3_location = 'us-east-1'
+
+        # Initial declaration
+        companyLogo_url = "https://{0}.s3.{1}.amazonaws.com/comp-{2}_logo.jpg".format(
+            custombucket,
+            s3_location,
+            row[2])
+        
+        # Convert each row to a dictionary
         company = {
             'status': row[0],
             'category': row[1],
             'compName': row[2],
-    #         # Add other fields as needed
+            'logo' : companyLogo_url,
+            # Add other fields as needed
          }    
-    #     # Append the job dictionary to the list of jobs
+        # Append the job dictionary to the list of jobs
         companies.append(company)
     
         print("Companies:", companies)
@@ -1110,9 +1184,22 @@ def adminCompanyDetail():
             'status' : company_data[13],
             # Add other fields as needed
         }
-        # print("Companies:", company)
     
-    return render_template('admin/companyDetail.html', company=company)
+        # Get the s3 bucket location
+        s3 = boto3.resource('s3')
+        bucket_location = boto3.client('s3').get_bucket_location(Bucket=custombucket)
+        s3_location = (bucket_location['LocationConstraint'])
+
+        if s3_location is None:
+            s3_location = 'us-east-1'
+
+        # Initial declaration
+        companyLogo_url = "https://{0}.s3.{1}.amazonaws.com/comp-{2}_logo.jpg".format(
+            custombucket,
+            s3_location,
+            company['compName'])
+    
+    return render_template('admin/companyDetail.html', company=company, companyLogo_url=companyLogo_url)
 
 @app.route("/admin/lecturerList", methods=['GET', 'POST'])
 def adminLecturerList():

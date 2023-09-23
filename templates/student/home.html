@@ -275,18 +275,27 @@
                                     onsubmit="return confirm('Are you sure to submit this company? Once submitted, cannot be changed anymore.')">
                                     <input type="hidden" name="action" value="editCompany">
                                     <div class="form-group">
-                                        <label for="companyName" class="col-form-label">Company Name</label>
-                                        <input type="text" class="form-control" id="companyName" placeholder="your internship company name"
-                                            {% if user.compName %} value="{{ user.compName }}" disabled {% endif %} name="companyName"
-                                            required>
+                                        <label for="company" class="col-form-label">Company Name</label>
+                                        {% if user.compName %}
+                                            <input type="text" class="form-control" id="company" placeholder="your internship company name" value="{{ user.compName }}" disabled name="company" required>
+                                        {% else %} 
+                                            {% if not available_comps %}<p style="font-size:12px">*No company available yet. Please apply a company and wait for their approval.</p>{% endif %} 
+                                            <select class="form-select" aria-label="company" id="company" name="company" required>
+                                            {% for row in available_comps %}
+                                              <option value="{{ row[1] }}">{{ row[0] }}</option>
+                                            {% endfor %}
+                                            </select>
+                                        {% endif %}
                                     </div>
                                     <br />
+                                    {% if user.compName %}
                                     <div class="form-group">
                                         <label for="companyAddress" class="col-form-label">Company Address</label>
-                                        <textarea class="form-control" id="companyAddress" placeholder="your internship company address" rows="3" name="companyAddress" {% if user.compAddr %}disabled{% endif %}
-                                            required>{% if user.compName %}{{ user.compAddr }}{% endif %}</textarea>
+                                        <textarea class="form-control" id="companyAddress" placeholder="your internship company address" rows="3" name="companyAddress" disabled required>{{ user.compAddr }}</textarea>
                                     </div>
                                     <br />
+                                    {% endif %}
+                                    {% if user.compName is none %}<br /><p style="font-size:12px">*Please fill in the following details based on what you have confirmed with your company.</p>{% endif %} 
                                     <div class="form-group">
                                         <label for="allowance" class="col-form-label">Monthy Allowance (RM)</label>
                                         <input type="text" class="form-control" id="allowance"

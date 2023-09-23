@@ -81,7 +81,7 @@
               <div class="col-lg-4 col-md-6 portfolio-item filter-{{ row['status'] }} wow fadeInUp">
                 <div class="portfolio-wrap">
                   <figure class="h-50">
-                    <img src="{{ url_for('static', filename='img/company/techtics.jpg') }}" class="techtics-img img-fluid w-100" alt="">
+                    <img src="{{ row['logo'] }}" class="techtics-img img-fluid w-100" alt="">
                     <a href="{{ url_for('adminCompanyDetail', comp_name=row['compName']) }}" class="link-details" title="More Details" target="_blank"><i
                         class="bx bx-link"></i></a>
                   </figure>
