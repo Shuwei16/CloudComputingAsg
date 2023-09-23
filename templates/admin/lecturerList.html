@@ -168,14 +168,14 @@
     <!-- Template Main JS File -->
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </body>
-{% for supervisor in supervisors %}
+
 <!-- Add Lecturer Modal -->
 <div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <form action="{{ url_for('adminLecturerList') }}" method="POST" onsubmit="return confirm('Are you sure to add this lecturer？')">
                 <input type="hidden" name="action" value="addLecturer">
-                <input type="hidden" name="adminEmail" id="addAdminEmail" value="{{ supervisor['adminEmail'] }}">
+                <input type="hidden" name="adminEmail" id="addAdminEmail" value="" required>
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Add Lecturer</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -208,6 +208,7 @@
     </div>
 </div>
 
+{% for supervisor in supervisors %}
 <!-- Edit Lecturer Modal -->
 <div class="modal fade" id="editModal{{ supervisor['lecEmail'] }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
