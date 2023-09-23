@@ -184,18 +184,18 @@
                     <div class="panel-body">
                         <div class="form-group">
                             <label for="lecturerName">Lecturer Name</label>
-                            <input type="text" class="form-control" name="lecturerName" id="lecturerName" placeholder="">
+                            <input type="text" class="form-control" name="lecturerName" id="lecturerName" placeholder="" required>
                         </div>
                         <br />
                         <div class="form-group">
                             <label for="email">Email</label>
-                            <input type="email" class="form-control" name="email" id="email" placeholder="e.g. xxx@tarc.edu.my">
+                            <input type="email" class="form-control" name="email" id="email" placeholder="e.g. xxx@tarc.edu.my" required>
                         </div>
                         <br />
                         <div class="form-group">
                             <label for="contactNo">ContactNo</label>
                             <input type="text" class="form-control" name="contactNo" id="contactNo" placeholder="e.g. 019-9999999"
-                                id="contactNo" pattern="\d{2,3}-\d{7,8}" />
+                                id="contactNo" pattern="\d{2,3}-\d{7,8}" required/>
                         </div>
                     </div>
                 </div>
@@ -223,17 +223,13 @@
                     <div class="panel-body">
                         <div class="form-group">
                             <label for="lecturerName">Lecturer Name</label>
-                            <input type="text" class="form-control" name="lecturerName" id="lecturerName" placeholder="" value="{{ supervisor['lecName'] }}">
+                            <input type="text" class="form-control" name="lecturerName" id="lecturerName" placeholder="" value="{{ supervisor['lecName'] }}" required>
                         </div>
                         <br />
-                        <!-- <div class="form-group">
-                            <label for="email">Email</label>
-                            <input type="email" class="form-control" name="email" id="email" placeholder="" value="{{ supervisor['lecEmail'] }}">
-                        </div> -->
                         <br />
                         <div class="form-group">
                             <label for="contactNo">ContactNo</label>
-                            <input type="text" class="form-control" name="contactNo" id="contactNo" placeholder="" value="{{ supervisor['lecPhoneNum'] }}">
+                            <input type="text" class="form-control" name="contactNo" id="contactNo" placeholder="" value="{{ supervisor['lecPhoneNum'] }}" required>
                         </div>
                     </div>
                 </div>

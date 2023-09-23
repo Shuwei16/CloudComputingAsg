@@ -460,13 +460,13 @@
                         <div class="form-group">
                             <label for="contactNo">Contact Number</label>
                             <input type="text" class="form-control" placeholder="e.g. 019-9999999" id="contactNo" name="contactNo"
-                                pattern="\d{2,3}-\d{7,8}" value="{{ user.studPhone }}">
+                                pattern="\d{2,3}-\d{7,8}" value="{{ user.studPhone }}" required>
                         </div>
                         <br />
                         <div class="form-group">
                             <label for="cgpa">CGPA</label>
                             <input type="text" class="form-control" placeholder="e.g. 4.0000" id="cgpa" name="cgpa"
-                                pattern="\d+(\.\d{4})" value="{{ user.cgpa }}">
+                                pattern="\d+(\.\d{4})" value="{{ user.cgpa }}" required>
                         </div>
                         <br />
                         <div class="form-group">

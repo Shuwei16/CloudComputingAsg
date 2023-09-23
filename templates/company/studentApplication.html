@@ -83,7 +83,7 @@
                         </td>
                         <td>
                             <div class="col-sm-9">
-                                <p class="text-muted mb-0"><a href="{{ application['resume_url'] }}" target="_blank">click to view resume</a></p>
+                                <p class="text-muted mb-0"><a class="btn btn-outline-primary btn-sm btn-rounded" href="{{ application['resume_url'] }}" target="_blank">click to view resume</a></p>
                             </div>
                         </td>
                         <td>
@@ -94,20 +94,20 @@
                         </td>
 
                         <td>
-                            <form method="POST" action="{{ url_for('companyStudentApplication') }}" onsubmit="return confirm('Are you sure to approve this application?')">
+                            <form method="POST" action="{{ url_for('companyStudentApplication') }}" onsubmit="return confirm('Are you sure to approve this application?')" style="float: left; margin: 2px;">
                                 <input type="hidden" name="action" value="approve">
                                 <input type="hidden" name="job_id" id="editStatus" value="{{ application['jobID'] }}">
                                 {% if application.applicationStatus == 'Approved' or application.applicationStatus == 'Rejected' %}
-                                <button type="submit" class="btn btn-success btn-sm btn-rounded" disabled>Approve</button>
+                                <button type="submit" class="btn btn-outline-secondary btn-sm btn-rounded" disabled>Approve</button>
                                 {% else %}
                                 <button type="submit" class="btn btn-success btn-sm btn-rounded">Approve</button>
                                 {% endif %}
                             </form>
-                            <form method="POST" action="{{ url_for('companyStudentApplication') }}" onsubmit="return confirm('Are you sure to reject this application?')">
+                            <form method="POST" action="{{ url_for('companyStudentApplication') }}" onsubmit="return confirm('Are you sure to reject this application?')" style="float: left; margin: 2px;">
                                 <input type="hidden" name="action" value="reject">
                                 <input type="hidden" name="job_id" id="editStatus" value="{{ application['jobID'] }}">
                                 {% if application.applicationStatus == 'Approved' or application.applicationStatus == 'Rejected' %}
-                                <button type="submit" class="btn btn-danger btn-sm btn-rounded" disabled>Reject</button>
+                                <button type="submit" class="btn btn-outline-secondary btn-sm btn-rounded" disabled>Reject</button>
                                 {% else %}
                                 <button type="submit" class="btn btn-danger btn-sm btn-rounded">Reject</button>
                                 {% endif %}

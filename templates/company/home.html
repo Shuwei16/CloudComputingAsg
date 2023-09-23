@@ -261,19 +261,19 @@
           <div class="panel-body">
             <div class="form-group">
               <label for="companyName">Company Name</label>
-              <input type="text" class="form-control" name="companyName" id="companyName" placeholder="" value="{{ company.compName }}">
+              <input type="text" class="form-control" name="companyName" id="companyName" placeholder="" value="{{ company.compName }}" required>
             </div>
             <br />
             <div class="form-group">
               <label for="companyDescription">Company Description</label>
               <textarea class="form-control" id="companyDescription" name="companyDescription"
-                rows="3">{{ company.compDesc }}</textarea>
+                rows="3" required>{{ company.compDesc }}</textarea>
             </div>
             <br />
             <div class="form-group">
               <label for="location">Location</label>
               <textarea class="form-control" id="location" name="companyLocation"
-                rows="3">{{ company.compLocation }}</textarea>
+                rows="3" required>{{ company.compLocation }}</textarea>
             </div>
             <br />
             <div class="form-group">
@@ -281,7 +281,7 @@
               <div class="row">
                 <div class="col">
                   <label for="startDay">Start Day</label>
-                  <select class="form-select" aria-label="startDay" name="workingStartDay">
+                  <select class="form-select" aria-label="startDay" name="workingStartDay" required>
                     <option value="Monday" {% if company.workingStartDay == "Monday" %}selected{% endif %}>Monday</option>
                     <option value="Tuesday" {% if company.workingStartDay == "Tuesday" %}selected{% endif %}>Tuesday</option>
                     <option value="Wednesday" {% if company.workingStartDay == "Wednesday" %}selected{% endif %}>Wednesday</option>
@@ -293,7 +293,7 @@
                 </div>
                 <div class="col">
                   <label for="endDay">End Day</label>
-                  <select class="form-select" aria-label="endDay" name="workingEndDay">
+                  <select class="form-select" aria-label="endDay" name="workingEndDay" required>
                     <option value="Monday" {% if company.workingEndDay == "Monday" %}selected{% endif %}>Monday</option>
                     <option value="Tuesday" {% if company.workingEndDay == "Tuesday" %}selected{% endif %}>Tuesday</option>
                     <option value="Wednesday" {% if company.workingEndDay == "Wednesday" %}selected{% endif %}>Wednesday</option>
@@ -311,25 +311,19 @@
               <div class="row">
                 <div class="col">
                   <label for="startTime">Start Time</label>
-                  <input type="time" class="form-control" placeholder="" value="{{ company.workingStartTime }}" name="workingStartTime">
+                  <input type="time" class="form-control" placeholder="" value="{{ company.workingStartTime }}" name="workingStartTime" required>
                 </div>
                 <div class="col">
                   <label for="endTime">End Time</label>
-                  <input type="time" class="form-control" placeholder="" value="{{ company.workingEndTime }}" name="workingEndTime">
+                  <input type="time" class="form-control" placeholder="" value="{{ company.workingEndTime }}" name="workingEndTime" required>
                 </div>
               </div>
             </div>
             <br />
-            <!-- <div class="form-group">
-              <label for="email">Email</label>
-              <input type="email" id="email" class="form-control" placeholder="e.g. xxx@xxx.com"
-                value="example@example.com">
-            </div> -->
-            <br />
             <div class="form-group">
               <label for="contact">Contact</label>
               <input type="text" id="contact" class="form-control" pattern="\d{2,3}-\d{7,8}"
-                placeholder="e.g. 019-9999999" value="03-2345678" name="compPhone" value="{{ company.compPhone }}">
+                placeholder="e.g. 019-9999999" value="03-2345678" name="compPhone" value="{{ company.compPhone }}" required>
             </div>
             <br />
             <div class="form-group">
@@ -377,7 +371,7 @@
           <div class="panel-body">
             <div class="form-group">
               <label for="jobTitle">Job Title</label>
-              <input type="text" class="form-control" id="jobTitle" placeholder="" name="jobTitle">
+              <input type="text" class="form-control" id="jobTitle" placeholder="" name="jobTitle" required>
             </div>
             <br />
             <div class="form-group">
@@ -385,11 +379,11 @@
               <div class="row">
                 <div class="col">
                   <label for="minimum">Minimum</label>
-                  <input type="text" name="minimum" class="form-control" placeholder="e.g. 800.00" pattern="\d+\.\d{2}">
+                  <input type="text" name="minimum" class="form-control" placeholder="e.g. 800.00" pattern="\d+\.\d{2}" required>
                 </div>
                 <div class="col">
                   <label for="maximum">Maximum</label>
-                  <input type="text" name="maximum" class="form-control" placeholder="e.g. 1000.00" pattern="\d+\.\d{2}">
+                  <input type="text" name="maximum" class="form-control" placeholder="e.g. 1000.00" pattern="\d+\.\d{2}" required>
                 </div>
               </div>
             </div>
@@ -412,11 +406,11 @@
             <br />
             <div class="form-group">
               <label for="jobDescription">Job Description</label>
-              <textarea class="form-control" name="jobDescription" id="jobDescription" rows="3"></textarea>
+              <textarea class="form-control" name="jobDescription" id="jobDescription" rows="3" required></textarea>
             </div>
             <div class="form-group">
               <label for="jobRequirement">Job Requirement</label>
-              <textarea class="form-control" name="jobRequirement" id="jobRequirement" rows="3"></textarea>
+              <textarea class="form-control" name="jobRequirement" id="jobRequirement" rows="3" required></textarea>
             </div>
           </div>
         </div>
@@ -446,7 +440,7 @@
           <div class="panel-body">
             <div class="form-group">
               <label for="jobTitle{{ job['jobID'] }}">Job Title</label>
-              <input type="text" name="jobTitle" class="form-control" id="jobTitle{{ job['jobID'] }}" placeholder="" value="{{ job['jobTitle'] }}">
+              <input type="text" name="jobTitle" class="form-control" id="jobTitle{{ job['jobID'] }}" placeholder="" value="{{ job['jobTitle'] }}" required>
             </div>
             <br />
             {% for min in minimums %}
@@ -458,11 +452,11 @@
               <div class="row">
                 <div class="col">
                   <label for="minimum">Minimum</label>
-                  <input type="text" name="minimum" class="form-control" placeholder="e.g. 800.00" pattern="\d+\.\d{2}" value="{{ min['min_allowance'] }}">
+                  <input type="text" name="minimum" class="form-control" placeholder="e.g. 800.00" pattern="\d+\.\d{2}" value="{{ min['min_allowance'] }}" required>
                 </div>
                 <div class="col">
                   <label for="maximum">Maximum</label>
-                  <input type="text" name="maximum" class="form-control" placeholder="e.g. 1000.00" pattern="\d+\.\d{2}" value="{{ max['max_allowance'] }}">
+                  <input type="text" name="maximum" class="form-control" placeholder="e.g. 1000.00" pattern="\d+\.\d{2}" value="{{ max['max_allowance'] }}" required>
                 </div>
               </div>
             </div>
@@ -489,11 +483,11 @@
             <br />
             <div class="form-group">
               <label for="jobDesc{{ job['jobID'] }}">Job Description</label>
-              <textarea class="form-control" name="jobDescription" id="jobDesc{{ job['jobID'] }}" rows="3">{{ job['jobDesc'] }}</textarea>
+              <textarea class="form-control" name="jobDescription" id="jobDesc{{ job['jobID'] }}" rows="3" required>{{ job['jobDesc'] }}</textarea>
             </div>
             <div class="form-group">
               <label for="jobReq{{ job['jobID'] }}">Job Requirement</label>
-              <textarea class="form-control" name="jobRequirement" id="jobReq{{ job['jobID'] }}" rows="3">{{ job['jobReq'] }}</textarea>
+              <textarea class="form-control" name="jobRequirement" id="jobReq{{ job['jobID'] }}" rows="3" required>{{ job['jobReq'] }}</textarea>
             </div>
           </div>
         </div>
