@@ -592,6 +592,11 @@ def lecturerHome():
     
     cursor = db_conn.cursor()
     # Execute a SQL query to fetch data from the database
+    cursor.execute("SELECT lecName FROM lecturer WHERE lecEmail = %s", session['lecEmail'])
+    lecturer = cursor.fetchone()  # Fetch one row
+    
+    cursor = db_conn.cursor()
+    # Execute a SQL query to fetch data from the database
     cursor.execute("SELECT cohortID FROM cohort")
     cohorts = cursor.fetchall()  # Fetch all rows
     
@@ -625,7 +630,7 @@ def lecturerHome():
         }
         students.append(app_dict)
     
-    return render_template('lecturer/home.html', cohorts=cohorts, students=students)
+    return render_template('lecturer/home.html', lecturer=lecturer, cohorts=cohorts, students=students)
 
 @app.route("/lecturer/studentDetail")
 def lecStudentDetail():
