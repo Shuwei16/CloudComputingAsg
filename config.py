@@ -6,4 +6,3 @@ custompass = "Teohxinzhi123"
 customdb = "internship"
 custombucket = "teohxinzhi-internship-bucket"
 customregion = "us-east-1"
-
