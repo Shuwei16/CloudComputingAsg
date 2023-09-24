@@ -1,13 +1,13 @@
-# Either add "sudo" before all commands or use "sudo su" first
-# Amazon Linux 2023
+# Internship Management System:
+# LANTERNSHIP
 
-#!/bin/bash
-dnf install git -y
-git clone https://github.com/lowchoonkeat/aws-live.git
-cd aws-live
-dnf install python-pip -y
-pip3 install flask pymysql boto3
-python3 EmpApp.py
+Created by:
+- Teoh Xin Zhi
+- Heah Jun Xi
+- Leau Goon Hei
+- Wang Shu Wei
+- Mah Jia Yi
+
 
 
 
