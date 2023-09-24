@@ -3,16 +3,10 @@ from pymysql import connections
 import os
 import boto3
 import requests
-# from config import *
+from config import *
 
 import secrets
 
-customhost = "internshipdbinstance.c7qv5pz2qhty.us-east-1.rds.amazonaws.com"
-customuser = "Teohxinzhi123"
-custompass = "Teohxinzhi123"
-customdb = "internship"
-custombucket = "teohxinzhi-internship-bucket"
-customregion = "us-east-1"
 
 app = Flask(__name__)
 app.secret_key = secrets.token_hex(16)
@@ -28,9 +22,6 @@ db_conn = connections.Connection(
     db=customdb
 
 )
-# output = {}
-# table = 'employee'
-
 
 # Main
 @app.route("/")
